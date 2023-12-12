@@ -47,18 +47,6 @@ export const fetchJSON = async <TOk, TErr>(
   return { ok: true, data: json as TOk };
 };
 
-export const validateRequestData = (
-  requestData: RequestData<unknown, unknown>,
-  cfg: ClientConfig,
-): string | undefined => {
-  if (
-    !cfg.useTestMode && requestData.url.includes("/epayment/") &&
-    requestData.url.includes("/approve")
-  ) {
-    return "forceApprove is only available in the test environment";
-  }
-};
-
 export const buildRequest = (
   cfg: ClientConfig,
   requestData: RequestData<unknown, unknown>,
@@ -74,7 +62,7 @@ export const buildRequest = (
       ...{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${requestData.token}` || "",
-        "User-Agent": "Deno SDK/0.0.1",
+        "User-Agent": createUserAgent(import.meta.url),
         "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
         "Merchant-Serial-Number": cfg.merchantSerialNumber,
         "Vipps-System-Name": cfg.systemName || "acme-systems",
@@ -87,4 +75,26 @@ export const buildRequest = (
     body: requestData.body ? JSON.stringify(requestData.body) : undefined,
   };
   return new Request(`${baseURL}${requestData.url}`, reqInit);
+};
+
+// Function that should receive import.meta.url (that will returns the URL of the current module
+// See: https://docs.deno.com/runtime/manual/runtime/import_meta_api
+export const createUserAgent = (metaUrl: string): string => {
+  let userAgent = "Vipps/Deno SDK/";
+
+  // Check if module is loaded from deno.land/x
+  const fromDenoLand = metaUrl.includes(
+    "https://deno.land/x/vipps_mobilepay_sdk",
+  );
+
+  if (fromDenoLand) {
+    // Extract the module version from the URL
+    const sdkVersion = metaUrl.split("@")[1].split("/")[0];
+    userAgent += sdkVersion;
+  } else {
+    // If not loaded from deno.land/x, assume it's a local version
+    userAgent += "local";
+  }
+
+  return userAgent;
 };

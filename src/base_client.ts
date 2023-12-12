@@ -4,12 +4,9 @@ import {
   ClientResponse,
   RequestData,
 } from "./types.ts";
-import {
-  buildRequest,
-  fetchRetry,
-  validateRequestData,
-} from "./base_client_helper.ts";
+import { buildRequest, fetchRetry } from "./base_client_helper.ts";
 import { parseError } from "./errors.ts";
+import { validateRequestData } from "./validate.ts";
 
 export const baseClient = (cfg: ClientConfig): BaseClient =>
   ({

@@ -1,7 +1,7 @@
 import {
   buildRequest,
+  createUserAgent,
   fetchJSON,
-  validateRequestData,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
 import { assert, assertEquals, mf } from "./test_deps.ts";
@@ -91,34 +91,20 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
   assert(checkHeaderKeys);
 });
 
-Deno.test("validateRequestData - Should return undefined for valid request data", () => {
-  const requestData: RequestData<unknown, unknown> = {
-    url: "/api/endpoint",
-    method: "POST",
-  };
-  const cfg: ClientConfig = { merchantSerialNumber: "", subscriptionKey: "" };
+Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
+  const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
+  const actualUserAgent = createUserAgent(
+    "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts",
+  );
 
-  const result = validateRequestData(requestData, cfg);
-
-  assertEquals(result, undefined);
+  assertEquals(actualUserAgent, expectedUserAgent);
 });
 
-Deno.test("validateRequestData - Should return error message when using forceApprove in Production", () => {
-  const requestData: RequestData<unknown, unknown> = {
-    url: "/epayment/approve",
-    method: "POST",
-  };
-  const cfg: ClientConfig = {
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: false,
-    retryRequests: false,
-  };
-
-  const result = validateRequestData(requestData, cfg);
-
-  assertEquals(
-    result,
-    "forceApprove is only available in the test environment",
+Deno.test("createUserAgent - Should return the correct user agent string when loaded locally", () => {
+  const expectedUserAgent = "Vipps/Deno SDK/local";
+  const actualUserAgent = createUserAgent(
+    "file:///Users/foo/bar/deno-sdk/src/mod.ts",
   );
+
+  assertEquals(actualUserAgent, expectedUserAgent);
 });
