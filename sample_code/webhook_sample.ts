@@ -1,7 +1,8 @@
 import "https://deno.land/std@0.208.0/dotenv/load.ts";
 import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.0.3/mod.ts";
 
-// Read environment variables
+// First, get your API keys from https://portal.vipps.no/
+// Here we assume they are stored in a .env file, see .env.example
 const clientId = Deno.env.get("CLIENT_ID") || "";
 const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
 
