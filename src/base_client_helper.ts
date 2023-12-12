@@ -95,7 +95,8 @@ export const createUserAgent = (metaUrl: string): string => {
   } // Or if the module was loaded from a local file
   else if (url.protocol === "file:") {
     userAgent += "local";
-  } else {
+  } // Otherwise, we don't know where the module was loaded from
+  else {
     userAgent += "unknown";
   }
 
