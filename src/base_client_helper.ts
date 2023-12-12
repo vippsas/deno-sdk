@@ -83,7 +83,7 @@ export const createUserAgent = (metaUrl: string): string => {
   let userAgent = "Vipps/Deno SDK/";
 
   const url = new URL(metaUrl);
-  
+
   // Check if the module was loaded from deno.land
   if (
     url.host === "deno.land" &&
@@ -92,12 +92,10 @@ export const createUserAgent = (metaUrl: string): string => {
     // Extract the module version from the URL
     const sdkVersion = url.pathname.split("@")[1].split("/")[0];
     userAgent += sdkVersion;
-  } 
-  // Or if the module was loaded from a local file
+  } // Or if the module was loaded from a local file
   else if (url.protocol === "file:") {
     userAgent += "local";
-  } 
-  else {
+  } else {
     userAgent += "unknown";
   }
 
