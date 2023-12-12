@@ -92,23 +92,22 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
-  const metaUrl = import.meta.url;
-  import.meta.url = "https://deno.land/x/vipps_mobilepay_sdk@1.0.0";
-
   const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
-  const actualUserAgent = createUserAgent();
+  const actualUserAgent = createUserAgent("https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts");
 
   assertEquals(actualUserAgent, expectedUserAgent);
-  import.meta.url = metaUrl;
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded locally", () => {
-  const metaUrl = import.meta.url;
-  import.meta.url = "file:///Users/foo/bar/deno-sdk/src/mod.ts";
-
   const expectedUserAgent = "Vipps/Deno SDK/local";
-  const actualUserAgent = createUserAgent();
+  const actualUserAgent = createUserAgent("file:///Users/foo/bar/deno-sdk/src/mod.ts");
 
   assertEquals(actualUserAgent, expectedUserAgent);
-  import.meta.url = metaUrl;
+});
+
+Deno.test("createUserAgent - Should return the correct user agent string with unknown", () => {
+  const expectedUserAgent = "Vipps/Deno SDK/unknown";
+  const actualUserAgent = createUserAgent("https://example.com/");
+
+  assertEquals(actualUserAgent, expectedUserAgent);
 });

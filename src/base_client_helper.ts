@@ -62,7 +62,7 @@ export const buildRequest = (
       ...{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${requestData.token}` || "",
-        "User-Agent": createUserAgent(),
+        "User-Agent": createUserAgent(import.meta.url),
         "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
         "Merchant-Serial-Number": cfg.merchantSerialNumber,
         "Vipps-System-Name": cfg.systemName || "acme-systems",
@@ -79,19 +79,25 @@ export const buildRequest = (
 
 // Function that should receive import.meta.url (that will returns the URL of the current module
 // See: https://deno.land/api@v1.38.5?s=ImportMeta#prop_url
-export const createUserAgent = (): string => {
+export const createUserAgent = (metaUrl: string): string => {
   let userAgent = "Vipps/Deno SDK/";
 
-  const url = new URL(import.meta.url);
-
-  if (url.host === "deno.land") {
+  const url = new URL(metaUrl);
+  
+  // Check if the module was loaded from deno.land
+  if (
+    url.host === "deno.land" &&
+    url.pathname.includes("vipps_mobilepay_sdk")
+  ) {
     // Extract the module version from the URL
     const sdkVersion = url.pathname.split("@")[1].split("/")[0];
     userAgent += sdkVersion;
-  } else if (url.protocol === "file:") {
-    // This module was loaded locally
+  } 
+  // Or if the module was loaded from a local file
+  else if (url.protocol === "file:") {
     userAgent += "local";
-  } else {
+  } 
+  else {
     userAgent += "unknown";
   }
 
