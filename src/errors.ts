@@ -1,5 +1,11 @@
 import { RetryError } from "./deps.ts";
 
+/**
+ * Parses the error and returns an object with error details.
+ * @template TErr - The type of the error object.
+ * @param error - The error to be parsed.
+ * @returns An object with error details.
+ */
 export const parseError = <TErr>(
   error: unknown,
 ): { ok: false; message: string; error?: TErr } => {

@@ -10,7 +10,17 @@ import {
   EPaymentPaymentEventOKResponse,
 } from "./types/epayment_types.ts";
 
+/**
+ * Factory object for creating ePayment request data.
+ */
 export const ePaymentRequestFactory = {
+  /**
+   * Creates a new payment.
+   *
+   * @param token - The authentication token.
+   * @param body - The request body containing the payment details.
+   * @returns A `RequestData` object with the URL, method, body, and token.
+   */
   create(
     token: string,
     body: EPaymentCreatePaymentRequest,
@@ -20,7 +30,6 @@ export const ePaymentRequestFactory = {
     if (!body.reference) {
       newBody.reference = crypto.randomUUID();
     }
-
     return {
       url: "/epayment/v1/payments",
       method: "POST",
@@ -28,6 +37,12 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+   * Retrieves information about a payment.
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment.
+   * @returns A `RequestData` object containing the URL, method, and token.
+   */
   info(
     token: string,
     reference: string,
@@ -38,6 +53,13 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+   * Retrieves the payment history for a specific reference.
+   * 
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment.
+   * @returns A `RequestData` object containing the URL, method, and token for the API request.
+   */
   history(
     token: string,
     reference: string,
@@ -48,6 +70,12 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+    * Cancels a payment.
+    * @param token - The authentication token.
+    * @param reference - The reference of the payment to cancel.
+    * @returns A RequestData object containing the URL, method, and token.
+    */
   cancel(
     token: string,
     reference: string,
@@ -58,6 +86,14 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+   * Capture a payment.
+   * 
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment.
+   * @param body - The modification request body.
+   * @returns A request data object containing the URL, method, body, and token.
+   */
   capture(
     token: string,
     reference: string,
@@ -70,6 +106,13 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+   * Refunds a payment.
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment to be refunded.
+   * @param body - The request body containing the modification details.
+   * @returns A RequestData object with the refund request details.
+   */
   refund(
     token: string,
     reference: string,
@@ -82,6 +125,14 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
+  /**
+   * Forces the approval of a payment.
+   * 
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment.
+   * @param body - The request body containing additional information.
+   * @returns A RequestData object with void as the response data type and EpaymentErrorResponse as the error response type.
+   */
   forceApprove(
     token: string,
     reference: string,
