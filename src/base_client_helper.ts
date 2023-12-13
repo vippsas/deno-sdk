@@ -103,9 +103,9 @@ export const buildRequest = (
  */
 export const getUserAgent = (): string => {
   const metaUrl = import.meta.url;
-  const userAgent = createUserAgent(metaUrl);
+  const userAgent = createSDKUserAgent(metaUrl);
   return userAgent;
-}
+};
 
 /**
  * Creates a user agent string based on the provided meta URL.
@@ -114,11 +114,10 @@ export const getUserAgent = (): string => {
  * @param metaUrl - The meta URL of the module.
  * @returns The user agent string.
  */
-export const createUserAgent = (metaUrl: string): string => {
-  let userAgent = "Vipps/Deno SDK/";
-
+export const createSDKUserAgent = (metaUrl: string): string => {
   const url = new URL(metaUrl);
 
+  let userAgent = "Vipps/Deno SDK/";
   // Check if the module was loaded from deno.land
   if (
     url.host === "deno.land" &&
@@ -134,6 +133,5 @@ export const createUserAgent = (metaUrl: string): string => {
   else {
     userAgent += "unknown";
   }
-
   return userAgent;
 };

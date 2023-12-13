@@ -1,6 +1,6 @@
 import {
   buildRequest,
-  createUserAgent,
+  createSDKUserAgent,
   fetchJSON,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
@@ -93,7 +93,7 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
   const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
-  const actualUserAgent = createUserAgent(
+  const actualUserAgent = createSDKUserAgent(
     "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts",
   );
 
@@ -102,7 +102,7 @@ Deno.test("createUserAgent - Should return the correct user agent string when lo
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded locally", () => {
   const expectedUserAgent = "Vipps/Deno SDK/local";
-  const actualUserAgent = createUserAgent(
+  const actualUserAgent = createSDKUserAgent(
     "file:///Users/foo/bar/deno-sdk/src/mod.ts",
   );
 
@@ -111,7 +111,7 @@ Deno.test("createUserAgent - Should return the correct user agent string when lo
 
 Deno.test("createUserAgent - Should return the correct user agent string with unknown", () => {
   const expectedUserAgent = "Vipps/Deno SDK/unknown";
-  const actualUserAgent = createUserAgent("https://example.com/");
+  const actualUserAgent = createSDKUserAgent("https://example.com/");
 
   assertEquals(actualUserAgent, expectedUserAgent);
 });
