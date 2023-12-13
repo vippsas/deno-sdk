@@ -18,7 +18,7 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
   ({
     /**
      * Makes a request to the server.
-     * 
+     *
      * @template TOk The type of the successful response.
      * @template TErr The type of the error response.
      * @param requestData The request data.

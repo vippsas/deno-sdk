@@ -6,7 +6,6 @@ import {
   GetCheckoutSessionOKResponse,
 } from "./types/checkout_types.ts";
 
-
 /**
  * Factory object for creating checkout request data.
  */

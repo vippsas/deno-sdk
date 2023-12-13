@@ -55,7 +55,7 @@ export const ePaymentRequestFactory = {
   },
   /**
    * Retrieves the payment history for a specific reference.
-   * 
+   *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @returns A `RequestData` object containing the URL, method, and token for the API request.
@@ -71,11 +71,11 @@ export const ePaymentRequestFactory = {
     };
   },
   /**
-    * Cancels a payment.
-    * @param token - The authentication token.
-    * @param reference - The reference of the payment to cancel.
-    * @returns A RequestData object containing the URL, method, and token.
-    */
+   * Cancels a payment.
+   * @param token - The authentication token.
+   * @param reference - The reference of the payment to cancel.
+   * @returns A RequestData object containing the URL, method, and token.
+   */
   cancel(
     token: string,
     reference: string,
@@ -88,7 +88,7 @@ export const ePaymentRequestFactory = {
   },
   /**
    * Capture a payment.
-   * 
+   *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The modification request body.
@@ -127,7 +127,7 @@ export const ePaymentRequestFactory = {
   },
   /**
    * Forces the approval of a payment.
-   * 
+   *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The request body containing additional information.

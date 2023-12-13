@@ -12,7 +12,7 @@ import {
 export const webhooksRequestFactory = {
   /**
    * Registers a webhook.
-   * 
+   *
    * @param token - The authentication token.
    * @param body - The request body containing the webhook details.
    * @returns A `RequestData` object with the URL, method, body, and token.

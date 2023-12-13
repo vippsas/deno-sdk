@@ -16,10 +16,10 @@ type Credentials = {
 export const authRequestFactory = {
   /**
    * Gets an access token.
-   * 
+   *
    * @param cred - The credentials.
    * @returns The request data.
-   */  
+   */
   getToken(cred: Credentials): RequestData<AccessToken, AccessTokenError> {
     return {
       method: "POST",
