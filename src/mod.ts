@@ -6,6 +6,11 @@ import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 
+/**
+ * Creates a client with the specified options.
+ * @param options The client configuration options.
+ * @returns The API client.
+ */
 export const Client = (options: ClientConfig) => {
   // Create the base client
   const client = baseClient(options);
