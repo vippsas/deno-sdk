@@ -2,6 +2,13 @@ import { isErrorStatus, retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
 import { ClientConfig, ClientResponse, RequestData } from "./types.ts";
 
+/**
+ * Executes a fetch request with optional retry logic.
+ *
+ * @param request - The request to be executed.
+ * @param retryRequest - Whether to retry the request if it fails. Default is true.
+ * @returns A promise that resolves to the response of the request.
+ */
 export const fetchRetry = async <TOk, TErr>(
   request: Request,
   retryRequest = true,
@@ -23,6 +30,13 @@ export const fetchRetry = async <TOk, TErr>(
   return req;
 };
 
+/**
+ * Fetches JSON data from the specified request.
+ * @param request - The request to fetch JSON data from.
+ * @returns A promise that resolves to a ClientResponse object containing the fetched data.
+ * @template TOk - The type of the successful response data.
+ * @template TErr - The type of the error response data.
+ */
 export const fetchJSON = async <TOk, TErr>(
   request: Request,
 ): Promise<ClientResponse<TOk, TErr>> => {
@@ -47,6 +61,12 @@ export const fetchJSON = async <TOk, TErr>(
   return { ok: true, data: json as TOk };
 };
 
+/**
+ * Builds a Request object based on the provided configuration and request data.
+ * @param cfg - The client configuration.
+ * @param requestData - The request data containing method, headers, token, body, and URL.
+ * @returns A Request object.
+ */
 export const buildRequest = (
   cfg: ClientConfig,
   requestData: RequestData<unknown, unknown>,
@@ -62,7 +82,7 @@ export const buildRequest = (
       ...{
         "Content-Type": "application/json",
         "Authorization": `Bearer ${requestData.token}` || "",
-        "User-Agent": createUserAgent(import.meta.url),
+        "User-Agent": getUserAgent(),
         "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
         "Merchant-Serial-Number": cfg.merchantSerialNumber,
         "Vipps-System-Name": cfg.systemName || "acme-systems",
@@ -77,8 +97,23 @@ export const buildRequest = (
   return new Request(`${baseURL}${requestData.url}`, reqInit);
 };
 
-// Function that should receive import.meta.url (that will returns the URL of the current module
-// See: https://deno.land/api@v1.38.5?s=ImportMeta#prop_url
+/**
+ * Returns the user agent string for the client.
+ * @returns The user agent string.
+ */
+export const getUserAgent = (): string => {
+  const metaUrl = import.meta.url;
+  const userAgent = createUserAgent(metaUrl);
+  return userAgent;
+}
+
+/**
+ * Creates a user agent string based on the provided meta URL.
+ * The function is meant to receive import.meta.url (that will returns the URL of the current module).
+ * Read more in the Deno docs in Import Meta
+ * @param metaUrl - The meta URL of the module.
+ * @returns The user agent string.
+ */
 export const createUserAgent = (metaUrl: string): string => {
   let userAgent = "Vipps/Deno SDK/";
 
