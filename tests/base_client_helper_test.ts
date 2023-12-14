@@ -68,7 +68,7 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
     headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer your-token",
-      "User-Agent": "Deno SDK/0.0.1",
+      "User-Agent": "Vipps/Deno SDK/local",
       "Ocp-Apim-Subscription-Key": "your-subscription-key",
       "Merchant-Serial-Number": "your-merchant-serial-number",
       "Vipps-System-Name": "your-system-name",
