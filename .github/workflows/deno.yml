@@ -17,6 +17,9 @@ jobs:
       - name: Setup Deno
         run: curl -fsSL https://deno.land/x/install/install.sh | sh
 
+      - name: Set PATH
+        run: export DENO_INSTALL="/home/runner/.deno" && export PATH="$DENO_INSTALL/bin:$PATH"
+
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/
 
