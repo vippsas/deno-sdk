@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        run: nix-shell -p deno
+        run: cargo install deno --locked
 
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/
