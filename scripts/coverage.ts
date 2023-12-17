@@ -2,14 +2,29 @@ import { trimAndParse } from "https://deno.land/x/ansi_escape_code@v1.0.2/mod.ts
 
 const THRESHOLD = 90;
 
-const cmd = new Deno.Command(Deno.execPath(), {
+const testCmd = new Deno.Command(Deno.execPath(), {
+  args: [
+    "test",
+    "--coverage",
+  ],
+});
+
+const output = await testCmd.output();
+const testCmdErr = new TextDecoder().decode(output.stderr);
+
+if (output.code || testCmdErr) {
+  console.error(testCmdErr);
+  Deno.exit(1);
+}
+
+const covCmd = new Deno.Command(Deno.execPath(), {
   args: [
     "coverage",
     "./coverage",
   ],
 });
 
-const { code, stdout, stderr } = await cmd.output();
+const { code, stdout, stderr } = await covCmd.output();
 const cmdOut = new TextDecoder().decode(stdout);
 const cmdErr = new TextDecoder().decode(stderr);
 console.log("CMD OUT: ", cmdOut);
