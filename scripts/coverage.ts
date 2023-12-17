@@ -12,6 +12,7 @@ const cmd = new Deno.Command(Deno.execPath(), {
 const { code, stdout, stderr } = await cmd.output();
 const cmdOut = new TextDecoder().decode(stdout);
 const cmdErr = new TextDecoder().decode(stderr);
+console.log("CMD OUT: ", cmdOut);
 
 if (code || cmdErr) {
   console.error(cmdErr);
