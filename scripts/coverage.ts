@@ -28,7 +28,6 @@ console.log("Third last: ", thirdLast);
 
 console.log(`Branch coverage: ${branchTotal}`);
 
-
 if (!branchTotal || isNaN(result)) {
   console.error("Could not retrieve branch coverage");
   Deno.exit(1);
