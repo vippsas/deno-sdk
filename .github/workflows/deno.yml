@@ -20,5 +20,8 @@ jobs:
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/
 
+      - name: Create coverage reports
+        run: deno test --coverage 
+        
       - name: Check coverage
-        run: deno test --coverage && deno run -A scripts/coverage.ts
+        run: deno run -A scripts/coverage.ts
