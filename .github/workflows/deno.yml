@@ -19,3 +19,6 @@ jobs:
 
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/
+
+      - name: Check coverage
+        run: ./scripts/coverage.sh
