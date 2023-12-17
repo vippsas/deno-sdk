@@ -20,18 +20,18 @@ if (code || cmdErr) {
 
 const words = cmdOut.split("|");
 const thirdLast = words.at(-3) || "";
-const [trimmed, _annotations] = trimAndParse(thirdLast)
+const [trimmed, _annotations] = trimAndParse(thirdLast);
 const branchTotal = trimmed.replaceAll(" ", "");
 const result = parseFloat(branchTotal);
 
 if (!branchTotal || isNaN(result)) {
-   console.error("Could not retrieve branch coverage");
-   Deno.exit(1);
+  console.error("Could not retrieve branch coverage");
+  Deno.exit(1);
 }
 
 if (result > THRESHOLD) {
   console.log(`Branch coverage is good: ${branchTotal}`);
 } else {
   console.log(`Branch coverage is bad: ${branchTotal}`);
-  Deno.exit(1)
+  Deno.exit(1);
 }
