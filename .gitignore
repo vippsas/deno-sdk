@@ -1,5 +1,3 @@
 .DS_Store
-.coverage
-lcov.info
-staging/
+coverage/
 .env

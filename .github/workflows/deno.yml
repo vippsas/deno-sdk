@@ -8,14 +8,17 @@ on:
 
 jobs:
   deno:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Deno
-        run: brew install deno
+        run: sudo snap install deno
 
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/
+        
+      - name: Check coverage
+        run: deno run -A scripts/coverage.ts
