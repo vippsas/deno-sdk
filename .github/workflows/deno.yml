@@ -8,14 +8,14 @@ on:
 
 jobs:
   deno:
-    runs-on: mac-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Setup repo
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        run: curl -fsSL https://deno.land/x/install/install.sh | sh
+        run: sudo snap install deno
 
       - name: Run tests
         run: deno fmt --check && deno lint && deno test --allow-net --parallel tests/

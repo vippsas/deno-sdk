@@ -27,7 +27,6 @@ const covCmd = new Deno.Command(Deno.execPath(), {
 const { code, stdout, stderr } = await covCmd.output();
 const cmdOut = new TextDecoder().decode(stdout);
 const cmdErr = new TextDecoder().decode(stderr);
-console.log("CMD OUT: ", cmdOut);
 
 if (code || cmdErr) {
   console.error(cmdErr);
@@ -40,9 +39,6 @@ const [trimmed, _annotations] = trimAndParse(thirdLast);
 const branchTotal = trimmed.replaceAll(" ", "");
 const result = parseFloat(branchTotal);
 
-console.log("Third last: ", thirdLast);
-
-console.log(`Branch coverage: ${branchTotal}`);
 
 if (!branchTotal || isNaN(result)) {
   console.error("Could not retrieve branch coverage");
