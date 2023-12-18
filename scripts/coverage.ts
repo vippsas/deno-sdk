@@ -31,7 +31,7 @@ const testCmd = new Deno.Command(Deno.execPath(), {
 });
 
 // Check that the command ran successfully
-getCommandOutput(testCmd);
+await getCommandOutput(testCmd);
 
 // Calculate branch coverage
 const covCmd = new Deno.Command(Deno.execPath(), {
