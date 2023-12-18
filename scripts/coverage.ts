@@ -6,11 +6,21 @@
  * If the branch coverage is below a specified threshold, it exits with an error.
  *
  * @param THRESHOLD - The minimum branch coverage threshold (in percentage) required for the project.
- * @returns - None.
  */
 
 // Minimum branch coverage threshold (in percentage)
 const THRESHOLD = 90;
+
+const getCommandOutput = async (command: Deno.Command) => {
+  const { code, stdout, stderr } = await command.output();
+  const errors = new TextDecoder().decode(stderr);
+  if (code || errors) {
+    console.error(cmdErr);
+    Deno.exit(1);
+  }
+  const output = new TextDecoder().decode(stdout);
+  return output;
+};
 
 // Run tests with coverage enabled
 const testCmd = new Deno.Command(Deno.execPath(), {
@@ -21,12 +31,7 @@ const testCmd = new Deno.Command(Deno.execPath(), {
 });
 
 // Check that the command ran successfully
-const output = await testCmd.output();
-const testCmdErr = new TextDecoder().decode(output.stderr);
-if (output.code || testCmdErr) {
-  console.error(testCmdErr);
-  Deno.exit(1);
-}
+getCommandOutput(testCmd);
 
 // Calculate branch coverage
 const covCmd = new Deno.Command(Deno.execPath(), {
@@ -37,18 +42,10 @@ const covCmd = new Deno.Command(Deno.execPath(), {
 });
 
 // Check that the command ran successfully
-const { code, stdout, stderr } = await covCmd.output();
-const cmdErr = new TextDecoder().decode(stderr);
-if (code || cmdErr) {
-  console.error(cmdErr);
-  Deno.exit(1);
-}
-
-// Decode the output
-const cmdOut = new TextDecoder().decode(stdout);
+const coverageReport = await getCommandOutput(covCmd);
 
 // Remove ANSI escape codes
-const words = cmdOut.replaceAll("\x1b", " ").split(" ");
+const words = coverageReport.replaceAll("\x1b", " ").split(" ");
 
 // Remove all non-numbers
 const floats = words.filter((word) => !isNaN(parseFloat(word)));
