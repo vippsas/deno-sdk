@@ -39,7 +39,6 @@ const [trimmed, _annotations] = trimAndParse(thirdLast);
 const branchTotal = trimmed.replaceAll(" ", "");
 const result = parseFloat(branchTotal);
 
-
 if (!branchTotal || isNaN(result)) {
   console.error("Could not retrieve branch coverage");
   Deno.exit(1);
