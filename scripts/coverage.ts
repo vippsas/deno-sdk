@@ -13,9 +13,9 @@ const THRESHOLD = 90;
 
 const getCommandOutput = async (command: Deno.Command) => {
   const { code, stdout, stderr } = await command.output();
-  const errors = new TextDecoder().decode(stderr);
-  if (code || errors) {
-    console.error(cmdErr);
+  const error = new TextDecoder().decode(stderr);
+  if (code || error) {
+    console.error(error);
     Deno.exit(1);
   }
   const output = new TextDecoder().decode(stdout);
