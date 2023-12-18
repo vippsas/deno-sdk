@@ -776,3 +776,96 @@ type AgreementVariableAmountPricingResponse = {
  * @example "NOK"
  */
 type AgreementCurrency = "NOK";
+
+export type PatchAgreementV3 = {
+  /**
+   * Name of the product being subscribed to.
+   * @maxLength 45
+   * @example "Pluss-abonnement"
+   */
+  productName?: string;
+  /**
+   * Product description (longer)
+   * @maxLength 100
+   */
+  productDescription?: string;
+  /**
+   * URL where we can send the customer to view/manage their
+   * subscription. Typically a "My page" where the user can change, pause, cancel, etc.
+   * The page must offer actual management, not just information about how to
+   * contact customer service, etc.
+   * We recommend letting users log in with Vipps MobilePay, not with username and password:
+   * https://developer.vippsmobilepay.com/docs/APIs/login-api
+   * We do not have any specific requirements for the security of the
+   * page other than requiring HTTPS.
+   * @maxLength 1024
+   * @example "https://example.com/vipps-subscriptions/1234/"
+   */
+  merchantAgreementUrl?: string;
+  /**
+   * An optional external ID for the agreement.
+   * The `externalId` can be used by the merchant to map the `agreementId`
+   * to an ID in a subscription system or similar.
+   * @minLength 1
+   * @maxLength 64
+   * @pattern ^.{1,64}$
+   * @example "external-id-2468"
+   */
+  externalId?: string;
+  /**
+   * Status of the agreement.
+   * @example "STOPPED"
+   */
+  status?: AgreementStatus;
+  pricing?: AgreementPricingUpdateRequest;
+  /**
+   * The interval of the agreement.
+   *
+   * The interval is specified by the `type` and `period` properties.
+   * When the type is `RECURRING`, then the property `period` is required.
+   */
+  interval?: {
+    /**
+     * @default "RECURRING"
+     * @example "RECURRING"
+     */
+    type?: ChargeType;
+    /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
+    period?: AgreementTimePeriod;
+  };
+}
+
+type AgreementPricingUpdateRequest = {
+  /**
+   * The price of the agreement, can only be updated if agreement type is LEGACY
+   *
+   * Amounts are specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @min 100
+   * @example 1500
+   */
+  amount?: number;
+  /**
+   * The suggested max amount that the customer should choose, can only be updated if agreement type is VARIABLE.
+   *
+   * Amounts are specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @min 100
+   * @max 2000000
+   * @example 3000
+   */
+  suggestedMaxAmount?: number;
+}
+
+/**
+ * @default "RECURRING"
+ * @example "RECURRING"
+ */
+type ChargeType = "INITIAL" | "RECURRING";
+
+export type ForceAcceptAgreementV3 = {
+  /** @example "4791234567" */
+  phoneNumber: string;
+}

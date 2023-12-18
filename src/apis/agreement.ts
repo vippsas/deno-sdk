@@ -5,6 +5,8 @@ import {
   AgreementStatus,
   DraftAgreementResponseV3,
   DraftAgreementV3,
+  ForceAcceptAgreementV3,
+  PatchAgreementV3,
 } from "./types/agreement_types.ts";
 
 /**
@@ -41,6 +43,30 @@ export const agreementRequestFactory = {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
       method: "GET",
+      token,
+    };
+  },
+  update(
+    token: string,
+    agreementId: string,
+    body: PatchAgreementV3
+  ): RequestData<void, AgreementErrorResponse> {
+    return {
+      url: `/recurring/v3/agreements/${agreementId}`,
+      method: "PATCH",
+      body,
+      token,
+    };
+  },
+  forceAccept(
+    token: string,
+    agreementId: string,
+    body: ForceAcceptAgreementV3
+  ): RequestData<void, AgreementErrorResponse> {
+    return {
+      url: `/recurring/v3/agreements/${agreementId}/accept`,
+      method: "PATCH",
+      body,
       token,
     };
   }
