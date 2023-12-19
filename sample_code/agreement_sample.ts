@@ -58,7 +58,10 @@ if (!agreement.ok) {
   Deno.exit(1);
 }
 
-const agreementInfo = await client.agreement.info(token, agreement.data.agreementId);
+const agreementInfo = await client.agreement.info(
+  token,
+  agreement.data.agreementId,
+);
 
 // Check if the agreement was retrieved successfully
 if (!agreementInfo.ok) {
@@ -67,9 +70,13 @@ if (!agreementInfo.ok) {
   Deno.exit(1);
 }
 
-const activatedAgreement = await client.agreement.forceAccept(token, agreement.data.agreementId, {
-  phoneNumber: customerPhoneNumber,
-});
+const activatedAgreement = await client.agreement.forceAccept(
+  token,
+  agreement.data.agreementId,
+  {
+    phoneNumber: customerPhoneNumber,
+  },
+);
 
 // Check if the agreement was retrieved successfully
 if (!activatedAgreement.ok) {
@@ -78,7 +85,11 @@ if (!activatedAgreement.ok) {
   Deno.exit(1);
 }
 
-const updatedAgreement = await client.agreement.update(token, agreement.data.agreementId, { status: "STOPPED" });
+const updatedAgreement = await client.agreement.update(
+  token,
+  agreement.data.agreementId,
+  { status: "STOPPED" },
+);
 
 // Check if the agreement was retrieved successfully
 if (!updatedAgreement.ok) {
