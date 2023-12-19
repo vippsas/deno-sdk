@@ -1,0 +1,16 @@
+{
+  "scriptId": "302",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/mod.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 980, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Client",
+      "ranges": [{ "startOffset": 548, "endOffset": 978, "count": 3 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

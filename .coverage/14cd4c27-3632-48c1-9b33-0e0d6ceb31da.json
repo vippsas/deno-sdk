@@ -1,0 +1,36 @@
+{
+  "scriptId": "311",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/apis/agreement.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 4028, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "create",
+      "ranges": [{ "startOffset": 1281, "endOffset": 1412, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "list",
+      "ranges": [{ "startOffset": 2045, "endOffset": 2223, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "info",
+      "ranges": [{ "startOffset": 2581, "endOffset": 2719, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "update",
+      "ranges": [{ "startOffset": 3269, "endOffset": 3429, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "forceAccept",
+      "ranges": [{ "startOffset": 3852, "endOffset": 4024, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

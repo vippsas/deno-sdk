@@ -1,0 +1,16 @@
+{
+  "scriptId": "328",
+  "url": "https://deno.land/std@0.209.0/assert/assert_string_includes.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 734, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertStringIncludes",
+      "ranges": [{ "startOffset": 476, "endOffset": 733, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

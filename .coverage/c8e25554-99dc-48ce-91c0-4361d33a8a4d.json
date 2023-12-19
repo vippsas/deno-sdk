@@ -1,0 +1,34 @@
+{
+  "scriptId": "300",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/tests/api_proxy_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1082, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 222, "endOffset": 554, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "foo",
+      "ranges": [{ "startOffset": 342, "endOffset": 423, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 633, "endOffset": 1079, "count": 1 },
+        { "startOffset": 954, "endOffset": 959, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "foo",
+      "ranges": [{ "startOffset": 759, "endOffset": 840, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

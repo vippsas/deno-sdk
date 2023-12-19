@@ -1,0 +1,16 @@
+{
+  "scriptId": "312",
+  "url": "https://deno.land/std@0.209.0/assert/assert_almost_equals.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1238, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertAlmostEquals",
+      "ranges": [{ "startOffset": 753, "endOffset": 1237, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

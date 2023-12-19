@@ -1,0 +1,31 @@
+{
+  "scriptId": "337",
+  "url": "https://crux.land/api/get/2KNRVU.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 3155, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "defaultOtherHandler",
+      "ranges": [{ "startOffset": 282, "endOffset": 372, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "defaultErrorHandler",
+      "ranges": [{ "startOffset": 432, "endOffset": 549, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "defaultUnknownMethodHandler",
+      "ranges": [{ "startOffset": 618, "endOffset": 790, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "router",
+      "ranges": [{ "startOffset": 1822, "endOffset": 3154, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

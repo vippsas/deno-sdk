@@ -1,0 +1,25 @@
+{
+  "scriptId": "301",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/base_client.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1106, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "baseClient",
+      "ranges": [{ "startOffset": 326, "endOffset": 1104, "count": 4 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "makeRequest",
+      "ranges": [
+        { "startOffset": 650, "endOffset": 1099, "count": 5 },
+        { "startOffset": 788, "endOffset": 875, "count": 0 },
+        { "startOffset": 1036, "endOffset": 1093, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

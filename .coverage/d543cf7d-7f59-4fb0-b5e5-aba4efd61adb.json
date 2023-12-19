@@ -1,0 +1,26 @@
+{
+  "scriptId": "309",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/apis/webhooks.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1118, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "register",
+      "ranges": [{ "startOffset": 331, "endOffset": 467, "count": 2 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "list",
+      "ranges": [{ "startOffset": 660, "endOffset": 767, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "delete",
+      "ranges": [{ "startOffset": 978, "endOffset": 1114, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

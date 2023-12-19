@@ -1,0 +1,21 @@
+{
+  "scriptId": "300",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/tests/validate_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 889, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 187, "endOffset": 434, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 538, "endOffset": 886, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scriptId": "307",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/apis/auth.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 539, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getToken",
+      "ranges": [{ "startOffset": 217, "endOffset": 535, "count": 3 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

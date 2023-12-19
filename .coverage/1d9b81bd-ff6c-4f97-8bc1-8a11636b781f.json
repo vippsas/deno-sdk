@@ -1,0 +1,16 @@
+{
+  "scriptId": "335",
+  "url": "https://deno.land/std@0.209.0/assert/unreachable.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 408, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "unreachable",
+      "ranges": [{ "startOffset": 338, "endOffset": 407, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

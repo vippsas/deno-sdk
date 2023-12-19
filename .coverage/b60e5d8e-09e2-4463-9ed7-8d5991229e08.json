@@ -1,0 +1,21 @@
+{
+  "scriptId": "310",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/apis/checkout.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1456, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "create",
+      "ranges": [{ "startOffset": 412, "endOffset": 937, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "info",
+      "ranges": [{ "startOffset": 1249, "endOffset": 1452, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "scriptId": "300",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/tests/agreement_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1068, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 155, "endOffset": 1065, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 226, "endOffset": 485, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}

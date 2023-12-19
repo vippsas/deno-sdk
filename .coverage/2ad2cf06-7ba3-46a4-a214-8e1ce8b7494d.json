@@ -1,0 +1,24 @@
+{
+  "scriptId": "342",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/validate.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 677, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "validateRequestData",
+      "ranges": [
+        { "startOffset": 240, "endOffset": 675, "count": 7 },
+        { "startOffset": 310, "endOffset": 351, "count": 0 },
+        { "startOffset": 352, "endOffset": 391, "count": 0 },
+        { "startOffset": 393, "endOffset": 467, "count": 0 },
+        { "startOffset": 517, "endOffset": 559, "count": 0 },
+        { "startOffset": 560, "endOffset": 598, "count": 0 },
+        { "startOffset": 600, "endOffset": 673, "count": 0 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

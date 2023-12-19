@@ -1,0 +1,50 @@
+{
+  "scriptId": "300",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/tests/base_client_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 2412, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 143, "endOffset": 314, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 361, "endOffset": 922, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 440, "endOffset": 652, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 965, "endOffset": 1445, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1044, "endOffset": 1174, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1508, "endOffset": 2409, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        { "startOffset": 1604, "endOffset": 1894, "count": 3 },
+        { "startOffset": 1642, "endOffset": 1782, "count": 2 },
+        { "startOffset": 1782, "endOffset": 1893, "count": 1 }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scriptId": "319",
+  "url": "https://deno.land/std@0.209.0/assert/assert_instance_of.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1410, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertInstanceOf",
+      "ranges": [{ "startOffset": 469, "endOffset": 1409, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

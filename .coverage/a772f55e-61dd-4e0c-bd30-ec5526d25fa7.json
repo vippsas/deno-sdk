@@ -1,0 +1,46 @@
+{
+  "scriptId": "308",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/src/apis/epayment.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 3188, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "create",
+      "ranges": [{ "startOffset": 337, "endOffset": 626, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "info",
+      "ranges": [{ "startOffset": 860, "endOffset": 991, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "history",
+      "ranges": [{ "startOffset": 1267, "endOffset": 1408, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "cancel",
+      "ranges": [{ "startOffset": 1630, "endOffset": 1771, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "capture",
+      "ranges": [{ "startOffset": 2045, "endOffset": 2206, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "refund",
+      "ranges": [{ "startOffset": 2500, "endOffset": 2659, "count": 0 }],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "forceApprove",
+      "ranges": [{ "startOffset": 3013, "endOffset": 3184, "count": 0 }],
+      "isBlockCoverage": false
+    }
+  ]
+}

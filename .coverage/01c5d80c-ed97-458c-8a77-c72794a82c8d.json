@@ -1,0 +1,21 @@
+{
+  "scriptId": "300",
+  "url": "file:///Users/tomas.zijdemans/Code/deno-sdk/tests/checkout_test.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 0, "endOffset": 1465, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 191, "endOffset": 1070, "count": 1 }],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [{ "startOffset": 1132, "endOffset": 1462, "count": 1 }],
+      "isBlockCoverage": true
+    }
+  ]
+}
