@@ -1,3 +1,21 @@
+//////////////// Common types /////////////////
+/**
+ * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
+ * @minLength 3
+ * @maxLength 3
+ * @pattern ^[A-Z]{3}$
+ * @example "NOK"
+ */
+type AgreementCurrencyV3 = "NOK";
+
+/**
+ * Status of the agreement.
+ * @default "ACTIVE"
+ * @example "ACTIVE"
+ */
+export type AgreementStatus = "PENDING" | "ACTIVE" | "STOPPED" | "EXPIRED";
+
+////////////// Create agreement ///////////////
 export type DraftAgreementV3 = {
   campaign?: AgreementCampaignV3;
   pricing: AgreementPricingRequest;
@@ -101,14 +119,8 @@ export type DraftAgreementV3 = {
    * @pattern ^[A-Z]{2}$
    * @example "NO"
    */
-  countryCode?: "NO";
+  countryCode?: string;
 };
-
-type AgreementCampaignV3 =
-  | AgreementPriceCampaignV3
-  | AgreementPeriodCampaignV3
-  | AgreementEventCampaignV3
-  | AgreementFullFlexCampaignV3;
 
 type AgreementPricingRequest = {
   /**
@@ -208,114 +220,6 @@ type AgreementTimePeriod = {
   count: number;
 };
 
-type AgreementPriceCampaignV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends.
-   * Needs to be UTC.
-   * @example "2019-06-01T00:00:00Z"
-   */
-  end: string;
-} | null;
-
-type AgreementPeriodCampaignV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  period: AgreementTimePeriod;
-} | null;
-
-type AgreementEventCampaignV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends. Must be UTC.
-   * @format date-time
-   * @example "2022-12-31T00:00:00Z"
-   */
-  eventDate: string;
-  /**
-   * A short text that describes the event
-   * @example "Until Christmas"
-   */
-  eventText: string;
-} | null;
-
-type AgreementFullFlexCampaignV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriod;
-  /**
-   * The date and time the campaign ends.
-   * Needs to be UTC.
-   * @example "2019-06-01T00:00:00Z"
-   */
-  end: string;
-} | null;
-
-/**
- * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
- * @minLength 3
- * @maxLength 3
- * @pattern ^[A-Z]{3}$
- * @example "NOK"
- */
-type AgreementCurrencyV3 = "NOK";
-
 export type DraftAgreementResponseV3 = {
   /**
    * Id of a an agreement which user may agree to.
@@ -348,79 +252,7 @@ export type DraftAgreementResponseV3 = {
   chargeId?: string | null;
 };
 
-export type AgreementErrorResponse = AgreementErrorV3 | AgreementErrorFromAzure;
-
-/**
- * Error response
- * Error response using the Problem JSON format
- */
-type AgreementErrorV3 = {
-  /**
-   * Path to type of error
-   * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
-   */
-  type?: string;
-  /**
-   * Short description of the error
-   * @example "Bad Request"
-   */
-  title?: string;
-  /**
-   * HTTP status returned with the problem
-   * @format int32
-   * @example 400
-   */
-  status?: number;
-  /**
-   * Details about the error
-   * @example "Input validation failed"
-   */
-  detail?: string;
-  /**
-   * The path of the request
-   * @example "/v3/agreements"
-   */
-  instance?: string;
-  /**
-   * An unique ID for the request
-   * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
-   */
-  contextId?: string;
-  extraDetails?: {
-    /**
-     * Field to provide additional details on
-     * @example "productName"
-     */
-    field?: string;
-    /**
-     * Details for the error of a specific field
-     * @example "must not be empty"
-     */
-    text?: string;
-  }[];
-};
-
-/**
- * An error from Microsoft Azure. We have limited control of these errors,
- * and can not give as detailed information as with the errors from our own code.
- * The most important property is the HTTP status code.
- */
-type AgreementErrorFromAzure = {
-  responseInfo: {
-    /** @example 401 */
-    responseCode: number;
-    /** @example "Unauthorized" */
-    responseMessage: string;
-  };
-  result: {
-    /**
-     * When possible: A description of what went wrong.
-     * @example "(An error from Azure API Management, possibly related to authentication)"
-     */
-    message: string;
-  };
-};
-
+/////////////// Agreement Info ////////////////
 export type AgreementResponseV3 = {
   campaign?: AgreementCampaignResponseV3 | null;
   pricing: AgreementPricingResponse;
@@ -512,7 +344,7 @@ export type AgreementResponseV3 = {
    * @pattern ^[A-Z]{2}$
    * @example "NO"
    */
-  countryCode: "NO";
+  countryCode: string;
   /**
    * UUID (RFC 4122) representation of ID
    * @format uuid
@@ -529,17 +361,6 @@ export type AgreementResponseV3 = {
    */
   vippsConfirmationUrl?: string;
 };
-
-type AgreementCampaignResponseV3 =
-  | AgreementPriceCampaignResponseV3
-  | AgreementPeriodCampaignResponseV3
-  | AgreementEventCampaignResponseV3
-  | AgreementFullFlexCampaignResponseV3
-  | AgreementLegacyCampaignResponseV3;
-
-type AgreementPricingResponse =
-  | AgreementLegacyPricingResponse
-  | AgreementVariableAmountPricingResponse;
 
 /**
  * Time Period response
@@ -563,174 +384,16 @@ type AgreementTimePeriodResponse = {
    */
   text?: string;
 };
-/**
- * Status of the agreement.
- * @default "ACTIVE"
- * @example "ACTIVE"
- */
-export type AgreementStatus = "PENDING" | "ACTIVE" | "STOPPED" | "EXPIRED";
 
-type AgreementPriceCampaignResponseV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends. Must be UTC.
-   * @format date-time
-   * @example "2022-12-31T00:00:00Z"
-   */
-  end: string;
-  /**
-   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
-   * @example "Ordinary price 399 kr starts 6/12/2022"
-   */
-  explanation?: string;
-};
-
-type AgreementPeriodCampaignResponseV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends.
-   * Needs to be UTC.
-   * @example "2019-06-01T00:00:00Z"
-   */
-  end: string;
-  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  period: AgreementTimePeriod;
-  /**
-   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
-   * @example "Ordinary price 399 kr starts 6/12/2022"
-   */
-  explanation?: string;
-};
-
-type AgreementEventCampaignResponseV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends. Must be UTC.
-   * @format date-time
-   * @example "2022-12-31T00:00:00Z"
-   */
-  eventDate: string;
-  /**
-   * A short text that describes the event
-   * @example "Until Christmas"
-   */
-  eventText: string;
-  /**
-   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
-   * @example "Ordinary price 399 kr starts 6/12/2022"
-   */
-  explanation?: string;
-};
-
-type AgreementFullFlexCampaignResponseV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN"
-    | "LEGACY_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends.
-   * Needs to be UTC.
-   * @example "2019-06-01T00:00:00Z"
-   */
-  end: string;
-  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriod;
-  /**
-   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
-   * @example "Ordinary price 399 kr starts 6/12/2022"
-   */
-  explanation?: string;
-};
-
-type AgreementLegacyCampaignResponseV3 = {
-  /** The type of campaign. This decides which properties are required */
-  type:
-    | "PRICE_CAMPAIGN"
-    | "PERIOD_CAMPAIGN"
-    | "EVENT_CAMPAIGN"
-    | "FULL_FLEX_CAMPAIGN"
-    | "LEGACY_CAMPAIGN";
-  /**
-   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
-   *
-   * Price is specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
-   * @format int32
-   * @example 1500
-   */
-  price: number;
-  /**
-   * The date and time the campaign ends.
-   * Needs to be UTC.
-   * @example "2019-06-01T00:00:00Z"
-   */
-  end: string;
-  /**
-   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
-   * @example "Ordinary price 399 kr starts 6/12/2022"
-   */
-  explanation?: string;
-};
+type AgreementPricingResponse =
+  | AgreementLegacyPricingResponse
+  | AgreementVariableAmountPricingResponse;
 
 type AgreementLegacyPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
-  type: "LEGACY" | "VARIABLE";
+  type: "LEGACY";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
-  currency: AgreementCurrency;
+  currency: AgreementCurrencyV3;
   /**
    * The price of the agreement, present if type is LEGACY.
    *
@@ -744,9 +407,9 @@ type AgreementLegacyPricingResponse = {
 
 type AgreementVariableAmountPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
-  type: "LEGACY" | "VARIABLE";
+  type: "VARIABLE";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
-  currency: AgreementCurrency;
+  currency: AgreementCurrencyV3;
   /**
    * The suggested max amount that the customer should choose, present if type is VARIABLE.
    *
@@ -767,16 +430,7 @@ type AgreementVariableAmountPricingResponse = {
   maxAmount: number;
 };
 
-/**
- * ISO-4217: https://www.iso.org/iso-4217-currency-codes.html
- * @minLength 3
- * @maxLength 3
- * @default "NOK"
- * @pattern ^[A-Z]{3}$
- * @example "NOK"
- */
-type AgreementCurrency = "NOK";
-
+////////////// Update agreements //////////////
 export type PatchAgreementV3 = {
   /**
    * Name of the product being subscribed to.
@@ -833,7 +487,7 @@ export type PatchAgreementV3 = {
     /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
     period?: AgreementTimePeriod;
   };
-}
+};
 
 type AgreementPricingUpdateRequest = {
   /**
@@ -857,7 +511,7 @@ type AgreementPricingUpdateRequest = {
    * @example 3000
    */
   suggestedMaxAmount?: number;
-}
+};
 
 /**
  * @default "RECURRING"
@@ -868,4 +522,315 @@ type ChargeType = "INITIAL" | "RECURRING";
 export type ForceAcceptAgreementV3 = {
   /** @example "4791234567" */
   phoneNumber: string;
-}
+};
+
+////////////////// Campaigns //////////////////
+type AgreementCampaignV3 =
+  | AgreementPriceCampaignV3
+  | AgreementPeriodCampaignV3
+  | AgreementEventCampaignV3
+  | AgreementFullFlexCampaignV3;
+
+type AgreementPriceCampaignV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "PRICE_CAMPAIGN";
+
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends.
+   * Needs to be UTC.
+   * @example "2019-06-01T00:00:00Z"
+   */
+  end: string;
+} | null;
+
+type AgreementPeriodCampaignV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "PERIOD_CAMPAIGN";
+
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
+  period: AgreementTimePeriod;
+} | null;
+
+type AgreementEventCampaignV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "EVENT_CAMPAIGN";
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends. Must be UTC.
+   * @format date-time
+   * @example "2022-12-31T00:00:00Z"
+   */
+  eventDate: string;
+  /**
+   * A short text that describes the event
+   * @example "Until Christmas"
+   */
+  eventText: string;
+} | null;
+
+type AgreementFullFlexCampaignV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "FULL_FLEX_CAMPAIGN";
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
+  interval: AgreementTimePeriod;
+  /**
+   * The date and time the campaign ends.
+   * Needs to be UTC.
+   * @example "2019-06-01T00:00:00Z"
+   */
+  end: string;
+} | null;
+
+type AgreementCampaignResponseV3 =
+  | AgreementPriceCampaignResponseV3
+  | AgreementPeriodCampaignResponseV3
+  | AgreementEventCampaignResponseV3
+  | AgreementFullFlexCampaignResponseV3
+  | AgreementLegacyCampaignResponseV3;
+
+type AgreementPriceCampaignResponseV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "PRICE_CAMPAIGN";
+
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends. Must be UTC.
+   * @format date-time
+   * @example "2022-12-31T00:00:00Z"
+   */
+  end: string;
+  /**
+   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
+   * @example "Ordinary price 399 kr starts 6/12/2022"
+   */
+  explanation?: string;
+};
+
+type AgreementPeriodCampaignResponseV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "PERIOD_CAMPAIGN";
+
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends.
+   * Needs to be UTC.
+   * @example "2019-06-01T00:00:00Z"
+   */
+  end: string;
+  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
+  period: AgreementTimePeriod;
+  /**
+   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
+   * @example "Ordinary price 399 kr starts 6/12/2022"
+   */
+  explanation?: string;
+};
+
+type AgreementEventCampaignResponseV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "EVENT_CAMPAIGN";
+
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends. Must be UTC.
+   * @format date-time
+   * @example "2022-12-31T00:00:00Z"
+   */
+  eventDate: string;
+  /**
+   * A short text that describes the event
+   * @example "Until Christmas"
+   */
+  eventText: string;
+  /**
+   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
+   * @example "Ordinary price 399 kr starts 6/12/2022"
+   */
+  explanation?: string;
+};
+
+type AgreementFullFlexCampaignResponseV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "FULL_FLEX_CAMPAIGN";
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends.
+   * Needs to be UTC.
+   * @example "2019-06-01T00:00:00Z"
+   */
+  end: string;
+  /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
+  interval: AgreementTimePeriod;
+  /**
+   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
+   * @example "Ordinary price 399 kr starts 6/12/2022"
+   */
+  explanation?: string;
+};
+
+type AgreementLegacyCampaignResponseV3 = {
+  /** The type of campaign. This decides which properties are required */
+  type: "LEGACY_CAMPAIGN";
+  /**
+   * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
+   *
+   * Price is specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @example 1500
+   */
+  price: number;
+  /**
+   * The date and time the campaign ends.
+   * Needs to be UTC.
+   * @example "2019-06-01T00:00:00Z"
+   */
+  end: string;
+  /**
+   * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
+   * @example "Ordinary price 399 kr starts 6/12/2022"
+   */
+  explanation?: string;
+};
+
+/////////////// Error responses ///////////////
+
+export type AgreementErrorResponse = AgreementErrorV3 | AgreementErrorFromAzure;
+
+/**
+ * Error response
+ * Error response using the Problem JSON format
+ */
+type AgreementErrorV3 = {
+  /**
+   * Path to type of error
+   * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
+   */
+  type?: string;
+  /**
+   * Short description of the error
+   * @example "Bad Request"
+   */
+  title?: string;
+  /**
+   * HTTP status returned with the problem
+   * @format int32
+   * @example 400
+   */
+  status?: number;
+  /**
+   * Details about the error
+   * @example "Input validation failed"
+   */
+  detail?: string;
+  /**
+   * The path of the request
+   * @example "/v3/agreements"
+   */
+  instance?: string;
+  /**
+   * An unique ID for the request
+   * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
+   */
+  contextId?: string;
+  extraDetails?: {
+    /**
+     * Field to provide additional details on
+     * @example "productName"
+     */
+    field?: string;
+    /**
+     * Details for the error of a specific field
+     * @example "must not be empty"
+     */
+    text?: string;
+  }[];
+};
+
+/**
+ * An error from Microsoft Azure. We have limited control of these errors,
+ * and can not give as detailed information as with the errors from our own code.
+ * The most important property is the HTTP status code.
+ */
+type AgreementErrorFromAzure = {
+  responseInfo: {
+    /** @example 401 */
+    responseCode: number;
+    /** @example "Unauthorized" */
+    responseMessage: string;
+  };
+  result: {
+    /**
+     * When possible: A description of what went wrong.
+     * @example "(An error from Azure API Management, possibly related to authentication)"
+     */
+    message: string;
+  };
+};

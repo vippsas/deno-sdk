@@ -49,7 +49,7 @@ export const agreementRequestFactory = {
   update(
     token: string,
     agreementId: string,
-    body: PatchAgreementV3
+    body: PatchAgreementV3,
   ): RequestData<void, AgreementErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
@@ -61,7 +61,7 @@ export const agreementRequestFactory = {
   forceAccept(
     token: string,
     agreementId: string,
-    body: ForceAcceptAgreementV3
+    body: ForceAcceptAgreementV3,
   ): RequestData<void, AgreementErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/accept`,
@@ -69,5 +69,5 @@ export const agreementRequestFactory = {
       body,
       token,
     };
-  }
+  },
 } as const;

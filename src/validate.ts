@@ -11,7 +11,6 @@ export const validateRequestData = (
   requestData: RequestData<unknown, unknown>,
   cfg: ClientConfig,
 ): string | undefined => {
-  
   // ePayment validation
   if (
     !cfg.useTestMode && requestData.url.includes("/epayment/") &&
