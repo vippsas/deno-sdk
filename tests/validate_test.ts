@@ -37,7 +37,7 @@ Deno.test("validateRequestData - epayment - Should return error message when usi
 Deno.test("validateRequestData - agreement - Should return error message when using forceAccept in Production ", () => {
   const requestData: RequestData<unknown, unknown> = {
     url: "/recurring/v3/agreements/foobar/accept",
-    method: "POST"
+    method: "POST",
   };
 
   const cfg: ClientConfig = {
