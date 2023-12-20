@@ -11,7 +11,8 @@ import {
  */
 export const webhooksRequestFactory = {
   /**
-   * Registers a webhook.
+   * Registers a webhook. At most 5 webhooks (five separate URLs) can be
+   * registered per event, please contact us if a higher limit is required.
    *
    * @param token - The authentication token.
    * @param body - The request body containing the webhook details.
@@ -30,6 +31,7 @@ export const webhooksRequestFactory = {
   },
   /**
    * Retrieves a list of registered webhooks.
+   *
    * @param token - The access token for authentication.
    * @returns A `RequestData` object containing the URL, method, and token.
    */
@@ -44,6 +46,7 @@ export const webhooksRequestFactory = {
   },
   /**
    * Deletes a webhook.
+   *
    * @param token - The authentication token.
    * @param webhookId - The ID of the webhook to delete.
    * @returns A `RequestData` object with the URL, method, and token.

@@ -1,21 +1,18 @@
-import { ClientConfig, RequestData } from "../types.ts";
+import { Credentials, RequestData } from "../types.ts";
 import { AccessToken, AccessTokenError } from "./types/auth_types.ts";
-
-type Credentials = {
-  /** Client ID for the merchant (the "username"). Found in the Vipps portal.
-   * Example: "fb492b5e-7907-4d83-bc20-c7fb60ca35de". */
-  clientId: string;
-  /** Client Secret for the merchant (the "password"). Found in the Vipps portal.
-   * Example: "Y8Kteew6GE3ZmeycEt6egg==" */
-  clientSecret: string;
-} & Pick<ClientConfig, "subscriptionKey">;
 
 /**
  * Factory for creating authentication-related request data.
  */
 export const authRequestFactory = {
   /**
-   * Gets an access token.
+   * This is an authentication endpoint for merchant use. The access token
+   * endpoint is used to get the JWT (JSON Web Token) that must be passed in
+   * every API request in the Authorization header. The access token is a
+   * base64-encoded string value that must be acquired first before making
+   * any Vipps MobilePay API calls. The access token is valid for 1 hour in
+   * the test environment and 24 hours in the production environment.
+   * See: https://developer.vippsmobilepay.com/docs/APIs/access-token-api/
    *
    * @param cred - The credentials.
    * @returns The request data.
