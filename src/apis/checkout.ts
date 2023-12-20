@@ -11,7 +11,11 @@ import {
  */
 export const checkoutRequestFactory = {
   /**
-   * Creates a new checkout session.
+   * Create a checkout session within your website, where you can process
+   * payments, handle shipping, and gather consent to user information.
+   * See https://developer.vippsmobilepay.com/docs/APIs/checkout-api/
+   * for more details.
+   *
    * @param client_id - The client ID.
    * @param client_secret - The client secret.
    * @param body - The request body containing the checkout session details.
@@ -42,7 +46,10 @@ export const checkoutRequestFactory = {
     };
   },
   /**
-   * Retrieves information about a checkout session.
+   * Retrieves information about a checkout session. Transaction information,
+   * user information and shipping information are included in the
+   * response if the SessionState is PaymentInitiated
+   *
    * @param client_id - The client ID.
    * @param client_secret - The client secret.
    * @param reference - The reference of the checkout session.

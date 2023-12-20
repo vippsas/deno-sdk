@@ -54,6 +54,31 @@ Deno.test("makeRequest - Should error", async () => {
   assertEquals(response.ok, false);
 });
 
+Deno.test("makeRequest - Should return validation error", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/epayment/v1/test/payments/123abc/approve", () => {
+    return new Response(JSON.stringify({ ok: false, error: "Bad Request" }), {
+      status: 400,
+    });
+  });
+
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    useTestMode: false,
+  };
+  const requestData: RequestData<unknown, unknown> = {
+    method: "GET",
+    url: "/epayment/v1/test/payments/123abc/approve",
+  };
+
+  const client = baseClient(cfg);
+  const response = await client.makeRequest(requestData);
+
+  assertEquals(response.ok, false);
+});
+
 Deno.test("makeRequest - Should return ok after 2 retries", async () => {
   mf.install(); // mock out calls to `fetch`
   let count = 0;

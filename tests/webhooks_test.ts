@@ -46,6 +46,7 @@ Deno.test("webhooks - registerWebhook - bad request", async () => {
     useTestMode: true,
     retryRequests: false,
   });
+
   const result = await client.webhook.register("testtoken", {
     events: [
       "epayments.payment.created.v1",
@@ -74,12 +75,36 @@ Deno.test("webhooks - delete webhook - OK", async () => {
     useTestMode: true,
     retryRequests: false,
   });
+
   const deleteResponse = await client.webhook.delete(
     "testtoken",
     "1234-1234-1234-1234-1234",
   );
 
   assertEquals(deleteResponse.ok, true);
+
+  mf.reset();
+});
+
+Deno.test("webhooks - list webhooks - OK", async () => {
+  mf.install();
+
+  mf.mock("GET@/webhooks/v1/webhooks", () => {
+    return new Response(null, {
+      status: 200,
+    });
+  });
+
+  const client = Client({
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    useTestMode: true,
+    retryRequests: false,
+  });
+
+  const listResponse = await client.webhook.list("testtoken");
+
+  assertEquals(listResponse.ok, true);
 
   mf.reset();
 });
