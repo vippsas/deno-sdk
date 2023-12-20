@@ -1,5 +1,6 @@
-import { assertEquals, mf } from "./test_deps.ts";
+import { assertEquals, assertExists, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
+import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", async () => {
   mf.install(); // mock out calls to `fetch`
@@ -38,6 +39,30 @@ Deno.test("ePayment - create - Should have correct url and header", async () => 
   });
 
   mf.reset();
+});
+
+Deno.test("ePayment - create - Should fill in missing props", () => {
+  const requestData = ePaymentRequestFactory.create(
+    "test_token",
+    {
+      amount: {
+        currency: "NOK",
+        value: 1000,
+      },
+      paymentMethod: {
+        type: "WALLET",
+      },
+      customer: {
+        phoneNumber: "4712345678",
+      },
+      returnUrl: "https://yourwebsite.come/redirect?reference=" + "foo",
+      userFlow: "WEB_REDIRECT",
+      paymentDescription: "One pair of socks",
+    },
+    // deno-lint-ignore no-explicit-any
+  ) as any;
+
+  assertExists(requestData.body.reference);
 });
 
 Deno.test("ePayment - info - Should have correct url and header", async () => {

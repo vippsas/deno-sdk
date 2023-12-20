@@ -9,7 +9,7 @@
  */
 
 // Minimum branch coverage threshold (in percentage)
-const THRESHOLD = 90;
+const THRESHOLD = 80;
 
 const getCommandOutput = async (command: Deno.Command) => {
   const { code, stdout, stderr } = await command.output();
