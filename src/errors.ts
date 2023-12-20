@@ -9,13 +9,16 @@ import { RetryError } from "./deps.ts";
 export const parseError = <TErr>(
   error: unknown,
 ): { ok: false; message: string; error?: TErr } => {
-  if (error instanceof RetryError) { // If the retry was exhausted
+  // Catch retry errors
+  if (error instanceof RetryError) {
     return {
       ok: false,
       message:
         "Could not get a response from the server after multiple attempts",
     };
   }
+
+  // Catch connection errors
   if (
     error instanceof TypeError &&
     error.message.includes("error trying to connect")
@@ -25,10 +28,22 @@ export const parseError = <TErr>(
       message: "Could not connect to Vipps MobilePay API",
     };
   }
+
+  // Catch Forbidden
+  if (error instanceof Error && error.message.includes("Forbidden")) {
+    return {
+      ok: false,
+      message:
+        "Your credentials are not authorized for this product, please visit portal.vipps.no",
+    };
+  }
+
+  // Catch regular errors
   if (error instanceof Error) {
     return { ok: false, message: `${error.name} - ${error.message}` };
   }
-  // Narrow down AccessTokenError
+
+  // Catch AccessTokenError
   if (
     typeof error === "object" && error !== null && "error" in error &&
     "error_description" in error && "trace_id" in error
@@ -39,7 +54,8 @@ export const parseError = <TErr>(
       error: error as TErr,
     };
   }
-  // Narrow down Problem JSON
+
+  // Catch Problem JSON
   if (
     typeof error === "object" && error !== null && "type" in error &&
     "title" in error && "status" in error
@@ -51,5 +67,6 @@ export const parseError = <TErr>(
     };
   }
 
+  // Default to error as string
   return { ok: false, message: String(error) };
 };
