@@ -17,4 +17,9 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.webhook.delete, "function");
   assertEquals(typeof client.checkout.create, "function");
   assertEquals(typeof client.checkout.info, "function");
+  assertEquals(typeof client.agreement.create, "function");
+  assertEquals(typeof client.agreement.info, "function");
+  assertEquals(typeof client.agreement.list, "function");
+  assertEquals(typeof client.agreement.update, "function");
+  assertEquals(typeof client.agreement.forceAccept, "function");
 });
