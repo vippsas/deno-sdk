@@ -59,8 +59,8 @@ if (!branchTotal) {
 }
 
 if (branchTotal > THRESHOLD) {
-  console.log(`Branch coverage is good: ${branchTotal}`);
+  console.log(`Branch coverage is good: ${branchTotal}%`);
 } else {
-  console.log(`Branch coverage is bad: ${branchTotal}`);
+  console.log(`Branch coverage is bad: ${branchTotal}%`);
   Deno.exit(1);
 }
