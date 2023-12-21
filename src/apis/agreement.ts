@@ -1,6 +1,5 @@
 import { RequestData } from "../types.ts";
 import {
-  AgreementErrorResponse,
   AgreementResponseV3,
   AgreementStatus,
   DraftAgreementResponseV3,
@@ -8,6 +7,7 @@ import {
   ForceAcceptAgreementV3,
   PatchAgreementV3,
 } from "./types/agreement_types.ts";
+import { RecurringErrorResponse } from "./types/recurring_types.ts";
 
 /**
  * Factory object for creating and managing agreements.
@@ -36,7 +36,7 @@ export const agreementRequestFactory = {
   create(
     token: string,
     body: DraftAgreementV3,
-  ): RequestData<DraftAgreementResponseV3, AgreementErrorResponse> {
+  ): RequestData<DraftAgreementResponseV3, RecurringErrorResponse> {
     return {
       url: "/recurring/v3/agreements",
       method: "POST",
@@ -59,7 +59,7 @@ export const agreementRequestFactory = {
     token: string,
     status: AgreementStatus,
     createdAfter: number,
-  ): RequestData<AgreementResponseV3, AgreementErrorResponse> {
+  ): RequestData<AgreementResponseV3, RecurringErrorResponse> {
     return {
       url:
         `/recurring/v3/agreements?status=${status}&createdAfter=${createdAfter}`,
@@ -78,7 +78,7 @@ export const agreementRequestFactory = {
   info(
     token: string,
     agreementId: string,
-  ): RequestData<AgreementResponseV3, AgreementErrorResponse> {
+  ): RequestData<AgreementResponseV3, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
       method: "GET",
@@ -99,7 +99,7 @@ export const agreementRequestFactory = {
     token: string,
     agreementId: string,
     body: PatchAgreementV3,
-  ): RequestData<void, AgreementErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
       method: "PATCH",
@@ -120,7 +120,7 @@ export const agreementRequestFactory = {
     token: string,
     agreementId: string,
     body: ForceAcceptAgreementV3,
-  ): RequestData<void, AgreementErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/accept`,
       method: "PATCH",

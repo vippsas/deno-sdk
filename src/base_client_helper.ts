@@ -81,7 +81,7 @@ export const buildRequest = (
       ...requestData.headers,
       ...{
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${requestData.token}` || "",
+        "Authorization": `Bearer ${requestData.token || ""}`,
         "User-Agent": getUserAgent(),
         "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
         "Merchant-Serial-Number": cfg.merchantSerialNumber,
