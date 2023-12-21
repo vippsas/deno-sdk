@@ -97,7 +97,7 @@ const chargeId = charge.data.chargeId;
 
 const chargeInfo = await client.charge.info(token, agreementId, chargeId);
 
-// Check if the charge was create successfully
+// Check if the charge info was fetched successfully
 if (!chargeInfo.ok) {
   console.error("😟 Error retrieving charge 😟");
   console.error(chargeInfo.error);
