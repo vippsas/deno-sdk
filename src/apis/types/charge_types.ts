@@ -9,7 +9,7 @@ export type CreateChargeV3 = {
    * Amount to be paid by the customer.
    *
    * Amounts are specified in minor units.
-   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre/cents. Example: 499 kr = 49900 øre/cents.
    * @format int32
    * @min 100
    * @example 19900
