@@ -188,7 +188,7 @@ export type ChargeResponseV3 = {
 };
 
 /** @example "PENDING" */
-type ChargeStatus =
+export type ChargeStatus =
   | "PENDING"
   | "DUE"
   | "RESERVED"
@@ -255,4 +255,24 @@ type ChargeEvent = {
   idempotencyKey: string;
   /** True if the operation was successful, false otherwise */
   success: boolean;
+};
+
+/** Refund charge request */
+export type ModifyCharge = {
+  /**
+   * The amount to refund/capture on a charge.
+   *
+   * Amounts are specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @min 100
+   * @example 5000
+   */
+  amount: number;
+  /**
+   * A textual description of the operation (refund or capture), which will be displayed in the user's app.
+   * @min 1
+   * @example "'Forgot to apply discount, refunding 50%' or: 'Not all items were in stock. Partial capture.'"
+   */
+  description: string;
 };
