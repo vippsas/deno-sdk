@@ -5,7 +5,7 @@ Deno.test("create - should return the correct RequestData object", () => {
   const token = "your-auth-token";
   const agreementId = "your-agreement-id";
 
-  const requestData = chargeRequestFactory.create(token, {
+  const requestData = chargeRequestFactory.create(token, agreementId, {
     amount: 1000,
     transactionType: "DIRECT_CAPTURE",
     description: "Test charge",
@@ -13,7 +13,7 @@ Deno.test("create - should return the correct RequestData object", () => {
     retryDays: 5,
     externalId: "test-charge-123",
     orderId: "test-order-123",
-  }, agreementId);
+  });
 
   assert(requestData.url, `/recurring/v3/agreements/${agreementId}/charges`);
   assert(requestData.method, "POST");
@@ -41,7 +41,6 @@ Deno.test("infoById should return the correct RequestData object", () => {
 
   assert(requestData.url, "/recurring/v3/agreements/charges/your-charge-id");
   assert(requestData.method, "GET");
-
 });
 
 Deno.test("list should return the correct RequestData object", () => {
@@ -59,16 +58,16 @@ Deno.test("list should return the correct RequestData object", () => {
 });
 
 Deno.test("list should return the correct RequestData object without search query", () => {
-    const token = "your-access-token";
-    const agreementId = "your-agreement-id";
-  
-    const requestData = chargeRequestFactory.list(token, agreementId);
-  
-    assert(
-      requestData.url,
-      "/recurring/v3/agreements/your-agreement-id/charges",
-    );
-  });
+  const token = "your-access-token";
+  const agreementId = "your-agreement-id";
+
+  const requestData = chargeRequestFactory.list(token, agreementId);
+
+  assert(
+    requestData.url,
+    "/recurring/v3/agreements/your-agreement-id/charges",
+  );
+});
 
 Deno.test("cancel should return the correct RequestData object", () => {
   const token = "your-access-token";
@@ -88,7 +87,7 @@ Deno.test("capture should return the correct RequestData object", () => {
   const token = "your-access-token";
   const agreementId = "your-agreement-id";
   const chargeId = "your-charge-id";
-  const body = { amount: 1000, description: "Test charge"};
+  const body = { amount: 1000, description: "Test charge" };
 
   const requestData = chargeRequestFactory.capture(
     token,
@@ -108,7 +107,7 @@ Deno.test("refund should return the correct RequestData object", () => {
   const token = "your-access-token";
   const agreementId = "your-agreement-id";
   const chargeId = "your-charge-id";
-  const body = { amount: 1000, description: "Test charge"};
+  const body = { amount: 1000, description: "Test charge" };
 
   const requestData = chargeRequestFactory.refund(
     token,

@@ -29,5 +29,4 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.charge.cancel, "function");
   assertEquals(typeof client.charge.capture, "function");
   assertEquals(typeof client.charge.refund, "function");
-
 });

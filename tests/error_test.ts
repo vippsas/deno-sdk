@@ -32,7 +32,10 @@ Deno.test("parseError should return correct error message for forbidden Error", 
   const error = new Error("Forbidden");
   const result = parseError(error);
   assertEquals(result.ok, false);
-  assertEquals(result.message, "Your credentials are not authorized for this product, please visit portal.vipps.no");
+  assertEquals(
+    result.message,
+    "Your credentials are not authorized for this product, please visit portal.vipps.no",
+  );
 });
 
 Deno.test("parseError - Should return correct error message for AccessTokenError", () => {

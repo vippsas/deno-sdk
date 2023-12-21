@@ -23,8 +23,8 @@ export const chargeRequestFactory = {
    */
   create(
     token: string,
-    body: CreateChargeV3,
     agreementId: string,
+    body: CreateChargeV3,
   ): RequestData<ChargeReference, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges`,

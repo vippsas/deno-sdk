@@ -124,7 +124,10 @@ Deno.test("buildRequest - Should return a Request object when filling in missing
 
   assertEquals(request.url, `${expectedBaseURL}${requestData.url}`);
   assertEquals(request.method, expectedReqInit.method);
-  assertEquals(request.headers.get("Authorization"), expectedReqInit.headers.Authorization);
+  assertEquals(
+    request.headers.get("Authorization"),
+    expectedReqInit.headers.Authorization,
+  );
 
   const checkHeaderKeys = Object.keys(expectedReqInit.headers).every((key) =>
     request.headers.has(key)

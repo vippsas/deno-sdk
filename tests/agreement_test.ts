@@ -51,7 +51,7 @@ Deno.test("list - should return the correct RequestData object", () => {
 
   assertEquals(
     requestData.url,
-    `/recurring/v3/agreements?status=${status}&createdAfter=${createdAfter}`
+    `/recurring/v3/agreements?status=${status}&createdAfter=${createdAfter}`,
   );
   assertEquals(requestData.method, "GET");
 });
@@ -64,7 +64,7 @@ Deno.test("info - should return the correct RequestData object", () => {
 
   assertEquals(
     requestData.url,
-    `/recurring/v3/agreements/${agreementId}`
+    `/recurring/v3/agreements/${agreementId}`,
   );
   assertEquals(requestData.method, "GET");
 });
@@ -72,13 +72,13 @@ Deno.test("info - should return the correct RequestData object", () => {
 Deno.test("update - should return the correct RequestData object", () => {
   const token = "your-auth-token";
   const agreementId = "your-agreement-id";
-  const body = { pricing: { amount: 1000, suggestedMaxAmount: 10000} };
+  const body = { pricing: { amount: 1000, suggestedMaxAmount: 10000 } };
 
   const requestData = agreementRequestFactory.update(token, agreementId, body);
 
   assertEquals(
     requestData.url,
-    `/recurring/v3/agreements/${agreementId}`
+    `/recurring/v3/agreements/${agreementId}`,
   );
   assertEquals(requestData.method, "PATCH");
   assertEquals(requestData.body, body);
@@ -89,11 +89,15 @@ Deno.test("forceAccept - should return the correct RequestData object", () => {
   const agreementId = "your-agreement-id";
   const body = { phoneNumber: "4791234567" };
 
-  const requestData = agreementRequestFactory.forceAccept(token, agreementId, body);
+  const requestData = agreementRequestFactory.forceAccept(
+    token,
+    agreementId,
+    body,
+  );
 
   assertEquals(
     requestData.url,
-    `/recurring/v3/agreements/${agreementId}/accept`
+    `/recurring/v3/agreements/${agreementId}/accept`,
   );
   assertEquals(requestData.method, "PATCH");
   assertEquals(requestData.body, body);
