@@ -86,7 +86,7 @@ const charge = await client.charge.create(token, agreementId, {
   transactionType: "DIRECT_CAPTURE",
 });
 
-// Check if the charge was create successfully
+// Check if the charge was created successfully
 if (!charge.ok) {
   console.error("😟 Error creating charge 😟");
   console.error(charge.error);
