@@ -22,4 +22,12 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.agreement.list, "function");
   assertEquals(typeof client.agreement.update, "function");
   assertEquals(typeof client.agreement.forceAccept, "function");
+  assertEquals(typeof client.charge.create, "function");
+  assertEquals(typeof client.charge.info, "function");
+  assertEquals(typeof client.charge.infoById, "function");
+  assertEquals(typeof client.charge.list, "function");
+  assertEquals(typeof client.charge.cancel, "function");
+  assertEquals(typeof client.charge.capture, "function");
+  assertEquals(typeof client.charge.refund, "function");
+
 });

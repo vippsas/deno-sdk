@@ -65,7 +65,7 @@ export const chargeRequestFactory = {
    * @param chargeId - The ID of the charge.
    * @returns A `RequestData` object containing the URL, method, and token.
    */
-  infoByChargeId(
+  infoById(
     token: string,
     chargeId: string,
   ): RequestData<ChargeResponseV3, RecurringErrorResponse> {
