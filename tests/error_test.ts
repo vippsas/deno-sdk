@@ -28,6 +28,13 @@ Deno.test("parseError - Should return correct error message for generic Error", 
   assertEquals(result.message, `${error.name} - ${error.message}`);
 });
 
+Deno.test("parseError should return correct error message for forbidden Error", () => {
+  const error = new Error("Forbidden");
+  const result = parseError(error);
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Your credentials are not authorized for this product, please visit portal.vipps.no");
+});
+
 Deno.test("parseError - Should return correct error message for AccessTokenError", () => {
   const error: AccessTokenError = {
     error: "access_token_error",

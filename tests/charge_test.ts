@@ -58,6 +58,18 @@ Deno.test("list should return the correct RequestData object", () => {
   assert(requestData.method, "GET");
 });
 
+Deno.test("list should return the correct RequestData object without search query", () => {
+    const token = "your-access-token";
+    const agreementId = "your-agreement-id";
+  
+    const requestData = chargeRequestFactory.list(token, agreementId);
+  
+    assert(
+      requestData.url,
+      "/recurring/v3/agreements/your-agreement-id/charges",
+    );
+  });
+
 Deno.test("cancel should return the correct RequestData object", () => {
   const token = "your-access-token";
   const agreementId = "your-agreement-id";
