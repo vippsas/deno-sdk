@@ -1,12 +1,10 @@
 //////////////// Common types /////////////////
-/**
- * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
- * @minLength 3
- * @maxLength 3
- * @pattern ^[A-Z]{3}$
- * @example "NOK"
- */
-type AgreementCurrencyV3 = "NOK";
+
+import {
+  ChargeType,
+  RecurringCurrencyV3,
+  RecurringTransactionType,
+} from "./recurring_types.ts";
 
 /**
  * Status of the agreement.
@@ -129,7 +127,7 @@ type AgreementPricingRequest = {
    */
   type?: "LEGACY" | "VARIABLE";
   /** Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024. */
-  currency: AgreementCurrencyV3;
+  currency: RecurringCurrencyV3;
   /**
    * The price of the agreement, required if type is LEGACY or not present.
    *
@@ -177,7 +175,7 @@ type AgreementInitialChargeV3 = {
    * The type of payment to be made.
    * @example "DIRECT_CAPTURE"
    */
-  transactionType: "RESERVE_CAPTURE" | "DIRECT_CAPTURE";
+  transactionType: RecurringTransactionType;
   /**
    * An optional, but recommended `orderId` for the charge.
    * If provided, this will be the `chargeId` for this charge.
@@ -207,7 +205,7 @@ type AgreementTimePeriod = {
    * Unit for time period
    * @example "WEEK"
    */
-  unit: "YEAR" | "MONTH" | "WEEK" | "DAY";
+  unit: AgreementInterval;
   /**
    * Number of units in the time period. Example: unit=week, count=2 to define two weeks
    * @format int32
@@ -219,6 +217,14 @@ type AgreementTimePeriod = {
    */
   count: number;
 };
+
+/**
+ * Interval for subscription
+ * @default "MONTH"
+ * @pattern ^(YEAR|MONTH|WEEK|DAY)$
+ * @example "MONTH"
+ */
+type AgreementInterval = "YEAR" | "MONTH" | "WEEK" | "DAY";
 
 export type DraftAgreementResponseV3 = {
   /**
@@ -371,7 +377,7 @@ type AgreementTimePeriodResponse = {
    * Unit for time period
    * @example "WEEK"
    */
-  unit?: "YEAR" | "MONTH" | "WEEK" | "DAY";
+  unit?: AgreementInterval;
   /**
    * Number of units in the time period. Example: unit=week, count=2 to define two weeks
    * @format int32
@@ -393,7 +399,7 @@ type AgreementLegacyPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
   type: "LEGACY";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
-  currency: AgreementCurrencyV3;
+  currency: RecurringCurrencyV3;
   /**
    * The price of the agreement, present if type is LEGACY.
    *
@@ -409,7 +415,7 @@ type AgreementVariableAmountPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
   type: "VARIABLE";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
-  currency: AgreementCurrencyV3;
+  currency: RecurringCurrencyV3;
   /**
    * The suggested max amount that the customer should choose, present if type is VARIABLE.
    *
@@ -512,12 +518,6 @@ type AgreementPricingUpdateRequest = {
    */
   suggestedMaxAmount?: number;
 };
-
-/**
- * @default "RECURRING"
- * @example "RECURRING"
- */
-type ChargeType = "INITIAL" | "RECURRING";
 
 export type ForceAcceptAgreementV3 = {
   /** @example "4791234567" */
@@ -758,79 +758,4 @@ type AgreementLegacyCampaignResponseV3 = {
    * @example "Ordinary price 399 kr starts 6/12/2022"
    */
   explanation?: string;
-};
-
-/////////////// Error responses ///////////////
-
-export type AgreementErrorResponse = AgreementErrorV3 | AgreementErrorFromAzure;
-
-/**
- * Error response
- * Error response using the Problem JSON format
- */
-type AgreementErrorV3 = {
-  /**
-   * Path to type of error
-   * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
-   */
-  type?: string;
-  /**
-   * Short description of the error
-   * @example "Bad Request"
-   */
-  title?: string;
-  /**
-   * HTTP status returned with the problem
-   * @format int32
-   * @example 400
-   */
-  status?: number;
-  /**
-   * Details about the error
-   * @example "Input validation failed"
-   */
-  detail?: string;
-  /**
-   * The path of the request
-   * @example "/v3/agreements"
-   */
-  instance?: string;
-  /**
-   * An unique ID for the request
-   * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
-   */
-  contextId?: string;
-  extraDetails?: {
-    /**
-     * Field to provide additional details on
-     * @example "productName"
-     */
-    field?: string;
-    /**
-     * Details for the error of a specific field
-     * @example "must not be empty"
-     */
-    text?: string;
-  }[];
-};
-
-/**
- * An error from Microsoft Azure. We have limited control of these errors,
- * and can not give as detailed information as with the errors from our own code.
- * The most important property is the HTTP status code.
- */
-type AgreementErrorFromAzure = {
-  responseInfo: {
-    /** @example 401 */
-    responseCode: number;
-    /** @example "Unauthorized" */
-    responseMessage: string;
-  };
-  result: {
-    /**
-     * When possible: A description of what went wrong.
-     * @example "(An error from Azure API Management, possibly related to authentication)"
-     */
-    message: string;
-  };
 };

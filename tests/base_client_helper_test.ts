@@ -91,6 +91,50 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
   assert(checkHeaderKeys);
 });
 
+Deno.test("buildRequest - Should return a Request object when filling in missing properties", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "your-subscription-key",
+    merchantSerialNumber: "your-merchant-serial-number",
+  };
+
+  const requestData: RequestData<unknown, unknown> = {
+    method: "GET",
+    url: "/your-endpoint",
+  };
+
+  const expectedBaseURL = "https://api.vipps.no";
+  const expectedReqInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer",
+      "User-Agent": "Vipps/Deno SDK/local",
+      "Ocp-Apim-Subscription-Key": "your-subscription-key",
+      "Merchant-Serial-Number": "your-merchant-serial-number",
+      "Vipps-System-Name": "",
+      "Vipps-System-Version": "",
+      "Vipps-System-Plugin-Name": "",
+      "Vipps-System-Plugin-Version": "",
+      "Idempotency-Key": "your-random-uuid",
+    },
+    body: JSON.stringify({ key: "value" }),
+  };
+
+  const request = buildRequest(cfg, requestData);
+
+  assertEquals(request.url, `${expectedBaseURL}${requestData.url}`);
+  assertEquals(request.method, expectedReqInit.method);
+  assertEquals(
+    request.headers.get("Authorization"),
+    expectedReqInit.headers.Authorization,
+  );
+
+  const checkHeaderKeys = Object.keys(expectedReqInit.headers).every((key) =>
+    request.headers.has(key)
+  );
+  assert(checkHeaderKeys);
+});
+
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
   const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
   const actualUserAgent = createSDKUserAgent(

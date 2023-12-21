@@ -11,7 +11,7 @@ import {
 } from "./types/epayment_types.ts";
 
 /**
- * Factory object for creating ePayment request data.
+ * Factory object for creating ePayment API requests.
  */
 export const ePaymentRequestFactory = {
   /**
