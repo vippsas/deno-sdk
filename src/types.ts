@@ -47,7 +47,7 @@ export type Credentials = {
 export type RequestData<TOk, TErr> = {
   method: "GET" | "POST" | "PATCH" | "DELETE";
   url: string;
-  headers?: HeadersInit;
+  headers?: Record<string, string>;
   body?: unknown;
   token?: string;
 };
