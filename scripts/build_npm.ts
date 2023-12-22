@@ -3,7 +3,7 @@ import { build, emptyDir } from "./script_deps.ts";
 await emptyDir("./npm");
 
 await build({
-  entryPoints: ["./mod.ts"],
+  entryPoints: ["./src/mod.ts"],
   outDir: "./npm",
   shims: {
     // see JS docs for overview and more options
