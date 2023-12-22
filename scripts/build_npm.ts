@@ -5,9 +5,10 @@ await emptyDir("./npm");
 await build({
   entryPoints: ["./src/mod.ts"],
   outDir: "./npm",
+  typeCheck: false,
+  test: false,
   shims: {
-    // see JS docs for overview and more options
-    deno: true,
+    deno: false,
   },
   package: {
     // package.json properties
@@ -25,7 +26,7 @@ await build({
   },
   postBuild() {
     // steps to run after building and before running the tests
-    Deno.copyFileSync("LICENSE", "npm/LICENSE");
+    Deno.copyFileSync("LICENSE.md", "npm/LICENSE.md");
     Deno.copyFileSync("./src/README.md", "npm/README.md");
   },
 });
