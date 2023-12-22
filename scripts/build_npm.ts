@@ -23,7 +23,7 @@ await build({
     bugs: {
       url: "https://github.com/vippsas/deno-sdk/issues",
     },
-    homepage: "https://developer.vippsmobilepay.com/docs/SDKs/"
+    homepage: "https://developer.vippsmobilepay.com/docs/SDKs/",
   },
   postBuild() {
     // steps to run after building and before running the tests
