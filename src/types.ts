@@ -45,7 +45,7 @@ export type Credentials = {
 } & Pick<ClientConfig, "subscriptionKey">;
 
 export type RequestData<TOk, TErr> = {
-  method: "GET" | "POST" | "PATCH" | "DELETE";
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   url: string;
   headers?: Record<string, string>;
   body?: unknown;

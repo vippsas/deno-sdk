@@ -7,6 +7,7 @@ import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { agreementRequestFactory } from "./apis/agreement.ts";
 import { chargeRequestFactory } from "./apis/charge.ts";
+import { callbackQRRequestFactory } from "./apis/qr.ts";
 
 /**
  * Creates a client with the specified options.
@@ -25,6 +26,7 @@ export const Client = (options: ClientConfig) => {
     checkout: createApi(client, checkoutRequestFactory),
     agreement: createApi(client, agreementRequestFactory),
     charge: createApi(client, chargeRequestFactory),
+    callbackQR: createApi(client, callbackQRRequestFactory),
   } satisfies APIClient;
 
   return apiClient;
