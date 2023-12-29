@@ -12,12 +12,15 @@ import {
   redirectQRRequestFactory,
 } from "./apis/qr.ts";
 
-export * from "./apis/types/auth_types.ts";
-export * from "./apis/types/checkout_types.ts";
-export * from "./apis/types/epayment_types.ts";
-export * from "./apis/types/qr_types.ts";
-export * from "./apis/types/recurring_types.ts";
-export * from "./apis/types/webhooks_types.ts";
+/**
+ *  Export API types
+ */
+export type * from "./apis/types/auth_types.ts";
+export type * from "./apis/types/checkout_types.ts";
+export type * from "./apis/types/epayment_types.ts";
+export type * from "./apis/types/qr_types.ts";
+export type * from "./apis/types/recurring_types.ts";
+export type * from "./apis/types/webhooks_types.ts";
 
 /**
  * Creates a client with the specified options.
