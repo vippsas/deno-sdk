@@ -9,7 +9,6 @@ import { agreementRequestFactory } from "./apis/recurring.ts";
 import { chargeRequestFactory } from "./apis/recurring.ts";
 import {
   callbackQRRequestFactory,
-  dynamicQRRequestFactory,
   redirectQRRequestFactory,
 } from "./apis/qr.ts";
 
@@ -30,7 +29,6 @@ export const Client = (options: ClientConfig) => {
     charge: createApi(client, chargeRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
-    dynamicQR: createApi(client, dynamicQRRequestFactory),
     redirectQR: createApi(client, redirectQRRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
   } satisfies APIClient;

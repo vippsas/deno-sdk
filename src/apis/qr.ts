@@ -4,8 +4,6 @@ import {
   CallbackQrImageSize,
   CallbackQrRequest,
   CallbackQrResponse,
-  DynamicQrRequest,
-  DynamicQrResponse,
   QrErrorResponse,
   RedirectQrImageFormat,
   RedirectQrRequest,
@@ -115,35 +113,6 @@ export const redirectQRRequestFactory = {
     return {
       url: `/qr/v1/merchant-redirect/${id}`,
       method: "DELETE",
-      token,
-    };
-  },
-} as const;
-
-/**
- * Factory function for creating a one time payment QR.
- */
-export const dynamicQRRequestFactory = {
-  /**
-   * Create a QR for a one time merchant payment. Given a valid
-   * vippsLandingPageUrl, this endpoint will return a QR for that payment.
-   *
-   * @param token - The authentication token.
-   * @param imageFormat - The format of the QR code image.
-   * @param body - The request body containing the payment details.
-   * @returns  A `RequestData` object containing the URL, method, headers,
-   * body and token.
-   */
-  create(
-    token: string,
-    imageFormat: RedirectQrImageFormat,
-    body: DynamicQrRequest,
-  ): RequestData<DynamicQrResponse, QrErrorResponse> {
-    return {
-      url: `/qr/v1`,
-      method: "POST",
-      headers: { "Accept": imageFormat },
-      body,
       token,
     };
   },

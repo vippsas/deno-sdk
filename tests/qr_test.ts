@@ -1,11 +1,9 @@
 import {
   callbackQRRequestFactory,
-  dynamicQRRequestFactory,
   redirectQRRequestFactory,
 } from "../src/apis/qr.ts";
 import {
   CallbackQrRequest,
-  DynamicQrRequest,
   RedirectQrRequest,
   RedirectQrUpdateRequest,
 } from "../src/apis/types/qr_types.ts";
@@ -74,17 +72,6 @@ Deno.test("redirectQR - delete - should return the correct request data", () => 
 
   assertEquals(requestData.url, `/qr/v1/merchant-redirect/${id}`);
   assertEquals(requestData.method, "DELETE");
-});
-
-Deno.test("dynamicQR - create - should return the correct RequestData object", () => {
-  const token = "your-token";
-  const imageFormat = "image/png";
-  const body: DynamicQrRequest = { url: "https://example.com" };
-
-  const requestData = dynamicQRRequestFactory.create(token, imageFormat, body);
-
-  assertEquals(requestData.url, "/qr/v1");
-  assertEquals(requestData.method, "POST");
 });
 
 Deno.test("callbackQR - create - should return a valid request data object", () => {

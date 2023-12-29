@@ -124,24 +124,3 @@ export type QrErrorResponse = {
     reason: string;
   }[];
 };
-
-export type DynamicQrRequest = {
-  /**
-   * Url to the Vipps landing page, obtained from ecom/recurring apis
-   * @example "https://api.vipps.no/dwo-api-application/v1/deeplink/vippsgateway?v=2&token=eyJraWQiO...."
-   */
-  url: string;
-};
-
-export type DynamicQrResponse = {
-  /**
-   * Link to QR image
-   * @example "https://qr.vipps.no/generate/qr.png?..."
-   */
-  url: string;
-  /**
-   * How many seconds more this QR will be active
-   * @example 544
-   */
-  expiresIn: number;
-};
