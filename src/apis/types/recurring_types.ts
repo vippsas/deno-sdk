@@ -29,7 +29,7 @@ export type RecurringErrorResponse = RecurringErrorV3 | RecurringErrorFromAzure;
  * Error response
  * Error response using the Problem JSON format
  */
-type RecurringErrorV3 = {
+export type RecurringErrorV3 = {
   /**
    * Path to type of error
    * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
@@ -80,7 +80,7 @@ type RecurringErrorV3 = {
  * and can not give as detailed information as with the errors from our own code.
  * The most important property is the HTTP status code.
  */
-type RecurringErrorFromAzure = {
+export type RecurringErrorFromAzure = {
   responseInfo: {
     /** @example 401 */
     responseCode: number;
@@ -278,7 +278,7 @@ export type ChargeResponseV3 = {
   /** A summary of the amounts captured, refunded and cancelled */
   summary: ChargeSummary;
   /** List of events related to the charge. */
-  history: ChargeHistory;
+  history: ChargeEvent[];
 };
 
 /** @example "PENDING" */
@@ -295,7 +295,7 @@ export type ChargeStatus =
   | "PROCESSING";
 
 /** A summary of the amounts captured, refunded and cancelled */
-type ChargeSummary = {
+export type ChargeSummary = {
   /**
    * The total amount which has been captured/charged, in case of status charged/partial capture.
    * Amounts are specified in minor units.
@@ -323,11 +323,8 @@ type ChargeSummary = {
   cancelled: number;
 };
 
-/** List of events related to the charge. */
-type ChargeHistory = ChargeEvent[];
-
 /** Describes the operation that was performed on the charge */
-type ChargeEvent = {
+export type ChargeEvent = {
   /**
    * Date and time of the event, as timestamp on the format `yyyy-MM-dd'T'HH:mm:ss'Z'`,
    * with or without milliseconds.
@@ -486,7 +483,7 @@ export type DraftAgreementV3 = {
   countryCode?: string;
 };
 
-type AgreementPricingRequest = {
+export type AgreementPricingRequest = {
   /**
    * The type of pricing. This decides which properties are required.
    * @default "LEGACY"
@@ -522,7 +519,7 @@ type AgreementPricingRequest = {
  * An initial charge for a new agreement.
  * The charge will be processed immediately when the user approves the agreement.
  */
-type AgreementInitialChargeV3 = {
+export type AgreementInitialChargeV3 = {
   /**
    * The amount that must be paid or approved before starting the agreement.
    *
@@ -566,7 +563,7 @@ type AgreementInitialChargeV3 = {
  * Time Period request
  * A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units)
  */
-type AgreementTimePeriod = {
+export type AgreementTimePeriod = {
   /**
    * Unit for time period
    * @example "WEEK"
@@ -590,7 +587,7 @@ type AgreementTimePeriod = {
  * @pattern ^(YEAR|MONTH|WEEK|DAY)$
  * @example "MONTH"
  */
-type AgreementInterval = "YEAR" | "MONTH" | "WEEK" | "DAY";
+export type AgreementInterval = "YEAR" | "MONTH" | "WEEK" | "DAY";
 
 export type DraftAgreementResponseV3 = {
   /**
@@ -738,7 +735,7 @@ export type AgreementResponseV3 = {
  * Time Period response
  * A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units)
  */
-type AgreementTimePeriodResponse = {
+export type AgreementTimePeriodResponse = {
   /**
    * Unit for time period
    * @example "WEEK"
@@ -757,11 +754,11 @@ type AgreementTimePeriodResponse = {
   text?: string;
 };
 
-type AgreementPricingResponse =
+export type AgreementPricingResponse =
   | AgreementLegacyPricingResponse
   | AgreementVariableAmountPricingResponse;
 
-type AgreementLegacyPricingResponse = {
+export type AgreementLegacyPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
   type: "LEGACY";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
@@ -777,7 +774,7 @@ type AgreementLegacyPricingResponse = {
   amount: number;
 };
 
-type AgreementVariableAmountPricingResponse = {
+export type AgreementVariableAmountPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
   type: "VARIABLE";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
@@ -861,7 +858,7 @@ export type PatchAgreementV3 = {
   };
 };
 
-type AgreementPricingUpdateRequest = {
+export type AgreementPricingUpdateRequest = {
   /**
    * The price of the agreement, can only be updated if agreement type is LEGACY
    *
@@ -891,13 +888,13 @@ export type ForceAcceptAgreementV3 = {
 };
 
 ////////////////// Campaigns //////////////////
-type AgreementCampaignV3 =
+export type AgreementCampaignV3 =
   | AgreementPriceCampaignV3
   | AgreementPeriodCampaignV3
   | AgreementEventCampaignV3
   | AgreementFullFlexCampaignV3;
 
-type AgreementPriceCampaignV3 = {
+export type AgreementPriceCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "PRICE_CAMPAIGN";
 
@@ -918,7 +915,7 @@ type AgreementPriceCampaignV3 = {
   end: string;
 } | null;
 
-type AgreementPeriodCampaignV3 = {
+export type AgreementPeriodCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "PERIOD_CAMPAIGN";
 
@@ -935,7 +932,7 @@ type AgreementPeriodCampaignV3 = {
   period: AgreementTimePeriod;
 } | null;
 
-type AgreementEventCampaignV3 = {
+export type AgreementEventCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "EVENT_CAMPAIGN";
   /**
@@ -960,7 +957,7 @@ type AgreementEventCampaignV3 = {
   eventText: string;
 } | null;
 
-type AgreementFullFlexCampaignV3 = {
+export type AgreementFullFlexCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "FULL_FLEX_CAMPAIGN";
   /**
@@ -982,14 +979,14 @@ type AgreementFullFlexCampaignV3 = {
   end: string;
 } | null;
 
-type AgreementCampaignResponseV3 =
+export type AgreementCampaignResponseV3 =
   | AgreementPriceCampaignResponseV3
   | AgreementPeriodCampaignResponseV3
   | AgreementEventCampaignResponseV3
   | AgreementFullFlexCampaignResponseV3
   | AgreementLegacyCampaignResponseV3;
 
-type AgreementPriceCampaignResponseV3 = {
+export type AgreementPriceCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "PRICE_CAMPAIGN";
 
@@ -1015,7 +1012,7 @@ type AgreementPriceCampaignResponseV3 = {
   explanation?: string;
 };
 
-type AgreementPeriodCampaignResponseV3 = {
+export type AgreementPeriodCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "PERIOD_CAMPAIGN";
 
@@ -1043,7 +1040,7 @@ type AgreementPeriodCampaignResponseV3 = {
   explanation?: string;
 };
 
-type AgreementEventCampaignResponseV3 = {
+export type AgreementEventCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "EVENT_CAMPAIGN";
 
@@ -1074,7 +1071,7 @@ type AgreementEventCampaignResponseV3 = {
   explanation?: string;
 };
 
-type AgreementFullFlexCampaignResponseV3 = {
+export type AgreementFullFlexCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "FULL_FLEX_CAMPAIGN";
   /**
@@ -1101,7 +1098,7 @@ type AgreementFullFlexCampaignResponseV3 = {
   explanation?: string;
 };
 
-type AgreementLegacyCampaignResponseV3 = {
+export type AgreementLegacyCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
   type: "LEGACY_CAMPAIGN";
   /**
