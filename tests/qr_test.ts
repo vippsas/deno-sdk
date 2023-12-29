@@ -111,9 +111,24 @@ Deno.test("callbackQR - info - should return a valid request data object", () =>
   assertEquals(requestData.method, "GET");
 });
 
+Deno.test("callbackQR - info - should return a valid request data object without image format and size set", () => {
+  const token = "your-auth-token";
+  const merchantQrId = "your-merchant-qr-id";
+
+  const requestData = callbackQRRequestFactory.info(
+    token,
+    merchantQrId,
+  );
+
+  assertEquals(
+    requestData.url,
+    "/qr/v1/merchant-callback/your-merchant-qr-id?QrImageFormat=SVG",
+  );
+});
+
 Deno.test("callbackQR - list - should return a valid request data object", () => {
   const token = "your-auth-token";
-  const qrImageFormat = "SVG";
+  const qrImageFormat = "PNG";
   const qrImageSize = 200;
 
   const requestData = callbackQRRequestFactory.list(
@@ -124,9 +139,17 @@ Deno.test("callbackQR - list - should return a valid request data object", () =>
 
   assertEquals(
     requestData.url,
-    "/qr/v1/merchant-callback?QrImageFormat=SVG&QrImageSize=200",
+    "/qr/v1/merchant-callback?QrImageFormat=PNG&QrImageSize=200",
   );
   assertEquals(requestData.method, "GET");
+});
+
+Deno.test("callbackQR - list - should return a valid request data object without image format and size set", () => {
+  const token = "your-auth-token";
+
+  const requestData = callbackQRRequestFactory.list(token);
+
+  assertEquals(requestData.url, "/qr/v1/merchant-callback?QrImageFormat=SVG");
 });
 
 Deno.test("callbackQR - delete - should return a valid request data object", () => {
