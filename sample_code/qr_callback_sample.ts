@@ -58,4 +58,3 @@ if (!qrInfo.ok) {
 }
 
 console.log(qrInfo.data.qrImageUrl);
-

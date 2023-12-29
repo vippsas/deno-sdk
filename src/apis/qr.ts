@@ -76,7 +76,7 @@ export const callbackQRRequestFactory = {
   },
   /**
    * Deletes the QR code that matches the provided merchantQrId and merchantSerialNumber.
-   * 
+   *
    * @param token - The authentication token.
    * @param merchantQrId - The ID of the merchant QR to delete.
    * @returns A `RequestData` object with the URL, method, and token for the delete request.
@@ -92,23 +92,23 @@ export const callbackQRRequestFactory = {
     };
   },
   /**
-   * NOTE: This endpoint is only intended for MobilePay PoS customers. 
+   * NOTE: This endpoint is only intended for MobilePay PoS customers.
    * It will be removed as soon as migration is completed.
-   * 
-   * This endpoint is for migrating existing MobilePay PoS QR codes from the 
-   * current solution that will end its lifetime. It is meant for merchants 
-   * that have printed QR codes and want them to stay functional for the new 
+   *
+   * This endpoint is for migrating existing MobilePay PoS QR codes from the
+   * current solution that will end its lifetime. It is meant for merchants
+   * that have printed QR codes and want them to stay functional for the new
    * product offering that will replace the now deprecated solution.
-   * 
-   * This endpoint will not create a new QR code but rather map the provided 
-   * beaconId with the Merchant-Serial-Number, to make sure the already 
-   * printed QR code can be re-used. When the QR code is scanned by MobilePay 
-   * users, it will result in a callback being sent to the merchant if the 
+   *
+   * This endpoint will not create a new QR code but rather map the provided
+   * beaconId with the Merchant-Serial-Number, to make sure the already
+   * printed QR code can be re-used. When the QR code is scanned by MobilePay
+   * users, it will result in a callback being sent to the merchant if the
    * merchant has registered a webhook for the user.checked-in.v1 event.
-   * 
-   * The callback will include a MerchantQrId which in this scenario will 
+   *
+   * The callback will include a MerchantQrId which in this scenario will
    * equal the beaconId.
-   * 
+   *
    * @param token - The authentication token.
    * @param beaconId - The beacon ID.
    * @param body - The request body.
