@@ -8,6 +8,7 @@ import {
   RedirectQrImageFormat,
   RedirectQrRequest,
   RedirectQrResponse,
+  RedirectQrUpdateRequest,
 } from "./types/qr_types.ts";
 
 /**
@@ -35,8 +36,23 @@ export const redirectQRRequestFactory = {
       token,
     };
   },
+  update(
+    token: string,
+    id: string,
+    imageFormat: RedirectQrImageFormat,
+    body: RedirectQrUpdateRequest,
+  ): RequestData<RedirectQrResponse, QrErrorResponse | { id: string }> {
+    return {
+      url: `/qr/v1/merchant-redirect/${id}`,
+      method: "PUT",
+      headers: { "Accept": imageFormat },
+      body,
+      token,
+    };
+  },
   /**
-   * Retrieves information about a merchant redirect QR code.
+   * Retrieves information about a merchant redirect QR code by its ID.
+   *
    * @param token - The authentication token.
    * @param id - The ID of the QR code.
    * @returns A `RequestData` object containing the URL, method, and token.
@@ -50,6 +66,42 @@ export const redirectQRRequestFactory = {
       url: `/qr/v1/merchant-redirect/${id}`,
       method: "GET",
       headers: { "Accept": imageFormat },
+      token,
+    };
+  },
+  /**
+   * Get all merchant redirect QRs for this saleunit
+   *
+   * @param token - The authentication token.
+   * @param imageFormat - The format of the QR code image.
+   * @returns A `RequestData` object containing the URL,
+   * method, headers, and token.
+   */
+  list(
+    token: string,
+    imageFormat: RedirectQrImageFormat,
+  ): RequestData<RedirectQrResponse[], QrErrorResponse> {
+    return {
+      url: `/qr/v1/merchant-redirect`,
+      method: "GET",
+      headers: { "Accept": imageFormat },
+      token,
+    };
+  },
+  /**
+   * Deletes a merchant redirect QR code by its ID.
+   *
+   * @param token - The authentication token.
+   * @param id - The ID of the QR code to delete.
+   * @returns A `RequestData` object with the URL, method, and token for the delete request.
+   */
+  delete(
+    token: string,
+    id: string,
+  ): RequestData<void, QrErrorResponse> {
+    return {
+      url: `/qr/v1/merchant-redirect/${id}`,
+      method: "DELETE",
       token,
     };
   },
