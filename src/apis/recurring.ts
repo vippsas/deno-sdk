@@ -2,13 +2,17 @@ import { RequestData } from "../types.ts";
 import {
   AgreementResponseV3,
   AgreementStatus,
+  ChargeReference,
+  ChargeResponseV3,
+  ChargeStatus,
+  CreateChargeV3,
   DraftAgreementResponseV3,
   DraftAgreementV3,
   ForceAcceptAgreementV3,
+  ModifyCharge,
   PatchAgreementV3,
-} from "./types/agreement_types.ts";
-import { CreateChargeV3, ChargeReference, ChargeResponseV3, ChargeStatus, ModifyCharge } from "./types/charge_types.ts";
-import { RecurringErrorResponse } from "./types/recurring_types.ts";
+  RecurringErrorResponse,
+} from "./types/recurring_types.ts";
 
 /**
  * Factory object for creating and managing agreements.

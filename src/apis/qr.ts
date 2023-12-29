@@ -1,11 +1,59 @@
 import { RequestData } from "../types.ts";
 import {
-  MerchantCallbackQr,
-  MerchantCallbackRequest,
+  CallbackQrImageFormat,
+  CallbackQrImageSize,
+  CallbackQrRequest,
+  CallbackQrResponse,
   QrErrorResponse,
-  QrImageFormat,
-  QrImageSize,
+  RedirectQrImageFormat,
+  RedirectQrRequest,
+  RedirectQrResponse,
 } from "./types/qr_types.ts";
+
+/**
+ * Factory function for creating a redirect QR request.
+ */
+export const redirectQRRequestFactory = {
+  /**
+   * Generate a QR that works as a redirect back to the merchant
+   *
+   * @param token - The authentication token.
+   * @param body - The request body containing the merchant redirect
+   * QR code details.
+   * @returns A RequestData object with the URL, method, body, and token.
+   */
+  create(
+    token: string,
+    imageFormat: RedirectQrImageFormat,
+    body: RedirectQrRequest,
+  ): RequestData<RedirectQrResponse, QrErrorResponse | { id: string }> {
+    return {
+      url: `/qr/v1/merchant-redirect`,
+      method: "POST",
+      headers: { "Accept": imageFormat },
+      body,
+      token,
+    };
+  },
+  /**
+   * Retrieves information about a merchant redirect QR code.
+   * @param token - The authentication token.
+   * @param id - The ID of the QR code.
+   * @returns A `RequestData` object containing the URL, method, and token.
+   */
+  info(
+    token: string,
+    id: string,
+    imageFormat: RedirectQrImageFormat,
+  ): RequestData<RedirectQrResponse, QrErrorResponse> {
+    return {
+      url: `/qr/v1/merchant-redirect/${id}`,
+      method: "GET",
+      headers: { "Accept": imageFormat },
+      token,
+    };
+  },
+};
 
 /**
  * Factory for creating Merchant callback QR request.
@@ -22,7 +70,7 @@ export const callbackQRRequestFactory = {
   create(
     token: string,
     merchantQrId: string,
-    body: MerchantCallbackRequest,
+    body: CallbackQrRequest,
   ): RequestData<void, QrErrorResponse> {
     return {
       url: `/qr/v1/merchant-callback/${merchantQrId}`,
@@ -46,9 +94,9 @@ export const callbackQRRequestFactory = {
   info(
     token: string,
     merchantQrId: string,
-    qrImageFormat: QrImageFormat = "SVG",
-    qrImageSize?: QrImageSize,
-  ): RequestData<MerchantCallbackQr, QrErrorResponse> {
+    qrImageFormat: CallbackQrImageFormat = "SVG",
+    qrImageSize?: CallbackQrImageSize,
+  ): RequestData<CallbackQrResponse, QrErrorResponse> {
     const url = qrImageSize
       ? `/qr/v1/merchant-callback/${merchantQrId}?QrImageFormat=${qrImageFormat}&QrImageSize=${qrImageSize}`
       : `/qr/v1/merchant-callback/${merchantQrId}?QrImageFormat=${qrImageFormat}`;
@@ -65,9 +113,9 @@ export const callbackQRRequestFactory = {
    */
   list(
     token: string,
-    qrImageFormat: QrImageFormat = "SVG",
-    qrImageSize?: QrImageSize,
-  ): RequestData<MerchantCallbackQr[], QrErrorResponse> {
+    qrImageFormat: CallbackQrImageFormat = "SVG",
+    qrImageSize?: CallbackQrImageSize,
+  ): RequestData<CallbackQrResponse[], QrErrorResponse> {
     const url = qrImageSize
       ? `/qr/v1/merchant-callback?QrImageFormat=${qrImageFormat}&QrImageSize=${qrImageSize}`
       : `/qr/v1/merchant-callback?QrImageFormat=${qrImageFormat}`;
@@ -117,7 +165,7 @@ export const callbackQRRequestFactory = {
   createMobilePayQR(
     token: string,
     beaconId: string,
-    body: MerchantCallbackRequest,
+    body: CallbackQrRequest,
   ): RequestData<void, QrErrorResponse> {
     return {
       url: `/qr/v1/merchant-callback/mobilepay/${beaconId}`,
