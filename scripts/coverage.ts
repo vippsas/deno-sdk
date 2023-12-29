@@ -9,7 +9,7 @@
  */
 
 // Minimum branch coverage threshold (in percentage)
-const THRESHOLD = 80;
+const THRESHOLD = 90;
 
 const getCommandOutput = async (command: Deno.Command) => {
   const { code, stdout, stderr } = await command.output();
@@ -58,9 +58,11 @@ if (!branchTotal) {
   Deno.exit(1);
 }
 
-if (branchTotal > THRESHOLD) {
-  console.log(`Branch coverage is good: ${branchTotal}%`);
+if (branchTotal === 100) {
+  console.log("Branch coverage is perfect! 🥹");
+} else if (branchTotal > THRESHOLD) {
+  console.log(`Branch coverage is good: ${branchTotal}% ✅`);
 } else {
-  console.log(`Branch coverage is bad: ${branchTotal}%`);
+  console.log(`Branch coverage is bad: ${branchTotal}% 💀`);
   Deno.exit(1);
 }
