@@ -5,8 +5,8 @@ import { authRequestFactory } from "./apis/auth.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
-import { agreementRequestFactory } from "./apis/agreement.ts";
-import { chargeRequestFactory } from "./apis/charge.ts";
+import { agreementRequestFactory } from "./apis/recurring.ts";
+import { chargeRequestFactory } from "./apis/recurring.ts";
 import { callbackQRRequestFactory } from "./apis/qr.ts";
 
 /**

@@ -1,6 +1,6 @@
 import { assertEquals, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
-import { agreementRequestFactory } from "../src/apis/agreement.ts";
+import { agreementRequestFactory } from "../src/apis/recurring.ts";
 
 Deno.test("agreements - create - check correct url in TEST/MT", async () => {
   mf.install();
