@@ -4,6 +4,8 @@ import {
   CallbackQrImageSize,
   CallbackQrRequest,
   CallbackQrResponse,
+  DynamicQrRequest,
+  DynamicQrResponse,
   QrErrorResponse,
   RedirectQrImageFormat,
   RedirectQrRequest,
@@ -36,6 +38,16 @@ export const redirectQRRequestFactory = {
       token,
     };
   },
+  /**
+   * Update the redirect url (target destination) of the QR.
+   *
+   * @param token - The authentication token.
+   * @param id - The ID of the QR code to update.
+   * @param imageFormat - The format of the QR code image to be returned.
+   * @param body - The request body containing the updated QR code data.
+   * @returns A `RequestData` object with the updated QR code response
+   * or an error response.
+   */
   update(
     token: string,
     id: string,
@@ -93,7 +105,8 @@ export const redirectQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param id - The ID of the QR code to delete.
-   * @returns A `RequestData` object with the URL, method, and token for the delete request.
+   * @returns A `RequestData` object with the URL, method, and
+   * token for the delete request.
    */
   delete(
     token: string,
@@ -105,7 +118,36 @@ export const redirectQRRequestFactory = {
       token,
     };
   },
-};
+} as const;
+
+/**
+ * Factory function for creating a one time payment QR.
+ */
+export const dynamicQRRequestFactory = {
+  /**
+   * Create a QR for a one time merchant payment. Given a valid
+   * vippsLandingPageUrl, this endpoint will return a QR for that payment.
+   *
+   * @param token - The authentication token.
+   * @param imageFormat - The format of the QR code image.
+   * @param body - The request body containing the payment details.
+   * @returns  A `RequestData` object containing the URL, method, headers,
+   * body and token.
+   */
+  create(
+    token: string,
+    imageFormat: RedirectQrImageFormat,
+    body: DynamicQrRequest,
+  ): RequestData<DynamicQrResponse, QrErrorResponse> {
+    return {
+      url: `/qr/v1`,
+      method: "POST",
+      headers: { "Accept": imageFormat },
+      body,
+      token,
+    };
+  },
+} as const;
 
 /**
  * Factory for creating Merchant callback QR request.
@@ -117,7 +159,8 @@ export const callbackQRRequestFactory = {
    * @param token - The authentication token.
    * @param merchantQrId - The merchant defined identifier for a QR code.
    * @param body - The request body.
-   * @returns A `RequestData` object representing the callback QR request.
+   * @returns  A `RequestData` object containing the URL, method, body and
+   * token.
    */
   create(
     token: string,
@@ -175,11 +218,13 @@ export const callbackQRRequestFactory = {
     return { url, method: "GET", token };
   },
   /**
-   * Deletes the QR code that matches the provided merchantQrId and merchantSerialNumber.
+   * Deletes the QR code that matches the provided merchantQrId and
+   * merchantSerialNumber.
    *
    * @param token - The authentication token.
    * @param merchantQrId - The ID of the merchant QR to delete.
-   * @returns A `RequestData` object with the URL, method, and token for the delete request.
+   * @returns A `RequestData` object with the URL, method, and
+   * token for the delete request.
    */
   delete(
     token: string,
@@ -226,4 +271,4 @@ export const callbackQRRequestFactory = {
       token,
     };
   },
-};
+} as const;

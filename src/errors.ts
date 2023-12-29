@@ -70,12 +70,11 @@ export const parseError = <TErr>(
 
   // Catch QR Error JSON
   if (
-    typeof error === "object" && error !== null && "type" in error &&
-    "title" in error && "detail" in error && "instance" in error &&
-    "invalidParams" in error
+    typeof error === "object" && error !== null && "title" in error &&
+    "detail" in error && "instance" in error
   ) {
     const qrError = error as QrErrorResponse;
-    const message = qrError.invalidParams?.[0]?.reason ?? qrError.title;
+    const message = qrError.invalidParams?.[0]?.reason ?? qrError.detail;
     return {
       ok: false,
       message,

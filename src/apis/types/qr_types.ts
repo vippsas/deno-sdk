@@ -125,7 +125,7 @@ export type QrErrorResponse = {
   }[];
 };
 
-export type OneTimePaymentQrRequest = {
+export type DynamicQrRequest = {
   /**
    * Url to the Vipps landing page, obtained from ecom/recurring apis
    * @example "https://api.vipps.no/dwo-api-application/v1/deeplink/vippsgateway?v=2&token=eyJraWQiO...."
@@ -133,7 +133,7 @@ export type OneTimePaymentQrRequest = {
   url: string;
 };
 
-export type OneTimePaymentQrResponse = {
+export type DynamicQrResponse = {
   /**
    * Link to QR image
    * @example "https://qr.vipps.no/generate/qr.png?..."
