@@ -13,7 +13,8 @@ import {
 } from "./apis/qr.ts";
 
 /**
- *  Export API types
+ * Export all API types, for convenience. All exported types are
+ * prefixed with the API name, to avoid potential naming conflicts.
  */
 export type * from "./apis/types/auth_types.ts";
 export type * from "./apis/types/checkout_types.ts";

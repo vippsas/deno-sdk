@@ -349,7 +349,7 @@ export type ChargeEvent = {
 };
 
 /** Refund charge request */
-export type ModifyCharge = {
+export type ChargeModification = {
   /**
    * The amount to refund/capture on a charge.
    *
@@ -800,7 +800,7 @@ export type AgreementVariableAmountPricingResponse = {
 };
 
 ////////////// Update agreements //////////////
-export type PatchAgreementV3 = {
+export type AgreementPatchV3 = {
   /**
    * Name of the product being subscribed to.
    * @maxLength 45
@@ -882,7 +882,7 @@ export type AgreementPricingUpdateRequest = {
   suggestedMaxAmount?: number;
 };
 
-export type ForceAcceptAgreementV3 = {
+export type AgreementForceAcceptV3 = {
   /** @example "4791234567" */
   phoneNumber: string;
 };

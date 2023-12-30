@@ -3,7 +3,7 @@ import {
   CheckoutErrorResponse,
   CheckoutInitiateSessionOKResponse,
   CheckoutInitiateSessionRequest,
-  GetCheckoutSessionOKResponse,
+  CheckoutSessionOKResponse,
 } from "./types/checkout_types.ts";
 
 /**
@@ -59,7 +59,7 @@ export const checkoutRequestFactory = {
     client_id: string,
     client_secret: string,
     reference: string,
-  ): RequestData<GetCheckoutSessionOKResponse, CheckoutErrorResponse> {
+  ): RequestData<CheckoutSessionOKResponse, CheckoutErrorResponse> {
     return {
       url: `/checkout/v3/session/${reference}`,
       method: "GET",

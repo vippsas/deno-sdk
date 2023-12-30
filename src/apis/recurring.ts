@@ -1,16 +1,16 @@
 import { RequestData } from "../types.ts";
 import {
+  AgreementForceAcceptV3,
+  AgreementPatchV3,
   AgreementResponseV3,
   AgreementStatus,
+  ChargeModification,
   ChargeReference,
   ChargeResponseV3,
   ChargeStatus,
   CreateChargeV3,
   DraftAgreementResponseV3,
   DraftAgreementV3,
-  ForceAcceptAgreementV3,
-  ModifyCharge,
-  PatchAgreementV3,
   RecurringErrorResponse,
 } from "./types/recurring_types.ts";
 
@@ -103,7 +103,7 @@ export const agreementRequestFactory = {
   update(
     token: string,
     agreementId: string,
-    body: PatchAgreementV3,
+    body: AgreementPatchV3,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
@@ -124,7 +124,7 @@ export const agreementRequestFactory = {
   forceAccept(
     token: string,
     agreementId: string,
-    body: ForceAcceptAgreementV3,
+    body: AgreementForceAcceptV3,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/accept`,
@@ -259,7 +259,7 @@ export const chargeRequestFactory = {
     token: string,
     agreementId: string,
     chargeId: string,
-    body: ModifyCharge,
+    body: ChargeModification,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url:
@@ -282,7 +282,7 @@ export const chargeRequestFactory = {
     token: string,
     agreementId: string,
     chargeId: string,
-    body: ModifyCharge,
+    body: ChargeModification,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges/${chargeId}/refund`,

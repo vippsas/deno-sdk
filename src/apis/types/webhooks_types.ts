@@ -39,7 +39,7 @@ export type WebhookDetails = {
 // All event types currently supported in the SDK for all APIs
 export type WebhookEventType = EpaymentEventTypes | "user.checked-in.v1";
 
-export type EpaymentEventTypes =
+type EpaymentEventTypes =
   | "epayments.payment.created.v1"
   | "epayments.payment.aborted.v1"
   | "epayments.payment.expired.v1"

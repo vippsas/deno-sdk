@@ -458,7 +458,7 @@ export type CheckoutResponsePaymentDetails = {
 };
 
 /** Session information */
-export type GetCheckoutSessionOKResponse = {
+export type CheckoutSessionOKResponse = {
   /** The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2". */
   sessionId: string;
   /** The merchant's serial number. Example: "123456" */
