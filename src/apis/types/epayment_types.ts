@@ -1,4 +1,4 @@
-type EPaymentProblemJSON = {
+export type EPaymentProblemJSON = {
   type: string;
   title: string;
   detail?: string;
@@ -17,9 +17,9 @@ export type EpaymentErrorResponse = EPaymentProblemJSON & {
  * Currency code as defined in ISO 4217. eg NOK for Norwegian kroner.
  * @example "NOK"
  */
-type EPaymentCurrency = "NOK" | "DKK" | "EUR";
+export type EPaymentCurrency = "NOK" | "DKK" | "EUR";
 
-type EPaymentAmount = {
+export type EPaymentAmount = {
   /** Currency code as defined in ISO 4217. eg NOK for Norwegian kroner. */
   currency: EPaymentCurrency;
   /**
@@ -42,14 +42,14 @@ type EPaymentAmount = {
  * @pattern ^[a-zA-Z0-9-]{8,50}$
  * @example "reference-string"
  */
-type EPaymentReference = string;
+export type EPaymentReference = string;
 
 /**
  * AirlineData
  * Airline related data.
  * If present, `passengerName`, `airlineCode`, `airlineDesignatorCode`, and `agencyInvoiceNumber` are all required.
  */
-type EPaymentAirlineData = {
+export type EPaymentAirlineData = {
   /**
    * Reference number for the invoice, issued by the agency.
    * @minLength 1
@@ -89,7 +89,7 @@ type EPaymentAirlineData = {
 };
 
 /** Additional compliance data related to the transaction. */
-type EPaymentIndustryData = {
+export type EPaymentIndustryData = {
   /**
    * Airline related data.
    * If present, `passengerName`, `airlineCode`, `airlineDesignatorCode`, and `agencyInvoiceNumber` are all required.
@@ -102,9 +102,9 @@ type EPaymentIndustryData = {
  * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
  * @example "WALLET"
  */
-type EPaymentPaymentMethodType = "WALLET" | "CARD";
+export type EPaymentPaymentMethodType = "WALLET" | "CARD";
 
-type EPaymentPaymentMethod = {
+export type EPaymentPaymentMethod = {
   /**
    * The paymentMethod type to be performed.
    * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
@@ -112,7 +112,7 @@ type EPaymentPaymentMethod = {
   type: EPaymentPaymentMethodType;
 };
 
-type EPaymentPaymentMethodResponse = {
+export type EPaymentPaymentMethodResponse = {
   /**
    * The paymentMethod type to be performed.
    * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
@@ -126,7 +126,7 @@ type EPaymentPaymentMethodResponse = {
   cardBin?: string;
 };
 
-type EPaymentProfileRequest = {
+export type EPaymentProfileRequest = {
   /** A space-separated string list of requested user information in accordance with the OpenID Connect specification. */
   scope?: string;
 };
@@ -202,7 +202,7 @@ export type EPaymentCreatePaymentOKResponse = {
   reference: string;
 };
 
-type EPaymentCustomer = {
+export type EPaymentCustomer = {
   /**
    * The phone number of the user paying the transaction with Vipps.
    * Only Norwegian mobile numbers are supported (for now).
@@ -235,7 +235,7 @@ export type EPaymentGetPaymentOKResponse = {
   paymentMethod: EPaymentPaymentMethodResponse;
   profile: EPaymentProfileResponse;
   /** Reference value for a payment defined by Vipps. */
-  pspReference: EPaymentPspReference;
+  pspReference: string;
   /**
    * The URL you should redirect the user to to continue with the payment.
    * @format uri
@@ -246,7 +246,7 @@ export type EPaymentGetPaymentOKResponse = {
   reference: EPaymentReference;
 };
 
-type EPaymentAggregate = {
+export type EPaymentAggregate = {
   /** Amount object */
   authorizedAmount: EPaymentAmount;
   /** Amount object */
@@ -267,14 +267,14 @@ type EPaymentAggregate = {
  * - AUTHORIZED : User has approved the payment
  * - TERMINATED : Merchant has terminated the payment via the cancelPayment endpoint
  */
-type EPaymentState =
+export type EPaymentState =
   | "CREATED"
   | "ABORTED"
   | "EXPIRED"
   | "AUTHORIZED"
   | "TERMINATED";
 
-type EPaymentProfileResponse = {
+export type EPaymentProfileResponse = {
   /**
    * If `profile.scope` was requested in `createPayment` this value will populate once
    * `state` is `AUTHORIZED`. This can be used towards the
@@ -284,17 +284,11 @@ type EPaymentProfileResponse = {
   sub?: string;
 };
 
-/**
- * PspReference
- * Reference value for a payment defined by Vipps.
- */
-type EPaymentPspReference = string;
-
 export type EPaymentPaymentEventOKResponse = {
   /** A reference */
   reference: EPaymentReference;
   /** Reference value for a payment defined by Vipps. */
-  pspReference: EPaymentPspReference;
+  pspReference: string;
   /** @example "AUTHORIZED" */
   name:
     | "CREATED"
@@ -337,7 +331,7 @@ export type EPaymentModificationOKResponse = {
   state: EPaymentState;
   aggregate: EPaymentAggregate;
   /** Reference value for a payment defined by Vipps. */
-  pspReference: EPaymentPspReference;
+  pspReference: string;
   /** A reference */
   reference: EPaymentReference;
 };

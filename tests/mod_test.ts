@@ -29,6 +29,11 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.charge.cancel, "function");
   assertEquals(typeof client.charge.capture, "function");
   assertEquals(typeof client.charge.refund, "function");
+  assertEquals(typeof client.redirectQR.create, "function");
+  assertEquals(typeof client.redirectQR.info, "function");
+  assertEquals(typeof client.redirectQR.list, "function");
+  assertEquals(typeof client.redirectQR.delete, "function");
+  assertEquals(typeof client.redirectQR.update, "function");
   assertEquals(typeof client.callbackQR.create, "function");
   assertEquals(typeof client.callbackQR.createMobilePayQR, "function");
   assertEquals(typeof client.callbackQR.delete, "function");

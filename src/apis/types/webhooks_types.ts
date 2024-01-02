@@ -1,5 +1,5 @@
 // Error types //
-type WebhooksProblemJSON = {
+export type WebhooksProblemJSON = {
   type: string | null;
   title: string | null;
   status: number | null;
@@ -30,14 +30,14 @@ export type WebhooksGetRegisteredOKResponse = {
   webhooks: WebhookDetails[];
 };
 
-type WebhookDetails = {
+export type WebhookDetails = {
   id: `${string}-${string}-${string}-${string}-${string}`; // UUID
   url: string;
   events: WebhookEventType[];
 };
 
 // All event types currently supported in the SDK for all APIs
-type WebhookEventType = EpaymentEventTypes | QREventTypes;
+export type WebhookEventType = EpaymentEventTypes | "user.checked-in.v1";
 
 type EpaymentEventTypes =
   | "epayments.payment.created.v1"
@@ -48,5 +48,3 @@ type EpaymentEventTypes =
   | "epayments.payment.refunded.v1"
   | "epayments.payment.authorized.v1"
   | "epayments.payment.terminated.v1";
-
-type QREventTypes = "user.checked-in.v1";

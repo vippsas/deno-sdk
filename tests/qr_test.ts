@@ -1,11 +1,83 @@
-import { callbackQRRequestFactory } from "../src/apis/qr.ts";
-import { MerchantCallbackRequest } from "../src/apis/types/qr_types.ts";
-import { assert } from "./test_deps.ts";
+import {
+  callbackQRRequestFactory,
+  redirectQRRequestFactory,
+} from "../src/apis/qr.ts";
+import {
+  CallbackQrRequest,
+  RedirectQrRequest,
+  RedirectQrUpdateRequest,
+} from "../src/apis/types/qr_types.ts";
+import { assertEquals } from "./test_deps.ts";
 
-Deno.test("qr - create - should return a valid request data object", () => {
+Deno.test("redirectQR - create - should return a RequestData object with the correct properties", () => {
+  const token = "my-auth-token";
+  const imageFormat = "image/png";
+  const body: RedirectQrRequest = {
+    id: "12345",
+    redirectUrl: "https://example.com",
+    ttl: 600,
+  };
+
+  const requestData = redirectQRRequestFactory.create(token, imageFormat, body);
+
+  assertEquals(requestData.url, "/qr/v1/merchant-redirect");
+  assertEquals(requestData.method, "POST");
+});
+
+Deno.test("redirectQR - update - should return a RequestData object with the correct properties", () => {
+  const token = "my-auth-token";
+  const id = "12345";
+  const imageFormat = "image/png";
+  const body: RedirectQrUpdateRequest = {
+    redirectUrl: "https://foobar.com",
+  };
+
+  const requestData = redirectQRRequestFactory.update(
+    token,
+    id,
+    imageFormat,
+    body,
+  );
+
+  assertEquals(requestData.url, `/qr/v1/merchant-redirect/${id}`);
+  assertEquals(requestData.method, "PUT");
+});
+
+Deno.test("redirectQR - info - should return a RequestData object with the correct properties", () => {
+  const token = "my-auth-token";
+  const id = "12345";
+  const imageFormat = "image/png";
+
+  const requestData = redirectQRRequestFactory.info(token, id, imageFormat);
+
+  assertEquals(requestData.url, `/qr/v1/merchant-redirect/${id}`);
+  assertEquals(requestData.method, "GET");
+});
+
+Deno.test("redirectQR - list - should return the correct request data", () => {
+  const token = "your-token";
+  const imageFormat = "image/png";
+
+  const requestData = redirectQRRequestFactory.list(token, imageFormat);
+
+  assertEquals(requestData.url, `/qr/v1/merchant-redirect`);
+  assertEquals(requestData.method, "GET");
+});
+
+Deno.test("redirectQR - delete - should return the correct request data", () => {
+  const token = "your-token";
+  const id = "12345";
+
+  const requestData = redirectQRRequestFactory.delete(token, id);
+
+  assertEquals(requestData.url, `/qr/v1/merchant-redirect/${id}`);
+  assertEquals(requestData.method, "DELETE");
+});
+
+Deno.test("callbackQR - create - should return a valid request data object", () => {
   const token = "your-auth-token";
   const merchantQrId = "your-merchant-qr-id";
-  const body: MerchantCallbackRequest = {
+  const body: CallbackQrRequest = {
     locationDescription: "your-location-description",
   };
 
@@ -15,12 +87,11 @@ Deno.test("qr - create - should return a valid request data object", () => {
     body,
   );
 
-  assert(requestData.url, "/qr/v1/merchant-callback/your-merchant-qr-id");
-  assert(requestData.method, "PUT");
-  assert(requestData.token, token);
+  assertEquals(requestData.url, "/qr/v1/merchant-callback/your-merchant-qr-id");
+  assertEquals(requestData.method, "PUT");
 });
 
-Deno.test("qr - info - should return a valid request data object", () => {
+Deno.test("callbackQR - info - should return a valid request data object", () => {
   const token = "your-auth-token";
   const merchantQrId = "your-merchant-qr-id";
   const qrImageFormat = "PNG";
@@ -33,17 +104,31 @@ Deno.test("qr - info - should return a valid request data object", () => {
     qrImageSize,
   );
 
-  assert(
+  assertEquals(
     requestData.url,
-    "/qr/v1/merchant-callback/your-merchant-qr-id?QrImageFormat=SVG&QrImageSize=200",
+    "/qr/v1/merchant-callback/your-merchant-qr-id?QrImageFormat=PNG&QrImageSize=200",
   );
-  assert(requestData.method, "GET");
-  assert(requestData.token, token);
+  assertEquals(requestData.method, "GET");
 });
 
-Deno.test("qr - list - should return a valid request data object", () => {
+Deno.test("callbackQR - info - should return a valid request data object without image format and size set", () => {
   const token = "your-auth-token";
-  const qrImageFormat = "SVG";
+  const merchantQrId = "your-merchant-qr-id";
+
+  const requestData = callbackQRRequestFactory.info(
+    token,
+    merchantQrId,
+  );
+
+  assertEquals(
+    requestData.url,
+    "/qr/v1/merchant-callback/your-merchant-qr-id?QrImageFormat=SVG",
+  );
+});
+
+Deno.test("callbackQR - list - should return a valid request data object", () => {
+  const token = "your-auth-token";
+  const qrImageFormat = "PNG";
   const qrImageSize = 200;
 
   const requestData = callbackQRRequestFactory.list(
@@ -52,29 +137,35 @@ Deno.test("qr - list - should return a valid request data object", () => {
     qrImageSize,
   );
 
-  assert(
+  assertEquals(
     requestData.url,
-    "/qr/v1/merchant-callback?QrImageFormat=SVG&QrImageSize=200",
+    "/qr/v1/merchant-callback?QrImageFormat=PNG&QrImageSize=200",
   );
-  assert(requestData.method, "GET");
-  assert(requestData.token, token);
+  assertEquals(requestData.method, "GET");
 });
 
-Deno.test("qr - delete - should return a valid request data object", () => {
+Deno.test("callbackQR - list - should return a valid request data object without image format and size set", () => {
+  const token = "your-auth-token";
+
+  const requestData = callbackQRRequestFactory.list(token);
+
+  assertEquals(requestData.url, "/qr/v1/merchant-callback?QrImageFormat=SVG");
+});
+
+Deno.test("callbackQR - delete - should return a valid request data object", () => {
   const token = "your-auth-token";
   const merchantQrId = "your-merchant-qr-id";
 
   const requestData = callbackQRRequestFactory.delete(token, merchantQrId);
 
-  assert(requestData.url, "/qr/v1/merchant-callback/your-merchant-qr-id");
-  assert(requestData.method, "DELETE");
-  assert(requestData.token, token);
+  assertEquals(requestData.url, "/qr/v1/merchant-callback/your-merchant-qr-id");
+  assertEquals(requestData.method, "DELETE");
 });
 
-Deno.test("qr - createMobilePayQR - should return a valid request data object", () => {
+Deno.test("callbackQR - createMobilePayQR - should return a valid request data object", () => {
   const token = "your-auth-token";
   const beaconId = "your-beacon-id";
-  const body: MerchantCallbackRequest = {
+  const body: CallbackQrRequest = {
     locationDescription: "your-location-description",
   };
 
@@ -84,7 +175,9 @@ Deno.test("qr - createMobilePayQR - should return a valid request data object", 
     body,
   );
 
-  assert(requestData.url, "/qr/v1/merchant-callback/mobilepay/your-beacon-id");
-  assert(requestData.method, "PUT");
-  assert(requestData.token, token);
+  assertEquals(
+    requestData.url,
+    "/qr/v1/merchant-callback/mobilepay/your-beacon-id",
+  );
+  assertEquals(requestData.method, "PUT");
 });

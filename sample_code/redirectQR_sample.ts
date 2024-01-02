@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.209.0/dotenv/load.ts";
+import "https://deno.land/std@0.210.0/dotenv/load.ts";
 import { Client } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
@@ -35,8 +35,10 @@ const token = accessToken.data.access_token;
 
 const qrId = crypto.randomUUID();
 
-const qr = await client.callbackQR.create(token, qrId, {
-  locationDescription: "Kasse 1",
+const qr = await client.redirectQR.create(token, "image/png", {
+  id: qrId,
+  redirectUrl: "https://example.com/myProduct",
+  ttl: 600,
 });
 
 // Check if the QR was created successfully
@@ -46,7 +48,7 @@ if (!qr.ok) {
   Deno.exit(1);
 }
 
-const qrInfo = await client.callbackQR.info(token, qrId);
+const qrInfo = await client.redirectQR.info(token, qrId, "image/png");
 
 // Check if the QR was retrieved successfully
 if (!qrInfo.ok) {
@@ -55,4 +57,4 @@ if (!qrInfo.ok) {
   Deno.exit(1);
 }
 
-console.log(qrInfo.data.qrImageUrl);
+console.log(qrInfo.data);

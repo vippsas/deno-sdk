@@ -1,4 +1,3 @@
-import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
 import "https://deno.land/std@0.210.0/dotenv/load.ts";
 import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.3.0/mod.ts";
 
@@ -34,29 +33,26 @@ if (!accessToken.ok) {
 
 const token = accessToken.data.access_token;
 
-// Create a payment
-const payment = await client.payment.create(token, {
-  amount: {
-    currency: "NOK",
-    value: 1000, // This value equals 10 NOK
-  },
-  paymentMethod: { type: "WALLET" },
-  customer: { phoneNumber: "4712345678" },
-  returnUrl: `https://yourwebsite.com/redirect`,
-  userFlow: "WEB_REDIRECT",
-  paymentDescription: "One pair of socks",
+const qrId = crypto.randomUUID();
+
+const qr = await client.callbackQR.create(token, qrId, {
+  locationDescription: "Kasse 1",
 });
 
-// Check if the payment was created successfully
-if (!payment.ok) {
-  console.error("😟 Error creating payment 😟");
-  console.error(payment.error);
+// Check if the QR was created successfully
+if (!qr.ok) {
+  console.error("😟 Error creating QR 😟");
+  console.error(qr.message);
   Deno.exit(1);
 }
-console.log("🎉 Payment created successfully!");
 
-const reference = payment.data.reference;
-console.log("📋 Payment reference:", reference);
+const qrInfo = await client.callbackQR.info(token, qrId);
 
-// Open the payment redirect URL in the browser
-await open(payment.data.redirectUrl);
+// Check if the QR was retrieved successfully
+if (!qrInfo.ok) {
+  console.error("😟 Error retrieving QR 😟");
+  console.error(qrInfo.message);
+  Deno.exit(1);
+}
+
+console.log(qrInfo.data.qrImageUrl);

@@ -5,9 +5,23 @@ import { authRequestFactory } from "./apis/auth.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
-import { agreementRequestFactory } from "./apis/agreement.ts";
-import { chargeRequestFactory } from "./apis/charge.ts";
-import { callbackQRRequestFactory } from "./apis/qr.ts";
+import { agreementRequestFactory } from "./apis/recurring.ts";
+import { chargeRequestFactory } from "./apis/recurring.ts";
+import {
+  callbackQRRequestFactory,
+  redirectQRRequestFactory,
+} from "./apis/qr.ts";
+
+/**
+ * Export all API types, for convenience. All exported types are
+ * prefixed with the API name, to avoid potential naming conflicts.
+ */
+export type * from "./apis/types/auth_types.ts";
+export type * from "./apis/types/checkout_types.ts";
+export type * from "./apis/types/epayment_types.ts";
+export type * from "./apis/types/qr_types.ts";
+export type * from "./apis/types/recurring_types.ts";
+export type * from "./apis/types/webhooks_types.ts";
 
 /**
  * Creates a client with the specified options.
@@ -21,12 +35,13 @@ export const Client = (options: ClientConfig) => {
   // Create the API client
   const apiClient = {
     auth: createApi(client, authRequestFactory),
-    payment: createApi(client, ePaymentRequestFactory),
-    webhook: createApi(client, webhooksRequestFactory),
-    checkout: createApi(client, checkoutRequestFactory),
     agreement: createApi(client, agreementRequestFactory),
-    charge: createApi(client, chargeRequestFactory),
     callbackQR: createApi(client, callbackQRRequestFactory),
+    charge: createApi(client, chargeRequestFactory),
+    checkout: createApi(client, checkoutRequestFactory),
+    payment: createApi(client, ePaymentRequestFactory),
+    redirectQR: createApi(client, redirectQRRequestFactory),
+    webhook: createApi(client, webhooksRequestFactory),
   } satisfies APIClient;
 
   return apiClient;

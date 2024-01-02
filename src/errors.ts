@@ -1,3 +1,4 @@
+import { QrErrorResponse } from "./apis/types/qr_types.ts";
 import { RetryError } from "./deps.ts";
 
 /**
@@ -63,6 +64,20 @@ export const parseError = <TErr>(
     return {
       ok: false,
       message: `${error.status} - ${error.title}`,
+      error: error as TErr,
+    };
+  }
+
+  // Catch QR Error JSON
+  if (
+    typeof error === "object" && error !== null && "title" in error &&
+    "detail" in error && "instance" in error
+  ) {
+    const qrError = error as QrErrorResponse;
+    const message = qrError.invalidParams?.[0]?.reason ?? qrError.detail;
+    return {
+      ok: false,
+      message,
       error: error as TErr,
     };
   }
