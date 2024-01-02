@@ -31,7 +31,7 @@ export const redirectQRRequestFactory = {
     return {
       url: `/qr/v1/merchant-redirect`,
       method: "POST",
-      headers: { "Accept": imageFormat },
+      additionalHeaders: { "Accept": imageFormat },
       body,
       token,
     };
@@ -55,7 +55,7 @@ export const redirectQRRequestFactory = {
     return {
       url: `/qr/v1/merchant-redirect/${id}`,
       method: "PUT",
-      headers: { "Accept": imageFormat },
+      additionalHeaders: { "Accept": imageFormat },
       body,
       token,
     };
@@ -75,7 +75,7 @@ export const redirectQRRequestFactory = {
     return {
       url: `/qr/v1/merchant-redirect/${id}`,
       method: "GET",
-      headers: { "Accept": imageFormat },
+      additionalHeaders: { "Accept": imageFormat },
       token,
     };
   },
@@ -94,7 +94,7 @@ export const redirectQRRequestFactory = {
     return {
       url: `/qr/v1/merchant-redirect`,
       method: "GET",
-      headers: { "Accept": imageFormat },
+      additionalHeaders: { "Accept": imageFormat },
       token,
     };
   },

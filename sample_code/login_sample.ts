@@ -3,9 +3,6 @@ import { Client } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
-const clientId = Deno.env.get("CLIENT_ID") || "";
-const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
-
 const merchantSerialNumber = Deno.env.get("MERCHANT_SERIAL_NUMBER") || "";
 const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 
@@ -13,17 +10,17 @@ const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 const client = Client({
   merchantSerialNumber,
   subscriptionKey,
-  useTestMode: false, // TODO: Change to true
+  useTestMode: true,
   retryRequests: false,
 });
 
 // Discover configuation information
 console.log("🔎 Discovering configuration 🔎");
-const config = await client.login.discover();
+const config = await client.login.discovery();
 
 if (!config.ok) {
   console.error("😟 Error discovering configuration 😟");
-  console.error(config.error);
+  console.error(config.message);
   Deno.exit(1);
 }
 

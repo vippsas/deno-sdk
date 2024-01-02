@@ -1,34 +1,27 @@
-// TODO: Review .NET SDK examples in developer docs. Could they use the JS SDK instead?
-// TODO: Find good samples, we have a recommended flow with recurring for example.
-
-// TODO: Catch Logintype errors
-
 import { RequestData } from "../types.ts";
 import {
-  LoginErrorResponse,
-  LoginOauthTokenRequest,
-  LoginOauthTokenResponse,
-  LoginWellKnownResponse,
+    LoginErrorResponse,
+    LoginWellKnownResponse,
 } from "./types/login_types.ts";
 
+/**
+ * Factory object for creating Login API requests.
+ */
 export const loginRequestFactory = {
-  discover(): RequestData<LoginWellKnownResponse, LoginErrorResponse> {
-    return {
-      url: `/access-management-1.0/access/.well-known/openid-configuration`,
-      method: "GET",
-    };
-  },
-  // TODO: Token should be ClientId + ":" + ClientSecret
-  getToken(
-    token: string,
-    body: LoginOauthTokenRequest,
-  ): RequestData<LoginOauthTokenResponse, LoginErrorResponse> {
-    return {
-      url: `/access-management-1.0/access/oauth2/token`,
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body,
-      token,
-    };
-  },
+    /**
+     * The well-known endpoint can be used to retrieve configuration 
+     * information for OpenID Connect clients. To learn more about this 
+     * endpoint, please refer to the specification at 
+     * https://openid.net/specs/openid-connect-discovery-1_0.html
+     *
+     * @returns A `RequestData` object containing the URL and method for 
+     * the API request.
+     */
+    discovery(): RequestData<LoginWellKnownResponse, LoginErrorResponse> {
+        return {
+            url: `/access-management-1.0/access/.well-known/openid-configuration`,
+            method: "GET",
+            omitHeaders: ["Ocp-Apim-Subscription-Key"],
+        };
+    },
 } as const;
