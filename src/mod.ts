@@ -11,6 +11,7 @@ import {
   callbackQRRequestFactory,
   redirectQRRequestFactory,
 } from "./apis/qr.ts";
+import { loginRequestFactory } from "./apis/login.ts";
 
 /**
  * Export all API types, for convenience. All exported types are
@@ -19,6 +20,7 @@ import {
 export type * from "./apis/types/auth_types.ts";
 export type * from "./apis/types/checkout_types.ts";
 export type * from "./apis/types/epayment_types.ts";
+export type * from "./apis/types/login_types.ts";
 export type * from "./apis/types/qr_types.ts";
 export type * from "./apis/types/recurring_types.ts";
 export type * from "./apis/types/webhooks_types.ts";
@@ -39,6 +41,7 @@ export const Client = (options: ClientConfig) => {
     callbackQR: createApi(client, callbackQRRequestFactory),
     charge: createApi(client, chargeRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
+    login: createApi(client, loginRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
     redirectQR: createApi(client, redirectQRRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
