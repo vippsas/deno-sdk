@@ -1,16 +1,16 @@
 import { RequestData } from "../types.ts";
 import {
-  AgreementForceAcceptV3,
-  AgreementPatchV3,
+  AgreementForceAcceptV3Request,
+  AgreementPatchV3Request,
   AgreementResponseV3,
   AgreementStatus,
-  ChargeModification,
+  ChargeModificationRequest,
   ChargeReference,
   ChargeResponseV3,
   ChargeStatus,
-  CreateChargeV3,
+  CreateChargeV3Request,
   DraftAgreementResponseV3,
-  DraftAgreementV3,
+  DraftAgreementV3Request,
   RecurringErrorResponse,
 } from "./types/recurring_types.ts";
 
@@ -40,7 +40,7 @@ export const agreementRequestFactory = {
    */
   create(
     token: string,
-    body: DraftAgreementV3,
+    body: DraftAgreementV3Request,
   ): RequestData<DraftAgreementResponseV3, RecurringErrorResponse> {
     return {
       url: "/recurring/v3/agreements",
@@ -103,7 +103,7 @@ export const agreementRequestFactory = {
   update(
     token: string,
     agreementId: string,
-    body: AgreementPatchV3,
+    body: AgreementPatchV3Request,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
@@ -124,7 +124,7 @@ export const agreementRequestFactory = {
   forceAccept(
     token: string,
     agreementId: string,
-    body: AgreementForceAcceptV3,
+    body: AgreementForceAcceptV3Request,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/accept`,
@@ -151,7 +151,7 @@ export const chargeRequestFactory = {
   create(
     token: string,
     agreementId: string,
-    body: CreateChargeV3,
+    body: CreateChargeV3Request,
   ): RequestData<ChargeReference, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges`,
@@ -259,7 +259,7 @@ export const chargeRequestFactory = {
     token: string,
     agreementId: string,
     chargeId: string,
-    body: ChargeModification,
+    body: ChargeModificationRequest,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url:
@@ -282,7 +282,7 @@ export const chargeRequestFactory = {
     token: string,
     agreementId: string,
     chargeId: string,
-    body: ChargeModification,
+    body: ChargeModificationRequest,
   ): RequestData<void, RecurringErrorResponse> {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges/${chargeId}/refund`,

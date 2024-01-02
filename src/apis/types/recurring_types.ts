@@ -98,7 +98,7 @@ export type RecurringErrorFromAzure = {
 
 //////////////// Charge types /////////////////
 
-export type CreateChargeV3 = {
+export type CreateChargeV3Request = {
   /**
    * Amount to be paid by the customer.
    *
@@ -349,7 +349,7 @@ export type ChargeEvent = {
 };
 
 /** Refund charge request */
-export type ChargeModification = {
+export type ChargeModificationRequest = {
   /**
    * The amount to refund/capture on a charge.
    *
@@ -377,7 +377,7 @@ export type ChargeModification = {
 export type AgreementStatus = "PENDING" | "ACTIVE" | "STOPPED" | "EXPIRED";
 
 ////////////// Create agreement ///////////////
-export type DraftAgreementV3 = {
+export type DraftAgreementV3Request = {
   campaign?: AgreementCampaignV3;
   pricing: AgreementPricingRequest;
   /**
@@ -800,7 +800,7 @@ export type AgreementVariableAmountPricingResponse = {
 };
 
 ////////////// Update agreements //////////////
-export type AgreementPatchV3 = {
+export type AgreementPatchV3Request = {
   /**
    * Name of the product being subscribed to.
    * @maxLength 45
@@ -882,7 +882,7 @@ export type AgreementPricingUpdateRequest = {
   suggestedMaxAmount?: number;
 };
 
-export type AgreementForceAcceptV3 = {
+export type AgreementForceAcceptV3Request = {
   /** @example "4791234567" */
   phoneNumber: string;
 };

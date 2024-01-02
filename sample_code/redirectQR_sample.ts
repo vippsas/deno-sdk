@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.209.0/dotenv/load.ts";
+import "https://deno.land/std@0.210.0/dotenv/load.ts";
 import { Client } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
