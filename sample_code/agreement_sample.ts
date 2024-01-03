@@ -9,7 +9,7 @@ const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
 const merchantSerialNumber = Deno.env.get("MERCHANT_SERIAL_NUMBER") || "";
 const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 
-const customerPhoneNumber = "4791234567";
+const customerPhoneNumber = "TEST_PHONE_NUMBER"; // Update with your test phone number
 
 // Create a client
 const client = Client({

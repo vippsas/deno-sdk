@@ -10,6 +10,8 @@ const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
 const merchantSerialNumber = Deno.env.get("MERCHANT_SERIAL_NUMBER") || "";
 const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 
+const customerPhoneNumber = "TEST_PHONE"; // Update with your test phone number, including country code
+
 // Create a client
 const client = Client({
   merchantSerialNumber,
@@ -41,8 +43,8 @@ const payment = await client.payment.create(token, {
     value: 1000, // This value equals 10 NOK
   },
   paymentMethod: { type: "WALLET" },
-  customer: { phoneNumber: "4712345678" },
-  returnUrl: `https://yourwebsite.com/redirect`,
+  customer: { phoneNumber: customerPhoneNumber },
+  returnUrl: `https://example.com/redirect`,
   userFlow: "WEB_REDIRECT",
   paymentDescription: "One pair of socks",
 });
@@ -58,5 +60,7 @@ console.log("🎉 Payment created successfully!");
 const reference = payment.data.reference;
 console.log("📋 Payment reference:", reference);
 
-// Open the payment redirect URL in the browser
-await open(payment.data.redirectUrl);
+console.log(
+  "Open the payment redirect URL in the browser and complete the payment:",
+  payment.data.redirectUrl,
+);
