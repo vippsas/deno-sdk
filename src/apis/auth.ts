@@ -21,7 +21,7 @@ export const authRequestFactory = {
     return {
       method: "POST",
       url: "/accesstoken/get",
-      headers: {
+      additionalHeaders: {
         "client_id": cred.clientId,
         "client_secret": cred.clientSecret,
         "Ocp-Apim-Subscription-Key": cred.subscriptionKey,

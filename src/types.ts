@@ -47,7 +47,23 @@ export type Credentials = {
 export type RequestData<TOk, TErr> = {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   url: string;
-  headers?: Record<string, string>;
+  additionalHeaders?: Record<string, string>;
+  omitHeaders?: OmitHeaders;
   body?: unknown;
   token?: string;
 };
+
+export type DefaultHeaders = {
+  "Content-Type": "application/json";
+  "Authorization": string;
+  "User-Agent": string;
+  "Ocp-Apim-Subscription-Key": string;
+  "Merchant-Serial-Number": string;
+  "Vipps-System-Name": string;
+  "Vipps-System-Version": string;
+  "Vipps-System-Plugin-Name": string;
+  "Vipps-System-Plugin-Version": string;
+  "Idempotency-Key": string;
+};
+
+export type OmitHeaders = (keyof DefaultHeaders)[];

@@ -39,7 +39,7 @@ export const checkoutRequestFactory = {
       url: "/checkout/v3/session",
       method: "POST",
       body: newBody,
-      headers: {
+      additionalHeaders: {
         client_id,
         client_secret,
       },
@@ -63,7 +63,7 @@ export const checkoutRequestFactory = {
     return {
       url: `/checkout/v3/session/${reference}`,
       method: "GET",
-      headers: {
+      additionalHeaders: {
         client_id,
         client_secret,
       },

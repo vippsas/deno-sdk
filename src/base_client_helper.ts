@@ -1,6 +1,12 @@
-import { isErrorStatus, retry } from "./deps.ts";
+import { filterKeys, isErrorStatus, retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
-import { ClientConfig, ClientResponse, RequestData } from "./types.ts";
+import {
+  ClientConfig,
+  ClientResponse,
+  DefaultHeaders,
+  OmitHeaders,
+  RequestData,
+} from "./types.ts";
 
 /**
  * Executes a fetch request with optional retry logic.
@@ -77,24 +83,57 @@ export const buildRequest = (
 
   const reqInit: RequestInit = {
     method: requestData.method,
-    headers: {
-      ...requestData.headers,
-      ...{
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${requestData.token || ""}`,
-        "User-Agent": getUserAgent(),
-        "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
-        "Merchant-Serial-Number": cfg.merchantSerialNumber,
-        "Vipps-System-Name": cfg.systemName || "",
-        "Vipps-System-Version": cfg.systemVersion || "",
-        "Vipps-System-Plugin-Name": cfg.pluginName || "",
-        "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-        "Idempotency-Key": crypto.randomUUID(),
-      },
-    },
+    headers: getHeaders(
+      cfg,
+      requestData.token,
+      requestData.additionalHeaders,
+      requestData.omitHeaders,
+    ),
     body: requestData.body ? JSON.stringify(requestData.body) : undefined,
   };
   return new Request(`${baseURL}${requestData.url}`, reqInit);
+};
+
+/**
+ * Returns a headers object based on the provided client configuration.
+ *
+ * @param cfg - The client configuration.
+ * @param additionalHeaders - Additional headers to include,
+ * these will not override default headers.
+ * @param omitHeaders - Headers to omit from the returned object.
+ * @param token - The token to use in the Authorization header.
+ * @returns A headers object.
+ */
+export const getHeaders = (
+  cfg: ClientConfig,
+  token?: string,
+  additionalHeaders?: Record<string, string>,
+  omitHeaders: OmitHeaders = [],
+): Record<string, string> => {
+  const defaultHeaders: DefaultHeaders = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token || ""}`,
+    "User-Agent": getUserAgent(),
+    "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
+    "Merchant-Serial-Number": cfg.merchantSerialNumber,
+    "Vipps-System-Name": cfg.systemName || "",
+    "Vipps-System-Version": cfg.systemVersion || "",
+    "Vipps-System-Plugin-Name": cfg.pluginName || "",
+    "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
+    "Idempotency-Key": crypto.randomUUID(),
+  };
+
+  // Remove omitted headers
+  const trimmedHeaders = filterKeys(
+    defaultHeaders,
+    (header) => !omitHeaders.includes(header as OmitHeaders[number]),
+  );
+
+  // Add additional headers
+  return {
+    ...additionalHeaders,
+    ...trimmedHeaders,
+  };
 };
 
 /**

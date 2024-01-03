@@ -1,5 +1,5 @@
 import "https://deno.land/std@0.210.0/dotenv/load.ts";
-import { Client } from "../src/mod.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.4.0/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example

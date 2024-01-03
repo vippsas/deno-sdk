@@ -30,8 +30,8 @@ Deno.test("create - should return the correct request data", () => {
   assertEquals(requestData.url, "/checkout/v3/session");
   assertEquals(requestData.method, "POST");
   assertEquals(requestData.body, body);
-  assertNotEquals(requestData.headers, undefined);
-  const headers = requestData.headers as Record<string, string>;
+  assertNotEquals(requestData.additionalHeaders, undefined);
+  const headers = requestData.additionalHeaders as Record<string, string>;
   assertEquals("client_id" in headers, true);
 });
 

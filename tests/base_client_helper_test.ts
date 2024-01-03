@@ -2,6 +2,7 @@ import {
   buildRequest,
   createSDKUserAgent,
   fetchJSON,
+  getHeaders,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
 import { assert, assertEquals, mf } from "./test_deps.ts";
@@ -41,22 +42,13 @@ Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
   const cfg: ClientConfig = {
-    useTestMode: true,
-    retryRequests: false,
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
-    systemName: "your-system-name",
-    systemVersion: "your-system-version",
-    pluginName: "your-plugin-name",
-    pluginVersion: "your-plugin-version",
+    useTestMode: true,
   };
 
   const requestData: RequestData<unknown, unknown> = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer your-token",
-    },
     token: "your-token",
     url: "/your-endpoint",
     body: { key: "value" },
@@ -65,74 +57,95 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
   const expectedBaseURL = "https://apitest.vipps.no";
   const expectedReqInit = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer your-token",
-      "User-Agent": "Vipps/Deno SDK/local",
-      "Ocp-Apim-Subscription-Key": "your-subscription-key",
-      "Merchant-Serial-Number": "your-merchant-serial-number",
-      "Vipps-System-Name": "your-system-name",
-      "Vipps-System-Version": "your-system-version",
-      "Vipps-System-Plugin-Name": "your-plugin-name",
-      "Vipps-System-Plugin-Version": "your-plugin-version",
-      "Idempotency-Key": "your-random-uuid",
-    },
     body: JSON.stringify({ key: "value" }),
   };
 
-  const request = buildRequest(cfg, requestData);
+  const expectedRequest = buildRequest(cfg, requestData);
 
-  assertEquals(request.url, `${expectedBaseURL}${requestData.url}`);
-  assertEquals(request.method, expectedReqInit.method);
-
-  const checkHeaderKeys = Object.keys(expectedReqInit.headers).every((key) =>
-    request.headers.has(key)
-  );
-  assert(checkHeaderKeys);
+  assertEquals(expectedRequest.url, `${expectedBaseURL}${requestData.url}`);
+  assertEquals(expectedRequest.method, expectedReqInit.method);
+  assert(expectedRequest.body !== undefined);
 });
 
-Deno.test("buildRequest - Should return a Request object when filling in missing properties", () => {
+Deno.test("getHeaders - Should return correct with input", () => {
   const cfg: ClientConfig = {
-    subscriptionKey: "your-subscription-key",
-    merchantSerialNumber: "your-merchant-serial-number",
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
+    systemName: "My Ecommerce System",
+    systemVersion: "1.0.0",
+    pluginName: "My cool plugin",
+    pluginVersion: "1.0.0",
+    retryRequests: false,
+    useTestMode: true,
   };
 
-  const requestData: RequestData<unknown, unknown> = {
-    method: "GET",
-    url: "/your-endpoint",
+  const expectedHeaders = getHeaders(cfg, "testToken");
+
+  assertEquals(expectedHeaders["Content-Type"], "application/json");
+  assertEquals(expectedHeaders["Authorization"], "Bearer testToken");
+  assertEquals(expectedHeaders["Ocp-Apim-Subscription-Key"], "testKey");
+  assertEquals(expectedHeaders["Merchant-Serial-Number"], "123456");
+  assertEquals(expectedHeaders["Vipps-System-Name"], "My Ecommerce System");
+  assertEquals(expectedHeaders["Vipps-System-Version"], "1.0.0");
+  assertEquals(expectedHeaders["Vipps-System-Plugin-Name"], "My cool plugin");
+  assertEquals(expectedHeaders["Vipps-System-Plugin-Version"], "1.0.0");
+});
+
+Deno.test("getHeaders - Should return correct with minimal input", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
   };
 
-  const expectedBaseURL = "https://api.vipps.no";
-  const expectedReqInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer",
-      "User-Agent": "Vipps/Deno SDK/local",
-      "Ocp-Apim-Subscription-Key": "your-subscription-key",
-      "Merchant-Serial-Number": "your-merchant-serial-number",
-      "Vipps-System-Name": "",
-      "Vipps-System-Version": "",
-      "Vipps-System-Plugin-Name": "",
-      "Vipps-System-Plugin-Version": "",
-      "Idempotency-Key": "your-random-uuid",
-    },
-    body: JSON.stringify({ key: "value" }),
+  const expectedHeaders = getHeaders(cfg);
+
+  assertEquals(expectedHeaders["Content-Type"], "application/json");
+  assertEquals(expectedHeaders["Authorization"], "Bearer ");
+  assertEquals(expectedHeaders["Ocp-Apim-Subscription-Key"], "testKey");
+  assertEquals(expectedHeaders["Merchant-Serial-Number"], "123456");
+  assertEquals(expectedHeaders["Vipps-System-Name"], "");
+  assertEquals(expectedHeaders["Vipps-System-Version"], "");
+  assertEquals(expectedHeaders["Vipps-System-Plugin-Name"], "");
+  assertEquals(expectedHeaders["Vipps-System-Plugin-Version"], "");
+  assert(expectedHeaders["User-Agent"] !== undefined);
+  assert(expectedHeaders["Idempotency-Key"] !== undefined);
+});
+
+Deno.test("getHeaders - Should return correct with additional headers", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
   };
 
-  const request = buildRequest(cfg, requestData);
+  const expectedHeaders = getHeaders(cfg, "testToken", { "foo": "bar" });
 
-  assertEquals(request.url, `${expectedBaseURL}${requestData.url}`);
-  assertEquals(request.method, expectedReqInit.method);
-  assertEquals(
-    request.headers.get("Authorization"),
-    expectedReqInit.headers.Authorization,
-  );
+  assert(expectedHeaders["foo"] === "bar");
+});
 
-  const checkHeaderKeys = Object.keys(expectedReqInit.headers).every((key) =>
-    request.headers.has(key)
-  );
-  assert(checkHeaderKeys);
+Deno.test("getHeaders - Additional headers should not overwrite default headers", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
+  };
+
+  const expectedHeaders = getHeaders(cfg, "testToken", {
+    "Merchant-Serial-Number": "foobar",
+  });
+
+  assert(expectedHeaders["Merchant-Serial-Number"] === "123456");
+});
+
+Deno.test("getHeaders - Should omit headers", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
+  };
+
+  const expectedHeaders = getHeaders(cfg, "testToken", {}, [
+    "Merchant-Serial-Number",
+  ]);
+
+  assert(expectedHeaders["Merchant-Serial-Number"] === undefined);
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {

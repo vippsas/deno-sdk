@@ -39,4 +39,5 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.callbackQR.delete, "function");
   assertEquals(typeof client.callbackQR.info, "function");
   assertEquals(typeof client.callbackQR.list, "function");
+  assertEquals(typeof client.login.discovery, "function");
 });
