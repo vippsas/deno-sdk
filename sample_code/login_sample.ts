@@ -27,7 +27,10 @@ if (!config.ok) {
   Deno.exit(1);
 }
 
- console.log(config.data);
+console.log("✅ Configuration discovered ✅");
+console.log(config.data);
+
+//  console.log(config.data.authorization_endpoint);
 
 // const queryParameters: LoginAuthQueryParams = {
 //   client_id: clientId,
@@ -40,8 +43,8 @@ if (!config.ok) {
 //       `${key}=${encodeURIComponent(value)}`
 //     ).join("&");
 
-// const redirectUrl = `https://apitest.vipps.no/access-management-1.0/access/oauth2/auth?${searchParams}`
+// const redirectUrl = `${config.data.authorization_endpoint}?${searchParams}`
+
+// // Serve a page that will redirect to the authorization endpoint
 
 // await open(redirectUrl)
-
-
