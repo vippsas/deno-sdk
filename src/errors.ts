@@ -1,5 +1,6 @@
 import { QrErrorResponse } from "./apis/types/qr_types.ts";
 import { RetryError } from "./deps.ts";
+import { CheckoutErrorResponse } from "./apis/types/checkout_types.ts";
 
 /**
  * Parses the error and returns an object with error details.
@@ -64,6 +65,20 @@ export const parseError = <TErr>(
     return {
       ok: false,
       message: `${error.status} - ${error.title}`,
+      error: error as TErr,
+    };
+  }
+
+  // Catch Checkout Error JSON
+  if (
+    typeof error === "object" && error !== null && "errorCode" in error &&
+    "errors" in error && typeof error["errors"] === "object"
+  ) {
+    const checkoutError = error as CheckoutErrorResponse;
+    const message = checkoutError.title || checkoutError.errorCode;
+    return {
+      ok: false,
+      message,
       error: error as TErr,
     };
   }

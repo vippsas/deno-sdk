@@ -1,5 +1,5 @@
 import "https://deno.land/std@0.210.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.4.0/mod.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.5.1/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -13,6 +13,10 @@ const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 const client = Client({
   merchantSerialNumber,
   subscriptionKey,
+  systemName: "My cool e-commerce system",
+  systemVersion: "1.2.3",
+  pluginVersion: "1.2.3",
+  pluginName: "My cool plugin",
   useTestMode: true,
   retryRequests: false,
 });
@@ -35,7 +39,7 @@ const checkout = await client.checkout.create(clientId, clientSecret, {
 // Check if the checkout session was created successfully
 if (!checkout.ok) {
   console.error("😟 Error creating checkout session 😟");
-  console.log(checkout.error);
+  console.log(checkout.message);
   Deno.exit(1);
 }
 
