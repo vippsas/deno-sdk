@@ -1,19 +1,28 @@
 export type CheckoutProblemJSON = {
-  type: string | null;
-  title: string | null;
-  status: number | null;
-  detail: string | null;
-  instance: string | null;
+  type?: string | null;
+  title?: string | null;
+  status?: number | null;
+  detail?: string | null;
+  instance?: string | null;
 };
 
 export type CheckoutErrorResponse = CheckoutProblemJSON & {
   errorCode: string;
   errors: {
-    [key: string]: string;
+    [key: string]: string[];
   };
 };
 
-/** Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre. */
+/**
+ * The currency identifier according to ISO 4217. Only NOK is supported at the moment.
+ * Support for EUR, DKK, and SEK will be provided in early 2024.
+ *
+ * @example "NOK"
+ */
+export type CheckoutCurrency = "NOK";
+
+/** Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre.
+ * Example: 499 kr = 49900 øre. */
 export type CheckoutAmount = {
   /**
    * Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
@@ -22,7 +31,7 @@ export type CheckoutAmount = {
    */
   value: number;
   /** The currency identifier according to ISO 4217. Example: "NOK" */
-  currency: string;
+  currency: CheckoutCurrency;
 };
 
 /** Defines the details of the billing */
@@ -208,7 +217,7 @@ export type CheckoutOrderBottomLine = {
    * @minLength 3
    * @maxLength 3
    */
-  currency: string;
+  currency: CheckoutCurrency;
   /**
    * Tip amount for the order. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
