@@ -1,10 +1,11 @@
 import { checkoutRequestFactory } from "../src/apis/checkout.ts";
+import { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
 import { assertEquals, assertExists, assertNotEquals } from "./test_deps.ts";
 
 Deno.test("create - should return the correct request data", () => {
   const client_id = "your_client_id";
   const client_secret = "your_client_secret";
-  const body = {
+  const body: CheckoutInitiateSessionRequest = {
     merchantInfo: {
       callbackUrl: "https://example.com/vipps/callbacks-for-checkout",
       returnUrl:
@@ -38,7 +39,7 @@ Deno.test("create - should return the correct request data", () => {
 Deno.test("create - should fill in missing properties", () => {
   const client_id = "your_client_id";
   const client_secret = "your_client_secret";
-  const body = {
+  const body: CheckoutInitiateSessionRequest = {
     merchantInfo: {
       callbackUrl: "https://example.com/vipps/callbacks-for-checkout",
       returnUrl:

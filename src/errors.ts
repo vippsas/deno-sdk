@@ -75,7 +75,7 @@ export const parseError = <TErr>(
     "errors" in error && typeof error["errors"] === "object"
   ) {
     const checkoutError = error as CheckoutErrorResponse;
-    const message = checkoutError.title || checkoutError.errorCode
+    const message = checkoutError.title || checkoutError.errorCode;
     return {
       ok: false,
       message,
