@@ -1,5 +1,19 @@
 import { build, emptyDir } from "./script_deps.ts";
 
+/**
+ * This script builds the SDK for NPM.
+ *
+ * It is run from the root of the repository with:
+ * 'Deno run -A scripts/build_npm.ts 1.0.0'
+ *
+ * '1.0.0' is the version, or git tag, you wish to use.
+ *
+ * after running the script, the SDK can be published to NPM with:
+ * 'cd npm && npm publish --access public'
+ *
+ * @example Deno run -A scripts/build_npm.ts 1.0.0 && cd npm && npm publish --access public
+ */
+
 await emptyDir("./npm");
 
 await build({
@@ -12,7 +26,7 @@ await build({
   },
   package: {
     // package.json properties
-    name: "vipps_mobilepay_sdk",
+    name: "@vippsmobilepay/sdk",
     version: Deno.args[0],
     description: "Official SDK for Vipps MobilePay APIs",
     license: "MIT",
