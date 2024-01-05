@@ -1,3 +1,55 @@
+export type LoginAuthQueryParams = {
+  /** Value MUST be set to "code". */
+  response_type: "code";
+  /** The client identifier, issued by Vipps MobilePay. */
+  client_id: string;
+  /** Redirect URL which the user agent is redirected to after finishing a
+   * login. If the URL is using a custom URL scheme, such as myapp://,
+   * a path is required: myapp://path-to-something. */
+  redirect_uri: string;
+  /**
+   * Scope of the access request, space-separated list.
+   *
+   * Valid scopes are: Name, Adresse, Delegated Consents, Email
+   * National identity number, Birth date, Promotions, Phone number
+   *
+   * @example "openid name phoneNumber address birthDate email"
+   */
+  scope: string;
+  /** An opaque value (e.g. a GUID) used by the client to maintain state
+   * between the request and callback. The authorization server includes
+   * this value when redirecting the user-agent back to the client.
+   * It must be at least 8 characters long to ensure sufficient entropy.
+   * In case of a too short state parameter the end-user will be
+   * redirected back to the merchant's site with an error.
+   *
+   * @example "5f6ddc4d-9c5b-4a9f-9aef-9cb4ef9b9a9d"
+   */
+  state: string;
+  /** Request a specific flow for the user. */
+  requested_flow?: string;
+  /**
+   * The target URI for automatic switch back to merchant app.
+   * Requires requested_flow=app_to_app. Example merchant-app://callback
+   */
+  app_callback_uri?: string;
+  /**
+   * Either true or false. If this is true we will enable some
+   * compatibility features to make sure the user is returned to the app.
+   */
+  final_redirect_is_app?: boolean;
+  /**
+   * Used for PKCE, either S256 or plain.
+   * @default "plain"
+   */
+  code_challenge_method?: "S256" | "plain";
+  /**
+   * Used for PKCE. The value must be calculated based on the
+   * code_verifier later used towards the token endpoint
+   */
+  code_challenge?: string;
+};
+
 export type LoginJSONWebKey = {
   /**
    * The 'alg' (algorithm) parameter identifies the algorithm intended for use for the key.  The values used should either be registered in the IANA 'JSON Web Signature and Encryption Algorithms' registry established by [JWA] or be a value that contains a collision resistant name.
