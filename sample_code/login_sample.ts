@@ -1,5 +1,8 @@
 import "https://deno.land/std@0.210.0/dotenv/load.ts";
-import { Client, LoginAuthQueryParams } from "https://deno.land/x/vipps_mobilepay_sdk@0.5.2/mod.ts";
+import {
+  Client,
+  LoginAuthQueryParams,
+} from "https://deno.land/x/vipps_mobilepay_sdk@0.5.2/mod.ts";
 import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
 
 // First, get your API keys from https://portal.vipps.no/
