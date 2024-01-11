@@ -14,10 +14,10 @@ import { run } from "./run.ts";
 const THRESHOLD = 90;
 
 // Run tests with coverage enabled
-await run(`deno test --coverage`);
+await run(`${Deno.execPath()} test --coverage`);
 
 // Calculate branch coverage
-const coverageReport = await run(`deno coverage ./coverage`);
+const coverageReport = await run(`${Deno.execPath()} coverage ./coverage`);
 
 // Remove ANSI escape codes
 const words = coverageReport.replaceAll("\x1b", " ").split(" ");

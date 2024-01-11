@@ -53,7 +53,7 @@ if (build?.toLowerCase().trim() === "y") {
   const spinnerBuild = new Spinner({ message: `Building...` });
   spinnerBuild.start();
   const buildOutput = await run(
-    `deno run -A scripts/build_npm.ts ${trimmedTag}`,
+    `${Deno.execPath()} run -A scripts/build_npm.ts ${trimmedTag}`,
   );
   spinnerBuild.stop();
   console.log(buildOutput);
