@@ -49,15 +49,19 @@ const build = prompt(
     colors.bold(`Do you want to build ${trimmedTag} for npm? (y/n)`),
   ),
 );
-if (build?.toLowerCase().trim() === "y") {
-  const spinnerBuild = new Spinner({ message: `Building...` });
-  spinnerBuild.start();
-  const buildOutput = await run(
-    `${Deno.execPath()} run -A scripts/build_npm.ts ${trimmedTag}`,
-  );
-  spinnerBuild.stop();
-  console.log(buildOutput);
+if (build?.toLowerCase().trim() !== "y") {
+  console.log(colors.white(`No problemo. Bye! 👋`));
+  Deno.exit(0);
 }
+
+const spinnerBuild = new Spinner({ message: `Building...` });
+spinnerBuild.start();
+const buildOutput = await run(
+  `${Deno.execPath()} run -A scripts/build_npm.ts ${trimmedTag}`,
+);
+spinnerBuild.stop();
+console.log(buildOutput);
+
 const publish = prompt(
   colors.green(
     colors.bold(`Do you want to publish ${trimmedTag} to npm? (y/n)`),
