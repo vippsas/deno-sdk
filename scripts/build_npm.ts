@@ -4,14 +4,14 @@ import { build, emptyDir } from "./script_deps.ts";
  * This script builds the SDK for NPM.
  *
  * It is run from the root of the repository with:
- * 'Deno run -A scripts/build_npm.ts 1.0.0'
+ * 'deno run -A scripts/build_npm.ts 1.0.0'
  *
  * '1.0.0' is the version, or git tag, you wish to use.
  *
  * after running the script, the SDK can be published to NPM with:
- * 'cd npm && npm publish --access public'
+ * 'npm publish ./npm --access public'
  *
- * @example Deno run -A scripts/build_npm.ts 1.0.0 && cd npm && npm publish --access public
+ * @example deno run -A scripts/build_npm.ts 1.0.0 && npm publish ./npm --access public
  */
 
 await emptyDir("./npm");
