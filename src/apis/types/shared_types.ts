@@ -26,6 +26,10 @@ type UnionConcat<
         : ""}`
   : "";
 
+/**
+ * See documentation of scopes here:
+ * https://developer.vippsmobilepay.com/docs/APIs/login-api/api-guide/core-concepts/#scopes
+ */
 export type ValidUserScopes =
   | "openid"
   | "address"
@@ -33,6 +37,7 @@ export type ValidUserScopes =
   | "email"
   | "name"
   | "phoneNumber"
-  | "nnin";
+  | "nin"
+  | "delegatedConsents";
 
 export type Scope = UnionConcat<ValidUserScopes, " ">;
