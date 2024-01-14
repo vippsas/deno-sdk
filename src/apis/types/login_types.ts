@@ -1,3 +1,5 @@
+import { Scope } from "./shared_types.ts";
+
 export type LoginAuthQueryParams = {
   /** Value MUST be set to "code". */
   response_type: "code";
@@ -17,7 +19,7 @@ export type LoginAuthQueryParams = {
    *
    * @example "openid name phoneNumber address birthDate email"
    */
-  scope: string;
+  scope: Scope;
   /**
    * An opaque value (e.g. a GUID) used by the client to maintain state
    * between the request and callback. The authorization server includes
