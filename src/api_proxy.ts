@@ -1,7 +1,7 @@
 import { BaseClient, ClientResponse, RequestData } from "./types.ts";
 
-export type APIClient = {
-  [key: string]: ApiProxy<RequestFactory>;
+export type ApiClient = {
+  [key: string]: ApiProxy<RequestFactory> | ApiClient;
 };
 
 type RequestFactory = {

@@ -1,6 +1,6 @@
 import { ClientConfig } from "./types.ts";
 import { baseClient } from "./base_client.ts";
-import { APIClient, createApi } from "./api_proxy.ts";
+import { ApiClient, createApi } from "./api_proxy.ts";
 import { authRequestFactory } from "./apis/auth.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
@@ -37,15 +37,17 @@ export const Client = (options: ClientConfig) => {
   // Create the API client
   const apiClient = {
     auth: createApi(client, authRequestFactory),
-    agreement: createApi(client, agreementRequestFactory),
     callbackQR: createApi(client, callbackQRRequestFactory),
-    charge: createApi(client, chargeRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
     login: createApi(client, loginRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
+    recurring: {
+      charge: createApi(client, chargeRequestFactory),
+      agreement: createApi(client, agreementRequestFactory),
+    },
     redirectQR: createApi(client, redirectQRRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
-  } satisfies APIClient;
+  } satisfies ApiClient;
 
   return apiClient;
 };
