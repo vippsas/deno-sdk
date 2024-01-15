@@ -1,5 +1,7 @@
 //////////////// Common types /////////////////
 
+import { Scope } from "./shared_types.ts";
+
 /**
  * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
  * @minLength 3
@@ -452,7 +454,7 @@ export type DraftAgreementV3Request = {
    * - nin
    * @example "address name email birthDate phoneNumber"
    */
-  scope?: string;
+  scope?: Scope;
   /**
    * If the property is set to `true`, it will cause a push notification
    * to be sent to the given phone number immediately, without loading

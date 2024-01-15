@@ -87,16 +87,28 @@ export type CallbackQrImageFormat = "PNG" | "SVG";
 export type CallbackQrImageSize = number;
 
 export type CallbackQrRequest = {
-  /** A description of where the QR code will be located. It will be shown in the app when a user scans the QR code. Examples could be ‘Kasse 1’ , ‘Kiosk’ or ‘Platform 3’. */
+  /**
+   * A description of where the QR code will be located.
+   * It will be shown in the app when a user scans the QR code.
+   * Examples could be ‘Kasse 1’ , ‘Kiosk’ or ‘Platform 3’.
+   */
   locationDescription: string;
 };
 
 export type CallbackQrResponse = {
   /** The merchant serial number (MSN) for the sale unit */
   merchantSerialNumber?: string;
-  /** The merchant defined identifier for a QR code. It will be provided in the callback to the merchant when the QR code has been scanned. */
+  /**
+   * The merchant defined identifier for a QR code.
+   * It will be provided in the callback to the merchant when the
+   * QR code has been scanned.
+   */
   merchantQrId?: string;
-  /** A description of where the QR code will be located. It will be shown in the app when a user scans the QR code. Examples could be ‘Kasse 1’ , ‘Kiosk’ or ‘Platform 3’. */
+  /**
+   * A description of where the QR code will be located.
+   * It will be shown in the app when a user scans the QR code.
+   * Examples could be ‘Kasse 1’ , ‘Kiosk’ or ‘Platform 3’.
+   */
   locationDescription?: string;
   /**
    * The link to the actual QR code.
@@ -104,8 +116,38 @@ export type CallbackQrResponse = {
    * @example "https://qr.vipps.no/generate/qr.png?..."
    */
   qrImageUrl?: string;
-  /** The text that is being encoded by the QR code. This is the actual content of the QR code. */
+  /**
+   * The text that is being encoded by the QR code.
+   * This is the actual content of the QR code.
+   */
   qrContent?: string;
+};
+
+export type QrWebhookEvent = {
+  /**
+   * A distinct token per customer
+   *
+   * @example "wbA8ceVRKkoYiQAVELHeFCC3Sn5dtNCvvEtVPiOT77j6wx7uR965AG6Q+q0ATP4="
+   */
+  customerToken: string;
+  /**
+   * The merchant defined identifier for a QR code.
+   * It will be provided in the callback to the merchant when the
+   * QR code has been scanned.
+   *
+   * @example "d8b7d76d-49aa-48b8-90c6-38779372c163"
+   */
+  merchantQrId: string;
+  /**
+   * The merchant serial number (MSN) for the sale unit.
+   *
+   * @example "123456"
+   */
+  msn: string;
+  /**
+   * @example "2023-10-06T10:45:40.3061965Z"
+   */
+  initiatedAt: string;
 };
 
 export type QrErrorResponse = {

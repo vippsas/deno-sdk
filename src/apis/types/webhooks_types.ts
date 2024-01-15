@@ -36,10 +36,15 @@ export type WebhookDetails = {
   events: WebhookEventType[];
 };
 
-// All event types currently supported in the SDK for all APIs
-export type WebhookEventType = EpaymentEventTypes | "user.checked-in.v1";
+/*
+ * All event types currently supported in the SDK for all APIs
+ *
+ * Please refer to the individual API types for the response payload
+ * for each event type. For example EPaymentWebhookEvent
+ */
+export type WebhookEventType = EPaymentEventTypes | QrEventTypes;
 
-type EpaymentEventTypes =
+export type EPaymentEventTypes =
   | "epayments.payment.created.v1"
   | "epayments.payment.aborted.v1"
   | "epayments.payment.expired.v1"
@@ -48,3 +53,5 @@ type EpaymentEventTypes =
   | "epayments.payment.refunded.v1"
   | "epayments.payment.authorized.v1"
   | "epayments.payment.terminated.v1";
+
+export type QrEventTypes = "user.checked-in.v1";

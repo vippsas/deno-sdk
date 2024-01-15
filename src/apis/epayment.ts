@@ -2,12 +2,12 @@ import { RequestData } from "../types.ts";
 import {
   EPaymentCreatePaymentOKResponse,
   EPaymentCreatePaymentRequest,
-  EpaymentErrorResponse,
+  EPaymentErrorResponse,
   EPaymentForceApproveRequest,
+  EPaymentGetEventLogOKResponse,
   EPaymentGetPaymentOKResponse,
   EPaymentModificationOKResponse,
   EPaymentModificationRequest,
-  EPaymentPaymentEventOKResponse,
 } from "./types/epayment_types.ts";
 
 /**
@@ -24,7 +24,7 @@ export const ePaymentRequestFactory = {
   create(
     token: string,
     body: EPaymentCreatePaymentRequest,
-  ): RequestData<EPaymentCreatePaymentOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentCreatePaymentOKResponse, EPaymentErrorResponse> {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
@@ -47,7 +47,7 @@ export const ePaymentRequestFactory = {
   info(
     token: string,
     reference: string,
-  ): RequestData<EPaymentGetPaymentOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentGetPaymentOKResponse, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/payments/${reference}`,
       method: "GET",
@@ -64,7 +64,7 @@ export const ePaymentRequestFactory = {
   history(
     token: string,
     reference: string,
-  ): RequestData<EPaymentPaymentEventOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentGetEventLogOKResponse, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/payments/${reference}/events`,
       method: "GET",
@@ -81,7 +81,7 @@ export const ePaymentRequestFactory = {
   cancel(
     token: string,
     reference: string,
-  ): RequestData<EPaymentModificationOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/payments/${reference}/cancel`,
       method: "POST",
@@ -100,7 +100,7 @@ export const ePaymentRequestFactory = {
     token: string,
     reference: string,
     body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/payments/${reference}/capture`,
       method: "POST",
@@ -120,7 +120,7 @@ export const ePaymentRequestFactory = {
     token: string,
     reference: string,
     body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EpaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/payments/${reference}/refund`,
       method: "POST",
@@ -140,7 +140,7 @@ export const ePaymentRequestFactory = {
     token: string,
     reference: string,
     body: EPaymentForceApproveRequest,
-  ): RequestData<void, EpaymentErrorResponse> {
+  ): RequestData<void, EPaymentErrorResponse> {
     return {
       url: `/epayment/v1/test/payments/${reference}/approve`,
       method: "POST",
