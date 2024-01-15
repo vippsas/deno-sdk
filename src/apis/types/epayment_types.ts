@@ -1,5 +1,7 @@
 /////////////// Error Types ///////////////
 
+import { Scope } from "./shared_types.ts";
+
 export type EPaymentProblemJSON = {
   type: string;
   title: string;
@@ -318,7 +320,7 @@ export type EPaymentProfileRequest = {
    *
    * @example "name phoneNumber"
    */
-  scope: string;
+  scope: Scope;
 };
 
 /**
