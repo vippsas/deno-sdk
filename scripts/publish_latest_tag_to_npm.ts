@@ -75,7 +75,7 @@ if (publish?.toLowerCase().trim() !== "y") {
 const spinnerPublish = new Spinner({ message: `Publishing...` });
 spinnerPublish.start();
 // Igonre npm errors since we are checking for them later
-await run(`npm publish ./npm --access public --dry-run`, true);
+await run(`npm publish ./npm --access public`, true);
 spinnerPublish.stop();
 
 const spinnerNewNpm = new Spinner({
