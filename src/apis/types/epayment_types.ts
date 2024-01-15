@@ -9,7 +9,7 @@ export type EPaymentProblemJSON = {
   status: number;
   instance: string;
 };
-export type EpaymentErrorResponse = EPaymentProblemJSON & {
+export type EPaymentErrorResponse = EPaymentProblemJSON & {
   traceId: string;
   extraDetails: {
     name: string;
@@ -42,7 +42,7 @@ export type EPaymentCreatePaymentRequest = {
   customerInteraction?: "CUSTOMER_PRESENT" | "CUSTOMER_NOT_PRESENT";
   /** Additional compliance data related to the transaction. */
   industryData?: EPaymentIndustryData;
-  paymentMethod: EPaymentPaymentMethod;
+  paymentMethod: EPaymentMethod;
   profile?: EPaymentProfileRequest;
   reference?: EPaymentReference;
   /**
@@ -280,12 +280,12 @@ export type EPaymentAirlineData = {
   ticketNumber?: string;
 };
 
-export type EPaymentPaymentMethod = {
+export type EPaymentMethod = {
   /**
    * The paymentMethod type to be performed.
    * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
    */
-  type: EPaymentPaymentMethodType;
+  type: EPaymentMethodType;
 };
 
 /**
@@ -300,7 +300,7 @@ export type EPaymentPaymentMethod = {
  *
  * @example "WALLET"
  */
-export type EPaymentPaymentMethodType = "WALLET" | "CARD";
+export type EPaymentMethodType = "WALLET" | "CARD";
 
 export type EPaymentProfileRequest = {
   /**
@@ -510,7 +510,7 @@ export type EPaymentBottomLine = {
    * @example "vipps_pos_122"
    */
   posId: string | null;
-  paymentSources?: EPaymentPaymentSources;
+  paymentSources?: EPaymentSources;
   barcode?: EPaymentBarcode;
   /**
    * Receipt number from the POS.
@@ -529,7 +529,7 @@ export type EPaymentBottomLine = {
  *  cash: 25
  * }
  */
-export type EPaymentPaymentSources = {
+export type EPaymentSources = {
   giftCard?: number | null;
   card?: number | null;
   voucher?: number | null;
@@ -580,7 +580,7 @@ export type EPaymentGetPaymentOKResponse = {
   aggregate: EPaymentAggregate;
   amount: EPaymentAmount;
   state: EPaymentState;
-  paymentMethod: EPaymentPaymentMethodResponse;
+  paymentMethod: EPaymentMethodResponse;
   profile: EPaymentProfileResponse;
   pspReference: string;
   /**
@@ -626,12 +626,12 @@ export type EPaymentState =
   | "AUTHORIZED"
   | "TERMINATED";
 
-export type EPaymentPaymentMethodResponse = {
+export type EPaymentMethodResponse = {
   /**
    * The paymentMethod type to be performed.
    * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
    */
-  type: EPaymentPaymentMethodType;
+  type: EPaymentMethodType;
   /**
    * The payment card's Bank Identification Number (BIN),
    * that identifies which bank has issued the card.
@@ -655,10 +655,12 @@ export type EPaymentProfileResponse = {
 
 /////////////// Payment Event History Response ///////////////
 
-export type EPaymentPaymentEventOKResponse = {
+export type EPaymentGetEventLogOKResponse = EPaymentEvent[];
+
+export type EPaymentEvent = {
   reference: EPaymentReference;
   pspReference: string;
-  name: EPaymentPaymentEventName;
+  name: EPaymentEventName;
   amount: EPaymentAmount;
   /**
    * @example: '2022-12-31T00:00:00Z'
@@ -674,9 +676,9 @@ export type EPaymentPaymentEventOKResponse = {
   idempotencyKey?: string | null;
   /** The outcome of the event */
   success: boolean;
-}[];
+};
 
-export type EPaymentPaymentEventName =
+export type EPaymentEventName =
   | "CREATED"
   | "ABORTED"
   | "EXPIRED"

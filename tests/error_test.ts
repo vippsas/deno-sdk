@@ -1,5 +1,5 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
-import { EpaymentErrorResponse } from "../src/apis/types/epayment_types.ts";
+import { EPaymentErrorResponse } from "../src/apis/types/epayment_types.ts";
 import { QrErrorResponse } from "../src/apis/types/qr_types.ts";
 import { RetryError } from "../src/deps.ts";
 import { parseError } from "../src/errors.ts";
@@ -56,7 +56,7 @@ Deno.test("parseError - Should return correct error message for AccessTokenError
 });
 
 Deno.test("parseError - Should return correct error message for Problem JSON", () => {
-  const error: EpaymentErrorResponse = {
+  const error: EPaymentErrorResponse = {
     type: "https://example.com/error",
     title: "Some problem",
     status: 400,
