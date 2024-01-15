@@ -200,7 +200,9 @@ export type LoginErrorResponse = {
    * @format int64
    */
   error_code?: number;
-  /** Debug contains debug information.
-   * This is usually not available and has to be enabled. */
+  /**
+   * Debug contains debug information.
+   * This is usually not available and has to be enabled.
+   */
   error_debug?: string;
 };

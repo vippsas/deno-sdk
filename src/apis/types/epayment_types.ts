@@ -1,15 +1,7 @@
+import { MerchantSerialNumber, ProblemJSON, Scope } from "./shared_types.ts";
+
 /////////////// Error Types ///////////////
-
-import { MerchantSerialNumber, Scope } from "./shared_types.ts";
-
-export type EPaymentProblemJSON = {
-  type: string;
-  title: string;
-  detail?: string;
-  status: number;
-  instance: string;
-};
-export type EPaymentErrorResponse = EPaymentProblemJSON & {
+export type EPaymentErrorResponse = ProblemJSON & {
   traceId: string;
   extraDetails: {
     name: string;

@@ -51,3 +51,32 @@ export type Scope = UnionConcat<ValidUserScopes, " ">;
  * @example "123456"
  */
 export type MerchantSerialNumber = string;
+
+export type ProblemJSON = {
+  /**
+   * Path to type of error
+   * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
+   */
+  type?: string | null;
+  /**
+   * Short description of the error
+   * @example "Bad Request"
+   */
+  title?: string | null;
+  /**
+   * HTTP status returned with the problem
+   * @format int32
+   * @example 400
+   */
+  status?: number | null;
+  /**
+   * Details about the error
+   * @example "Input validation failed"
+   */
+  detail?: string | null;
+  /**
+   * The path of the request
+   * @example "/v3/agreements"
+   */
+  instance?: string | null;
+};

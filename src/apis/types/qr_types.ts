@@ -1,4 +1,4 @@
-import { MerchantSerialNumber } from "./shared_types.ts";
+import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
 
 /**
  * @description Requested image format.
@@ -146,15 +146,7 @@ export type QrWebhookEvent = {
   initiatedAt: string;
 };
 
-export type QrErrorResponse = {
-  /** @minLength 1 */
-  type?: string;
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  detail: string;
-  /** @minLength 1 */
-  instance: string;
+export type QrErrorResponse = ProblemJSON & {
   invalidParams?: {
     /** @minLength 1 */
     name: string;

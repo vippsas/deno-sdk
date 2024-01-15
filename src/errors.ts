@@ -89,7 +89,8 @@ export const parseError = <TErr>(
     "detail" in error && "instance" in error
   ) {
     const qrError = error as QrErrorResponse;
-    const message = qrError.invalidParams?.[0]?.reason ?? qrError.detail;
+    const message = qrError.invalidParams?.[0]?.reason ?? qrError.detail ??
+      "Unknown error";
     return {
       ok: false,
       message,

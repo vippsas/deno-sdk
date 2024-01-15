@@ -1,14 +1,7 @@
-import { MerchantSerialNumber } from "./shared_types.ts";
+import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
 
-export type CheckoutProblemJSON = {
-  type?: string | null;
-  title?: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-};
-
-export type CheckoutErrorResponse = CheckoutProblemJSON & {
+/////////////// Error Types ///////////////
+export type CheckoutErrorResponse = ProblemJSON & {
   errorCode: string;
   errors: {
     [key: string]: string[];
