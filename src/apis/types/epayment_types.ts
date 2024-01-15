@@ -1,6 +1,6 @@
 /////////////// Error Types ///////////////
 
-import { Scope } from "./shared_types.ts";
+import { MerchantSerialNumber, Scope } from "./shared_types.ts";
 
 export type EPaymentProblemJSON = {
   type: string;
@@ -678,19 +678,8 @@ export type EPaymentEvent = {
   success: boolean;
 };
 
-/**
- * The merchant serial number (MSN) for the sales unit.
- *
- * @minLength 4
- * @maxLength 6
- * @pattern ^[0-9]{4,6}$
- * @example "123456"
- */
-export type EPaymentMSN = string;
-
 export type EPaymentWebhookEvent = {
-  /** The merchant serial number (MSN) for the sales unit. */
-  msn: EPaymentMSN;
+  msn: MerchantSerialNumber;
 } & EPaymentEvent;
 
 export type EPaymentEventName =
