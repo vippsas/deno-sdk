@@ -1,12 +1,9 @@
-import { colors, gt, parse, Spinner } from "./script_deps.ts";
+import { colors, delay, gt, parse } from "./script_deps.ts";
 import { run } from "./run.ts";
 
 const PACKAGE_NAME = `@vippsmobilepay/sdk`;
 
-const spinnerTags = new Spinner({ message: `Fetching latest tags...` });
-spinnerTags.start();
-await run(`git fetch --tags`);
-spinnerTags.stop();
+await run(`git fetch --tags`, `Fetching latest tags...`, true);
 
 // Finding latest tagged commit across branches
 const latestTaggedCommit = await run(`git rev-list --tags --max-count=1`);
@@ -18,12 +15,10 @@ const latestTagName = await run(`git describe --tags ${trimmedCommit}`);
 const trimmedTag = latestTagName.trim();
 console.log(colors.gray(`Latest tag name: ${trimmedTag}`));
 
-const spinnerNpm = new Spinner({
-  message: `Fetching latest published npm version...`,
-});
-spinnerNpm.start();
-const latestNpmVersion = await run(`npm show ${PACKAGE_NAME} version`);
-spinnerNpm.stop();
+const latestNpmVersion = await run(
+  `npm view ${PACKAGE_NAME} version`,
+  `Fetching latest published npm version...`,
+);
 console.log(colors.gray(`Latest npm version: ${latestNpmVersion}`));
 
 try {
@@ -54,12 +49,10 @@ if (build?.toLowerCase().trim() !== "y") {
   Deno.exit(0);
 }
 
-const spinnerBuild = new Spinner({ message: `Building...` });
-spinnerBuild.start();
 const buildOutput = await run(
   `${Deno.execPath()} run -A scripts/build_npm.ts ${trimmedTag}`,
+  `Building...`,
 );
-spinnerBuild.stop();
 console.log(buildOutput);
 
 const publish = prompt(
@@ -72,18 +65,15 @@ if (publish?.toLowerCase().trim() !== "y") {
   Deno.exit(0);
 }
 
-const spinnerPublish = new Spinner({ message: `Publishing...` });
-spinnerPublish.start();
 // Igonre npm errors since we are checking for them later
-await run(`npm publish ./npm --access public`, true);
-spinnerPublish.stop();
+await run(`npm publish ./npm --access public`, `Publishing...`, true);
 
-const spinnerNewNpm = new Spinner({
-  message: `Checking new published npm package...`,
-});
-spinnerNewNpm.start();
-const newNpmVersion = await run(`npm show ${PACKAGE_NAME} version`);
-spinnerNewNpm.stop();
+const newNpmVersion = await run(
+  `npm view ${PACKAGE_NAME} version`,
+  `Checking new published npm package...`,
+);
+// Wait for npm to update
+await delay(4000);
 
 if (newNpmVersion.trim() !== trimmedTag) {
   console.log(
