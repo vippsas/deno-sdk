@@ -1,5 +1,5 @@
-import "https://deno.land/std@0.210.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.5.2/mod.ts";
+import "https://deno.land/std@0.212.0/dotenv/load.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.7.0/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -35,7 +35,7 @@ if (!accessToken.ok) {
 
 const token = accessToken.data.access_token;
 
-const agreement = await client.agreement.create(token, {
+const agreement = await client.recurring.agreement.create(token, {
   pricing: {
     type: "LEGACY",
     amount: 2500,
@@ -58,7 +58,7 @@ if (!agreement.ok) {
   Deno.exit(1);
 }
 
-const agreementInfo = await client.agreement.info(
+const agreementInfo = await client.recurring.agreement.info(
   token,
   agreement.data.agreementId,
 );
@@ -70,7 +70,7 @@ if (!agreementInfo.ok) {
   Deno.exit(1);
 }
 
-const activatedAgreement = await client.agreement.forceAccept(
+const activatedAgreement = await client.recurring.agreement.forceAccept(
   token,
   agreement.data.agreementId,
   {
@@ -85,7 +85,7 @@ if (!activatedAgreement.ok) {
   Deno.exit(1);
 }
 
-const updatedAgreement = await client.agreement.update(
+const updatedAgreement = await client.recurring.agreement.update(
   token,
   agreement.data.agreementId,
   { status: "STOPPED" },
@@ -98,7 +98,11 @@ if (!updatedAgreement.ok) {
   Deno.exit(1);
 }
 
-const listAgreements = await client.agreement.list(token, "STOPPED", 1);
+const listAgreements = await client.recurring.agreement.list(
+  token,
+  "STOPPED",
+  1,
+);
 
 // Check if the agreements was retrieved successfully
 if (!listAgreements.ok) {

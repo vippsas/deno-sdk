@@ -1,5 +1,5 @@
-import "https://deno.land/std@0.210.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.5.2/mod.ts";
+import "https://deno.land/std@0.212.0/dotenv/load.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@0.7.0/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -35,7 +35,7 @@ if (!accessToken.ok) {
 
 const token = accessToken.data.access_token;
 
-const agreement = await client.agreement.create(token, {
+const agreement = await client.recurring.agreement.create(token, {
   pricing: {
     type: "LEGACY",
     amount: 2500,
@@ -60,7 +60,7 @@ if (!agreement.ok) {
 
 const agreementId = agreement.data.agreementId;
 
-const acceptedAgreement = await client.agreement.forceAccept(
+const acceptedAgreement = await client.recurring.agreement.forceAccept(
   token,
   agreementId,
   { phoneNumber: customerPhoneNumber },
@@ -77,7 +77,7 @@ if (!acceptedAgreement.ok) {
 const tenDaysFromToday = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)
   .toISOString().split("T")[0];
 
-const charge = await client.charge.create(token, agreementId, {
+const charge = await client.recurring.charge.create(token, agreementId, {
   amount: 2500,
   description: "MyNews Digital",
   orderId: crypto.randomUUID(),
@@ -95,7 +95,11 @@ if (!charge.ok) {
 
 const chargeId = charge.data.chargeId;
 
-const chargeInfo = await client.charge.info(token, agreementId, chargeId);
+const chargeInfo = await client.recurring.charge.info(
+  token,
+  agreementId,
+  chargeId,
+);
 
 // Check if the charge info was fetched successfully
 if (!chargeInfo.ok) {
