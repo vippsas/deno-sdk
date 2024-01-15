@@ -21,7 +21,7 @@ Deno.test("agreements - create - check correct url in TEST/MT", async () => {
     retryRequests: false,
   });
 
-  const result = await client.agreement.create("testtoken", {
+  const result = await client.recurring.agreement.create("testtoken", {
     pricing: {
       type: "LEGACY",
       amount: 2500,
