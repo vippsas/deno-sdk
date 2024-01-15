@@ -1,6 +1,6 @@
 //////////////// Common types /////////////////
 
-import { Scope } from "./shared_types.ts";
+import { ProblemJSON, Scope } from "./shared_types.ts";
 
 /**
  * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
@@ -27,37 +27,7 @@ export type RecurringTransactionType = "DIRECT_CAPTURE" | "RESERVE_CAPTURE";
 
 export type RecurringErrorResponse = RecurringErrorV3 | RecurringErrorFromAzure;
 
-/**
- * Error response
- * Error response using the Problem JSON format
- */
-export type RecurringErrorV3 = {
-  /**
-   * Path to type of error
-   * @example "https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems#validation-error"
-   */
-  type?: string;
-  /**
-   * Short description of the error
-   * @example "Bad Request"
-   */
-  title?: string;
-  /**
-   * HTTP status returned with the problem
-   * @format int32
-   * @example 400
-   */
-  status?: number;
-  /**
-   * Details about the error
-   * @example "Input validation failed"
-   */
-  detail?: string;
-  /**
-   * The path of the request
-   * @example "/v3/agreements"
-   */
-  instance?: string;
+export type RecurringErrorV3 = ProblemJSON & {
   /**
    * An unique ID for the request
    * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
@@ -325,6 +295,14 @@ export type ChargeSummary = {
   cancelled: number;
 };
 
+export type ChargeEventType =
+  | "CREATE"
+  | "RESERVE"
+  | "CAPTURE"
+  | "REFUND"
+  | "CANCEL"
+  | "FAIL";
+
 /** Describes the operation that was performed on the charge */
 export type ChargeEvent = {
   /**
@@ -335,7 +313,7 @@ export type ChargeEvent = {
    */
   occurred: string;
   /** @example "RESERVE" */
-  event: "CREATE" | "RESERVE" | "CAPTURE" | "REFUND" | "CANCEL" | "FAIL";
+  event: ChargeEventType;
   /**
    * The amount related to the operation.
    * Amounts are specified in minor units.

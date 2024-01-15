@@ -1,3 +1,5 @@
+import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
+
 /**
  * @description Requested image format.
  * Supported values: {image/*,image/png, image/svg+xml, text/targetUrl}
@@ -96,8 +98,7 @@ export type CallbackQrRequest = {
 };
 
 export type CallbackQrResponse = {
-  /** The merchant serial number (MSN) for the sale unit */
-  merchantSerialNumber?: string;
+  merchantSerialNumber?: MerchantSerialNumber;
   /**
    * The merchant defined identifier for a QR code.
    * It will be provided in the callback to the merchant when the
@@ -138,27 +139,14 @@ export type QrWebhookEvent = {
    * @example "d8b7d76d-49aa-48b8-90c6-38779372c163"
    */
   merchantQrId: string;
-  /**
-   * The merchant serial number (MSN) for the sale unit.
-   *
-   * @example "123456"
-   */
-  msn: string;
+  msn: MerchantSerialNumber;
   /**
    * @example "2023-10-06T10:45:40.3061965Z"
    */
   initiatedAt: string;
 };
 
-export type QrErrorResponse = {
-  /** @minLength 1 */
-  type?: string;
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  detail: string;
-  /** @minLength 1 */
-  instance: string;
+export type QrErrorResponse = ProblemJSON & {
   invalidParams?: {
     /** @minLength 1 */
     name: string;

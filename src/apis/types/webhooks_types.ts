@@ -1,13 +1,7 @@
-// Error types //
-export type WebhooksProblemJSON = {
-  type: string | null;
-  title: string | null;
-  status: number | null;
-  detail: string | null;
-  instance: string | null;
-};
+import { ProblemJSON } from "./shared_types.ts";
 
-export type WebhooksErrorResponse = WebhooksProblemJSON & {
+// Error types //
+export type WebhooksErrorResponse = ProblemJSON & {
   extraDetails: {
     name: string;
     reason: string;

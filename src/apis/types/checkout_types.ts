@@ -1,12 +1,7 @@
-export type CheckoutProblemJSON = {
-  type?: string | null;
-  title?: string | null;
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-};
+import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
 
-export type CheckoutErrorResponse = CheckoutProblemJSON & {
+/////////////// Error Types ///////////////
+export type CheckoutErrorResponse = ProblemJSON & {
   errorCode: string;
   errors: {
     [key: string]: string[];
@@ -470,8 +465,7 @@ export type CheckoutResponsePaymentDetails = {
 export type CheckoutSessionOKResponse = {
   /** The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2". */
   sessionId: string;
-  /** The merchant's serial number. Example: "123456" */
-  merchantSerialNumber?: string | null;
+  merchantSerialNumber?: MerchantSerialNumber | null;
   /** The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid */
   reference: string;
   /** The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State. */
