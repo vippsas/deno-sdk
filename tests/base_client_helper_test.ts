@@ -157,10 +157,10 @@ Deno.test("createUserAgent - Should return the correct user agent string when lo
   assertEquals(actualUserAgent, expectedUserAgent);
 });
 
-Deno.test("createUserAgent - Should return the correct user agent string when loaded locally", () => {
-  const expectedUserAgent = "Vipps/Deno SDK/local";
+Deno.test("createUserAgent - Should return the correct user agent string when loaded from node_modules", () => {
+  const expectedUserAgent = "Vipps/Deno SDK/npm-module";
   const actualUserAgent = createSDKUserAgent(
-    "file:///Users/foo/bar/deno-sdk/src/mod.ts",
+    "file:///Users/foo/bar/node_modules/mod.ts",
   );
 
   assertEquals(actualUserAgent, expectedUserAgent);
