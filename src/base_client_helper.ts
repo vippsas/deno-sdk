@@ -141,7 +141,11 @@ export const getHeaders = (
  * @returns The user agent string.
  */
 export const getUserAgent = (): string => {
-  const metaUrl = import.meta.url;
+  const metaUrl = import.meta.url || undefined;
+  // If the sdk is loaded using require, import.meta.url will be undefined
+  if (!metaUrl) {
+    return "Vipps/Deno SDK/npm-require";
+  }
   const userAgent = createSDKUserAgent(metaUrl);
   return userAgent;
 };
@@ -165,9 +169,9 @@ export const createSDKUserAgent = (metaUrl: string): string => {
     // Extract the module version from the URL
     const sdkVersion = url.pathname.split("@")[1].split("/")[0];
     userAgent += sdkVersion;
-  } // Or if the module was loaded from a local file
-  else if (url.protocol === "file:") {
-    userAgent += "local";
+  } // Or if the module was loaded from npm
+  else if (url.pathname.includes("node_modules")) {
+    userAgent += "npm-module";
   } // Otherwise, we don't know where the module was loaded from
   else {
     userAgent += "unknown";
