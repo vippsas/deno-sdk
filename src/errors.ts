@@ -1,6 +1,18 @@
 import { QrErrorResponse } from "./apis/types/qr_types.ts";
 import { RetryError } from "./deps.ts";
 import { CheckoutErrorResponse } from "./apis/types/checkout_types.ts";
+import { ProblemJSON } from "./apis/types/shared_types.ts";
+
+/**
+ * Parses the given ProblemJSON and returns an object indicating an error.
+ * @param error The ProblemJSON to parse.
+ * @returns An object with `ok` set to `false` and the parsed `error`.
+ */
+export const parseProblemJSON = <TErr>(
+  error: ProblemJSON,
+): { ok: false; error: ProblemJSON } => {
+  return { ok: false, error };
+};
 
 /**
  * Parses the error and returns an object with error details.

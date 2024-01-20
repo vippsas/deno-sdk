@@ -1,5 +1,5 @@
-import { filterKeys, isErrorStatus, retry } from "./deps.ts";
-import { parseError } from "./errors.ts";
+import { filterKeys, isErrorStatus, parseMediaType, retry } from "./deps.ts";
+import { parseError, parseProblemJSON } from "./errors.ts";
 import {
   ClientConfig,
   ClientResponse,
@@ -48,9 +48,32 @@ export const fetchJSON = async <TOk, TErr>(
 ): Promise<ClientResponse<TOk, TErr>> => {
   const response = await fetch(request);
 
+  //console.log("RESPONSE");
+  // Check media type of response
+  const parsedMediaType = parseMediaType(
+    response.headers.get("content-type") || "",
+  );
+  const mediaType: string | undefined = parsedMediaType[0];
+
+  if (mediaType === "application/json") {
+    console.log("JSON CONTENT TYPE");
+  } else if (mediaType === "application/problem+json") {
+    const error = await response.json();
+    return parseProblemJSON<TErr>(error);
+  } else {
+    console.log("OTHER CONTENT TYPE");
+    console.log(mediaType);
+  }
+
   if (isErrorStatus(response.status)) {
-    // Bad Request
-    if (response.status === 400) {
+    console.log("ERROR STATUS");
+
+    // Avoid retries on errors that will not benefit from a retry attemp
+    // 400 - Bad Request, 401 - Unauthorized, 403 - Forbidden, 404 - Not Found
+    if (
+      response.status === 400 || response.status === 401 ||
+      response.status === 403 || response.status === 404
+    ) {
       const error = await response.json();
       return parseError<TErr>(error);
     } else {
