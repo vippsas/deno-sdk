@@ -2,7 +2,8 @@ import { ProblemJSON } from "./shared_types.ts";
 
 // Error types //
 export type WebhooksErrorResponse = ProblemJSON & {
-  extraDetails: {
+  traceId?: string | null;
+  extraDetails?: {
     name: string;
     reason: string;
   }[] | null;

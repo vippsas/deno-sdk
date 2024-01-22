@@ -16,7 +16,7 @@ Deno.test("makeRequest - Should return ok", async () => {
   mf.mock("GET@/foo", (req: Request) => {
     assertEquals(req.url, "https://api.vipps.no/foo");
     assertEquals(req.method, "GET");
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -89,7 +89,7 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
         status: 400,
       });
     }
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });

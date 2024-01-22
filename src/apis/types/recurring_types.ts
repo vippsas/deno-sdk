@@ -1,27 +1,4 @@
-//////////////// Common types /////////////////
-
 import { ProblemJSON, Scope } from "./shared_types.ts";
-
-/**
- * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
- * @minLength 3
- * @maxLength 3
- * @pattern ^[A-Z]{3}$
- * @example "NOK"
- */
-export type RecurringCurrencyV3 = "NOK";
-
-/**
- * @default "RECURRING"
- * @example "RECURRING"
- */
-export type ChargeType = "INITIAL" | "RECURRING";
-
-/**
- * Type of transaction, either direct capture or reserve capture
- * @example "DIRECT_CAPTURE"
- */
-export type RecurringTransactionType = "DIRECT_CAPTURE" | "RESERVE_CAPTURE";
 
 ///////////////// Error types /////////////////
 
@@ -67,6 +44,29 @@ export type RecurringErrorFromAzure = {
     message: string;
   };
 };
+
+//////////////// Common types /////////////////
+
+/**
+ * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
+ * @minLength 3
+ * @maxLength 3
+ * @pattern ^[A-Z]{3}$
+ * @example "NOK"
+ */
+export type RecurringCurrencyV3 = "NOK";
+
+/**
+ * @default "RECURRING"
+ * @example "RECURRING"
+ */
+export type ChargeType = "INITIAL" | "RECURRING";
+
+/**
+ * Type of transaction, either direct capture or reserve capture
+ * @example "DIRECT_CAPTURE"
+ */
+export type RecurringTransactionType = "DIRECT_CAPTURE" | "RESERVE_CAPTURE";
 
 //////////////// Charge types /////////////////
 

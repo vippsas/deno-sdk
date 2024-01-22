@@ -9,7 +9,7 @@ Deno.test("ePayment - create - Should have correct url and header", async () => 
     assertEquals(req.url, "https://apitest.vipps.no/epayment/v1/payments");
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -72,7 +72,7 @@ Deno.test("ePayment - info - Should have correct url and header", async () => {
     assertEquals(req.url, "https://apitest.vipps.no/epayment/v1/payments/foo");
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -99,7 +99,7 @@ Deno.test("ePayment - history - Should have correct url and header", async () =>
     );
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -126,7 +126,7 @@ Deno.test("ePayment - cancel - Should have correct url and header", async () => 
     );
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -153,7 +153,7 @@ Deno.test("ePayment - capture - Should have correct url and header", async () =>
     );
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -185,7 +185,7 @@ Deno.test("ePayment - refund - Should have correct url and header", async () => 
     );
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });
@@ -217,7 +217,7 @@ Deno.test("ePayment - forceApprove - Should have correct url and header", async 
     );
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });

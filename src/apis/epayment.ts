@@ -28,7 +28,7 @@ export const ePaymentRequestFactory = {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
-      //newBody.reference = crypto.randomUUID();
+      newBody.reference = crypto.randomUUID();
     }
     return {
       url: "/epayment/v1/payments",

@@ -1,7 +1,9 @@
 import { QrErrorResponse } from "./apis/types/qr_types.ts";
-import { RetryError } from "./deps.ts";
+import { RetryError, STATUS_CODE } from "./deps.ts";
 import { CheckoutErrorResponse } from "./apis/types/checkout_types.ts";
-import { ProblemJSON } from "./apis/types/shared_types.ts";
+import { ProblemJSON, SDKError } from "./apis/types/shared_types.ts";
+import { EPaymentErrorResponse } from "./apis/types/epayment_types.ts";
+import { RecurringErrorFromAzure, RecurringErrorV3 } from "./mod.ts";
 
 /**
  * Parses the given ProblemJSON and returns an object indicating an error.
@@ -10,8 +12,78 @@ import { ProblemJSON } from "./apis/types/shared_types.ts";
  */
 export const parseProblemJSON = <TErr>(
   error: ProblemJSON,
-): { ok: false; error: ProblemJSON } => {
-  return { ok: false, error };
+): SDKError<TErr> => {
+  let customMessage: string | undefined | null = error.detail;
+
+  // Catch EPayment and Webhook Problem JSON
+  if ("extraDetails" in error && typeof error["extraDetails"] === "object") {
+    const ePaymentError = error as EPaymentErrorResponse;
+    customMessage = (ePaymentError.extraDetails.length > 0)
+      ? `${ePaymentError.extraDetails?.[0].name} - ${
+        ePaymentError.extraDetails?.[0].reason
+      }`
+      : undefined;
+  }
+
+  // Catch Checkout Problem JSON
+  if (
+    "errorCode" in error && "errors" in error &&
+    typeof error["errors"] === "object"
+  ) {
+    const checkoutError = error as CheckoutErrorResponse;
+    customMessage = checkoutError.errors[0][0] || undefined;
+  }
+
+  // Catch QR Problem JSON
+  if (
+    "invalidParams" in error && typeof error["invalidParams"] === "object"
+  ) {
+    const qrError = error as QrErrorResponse;
+    customMessage = (qrError.invalidParams && qrError.invalidParams?.length > 0)
+      ? `${qrError.invalidParams[0].name} - ${qrError.invalidParams[0].reason}`
+      : undefined;
+  }
+
+  // Catch Recurring Problem JSON
+  if (
+    "contextId" in error && "extraDetails" in error &&
+    typeof error["extraDetails"] === "object"
+  ) {
+    const recurringError = error as RecurringErrorV3;
+    customMessage =
+      (recurringError.extraDetails && recurringError.extraDetails?.length > 0)
+        ? `${recurringError.extraDetails[0].field} - ${
+          recurringError.extraDetails[0].text
+        }`
+        : undefined;
+  }
+
+  return {
+    ok: false,
+    message: customMessage || "Unknown error",
+    error: error as TErr,
+  };
+};
+
+/**
+ * Checks if the provided JSON object is an instance of RetryError.
+ * @param json The JSON object to check.
+ * @returns True if the JSON object is an instance of RetryError,
+ * false otherwise.
+ */
+export const isRetryError = (json: JSON) => {
+  return json instanceof RetryError;
+};
+
+/**
+ * Parses the error and returns an object with error details.
+ * @returns An object with error details.
+ */
+export const parseRetryError = (): SDKError<undefined> => {
+  return {
+    ok: false,
+    message: "Retry limit reached. Could not get a response from the server",
+  };
 };
 
 /**
@@ -22,16 +94,8 @@ export const parseProblemJSON = <TErr>(
  */
 export const parseError = <TErr>(
   error: unknown,
-): { ok: false; message: string; error?: TErr } => {
-  // Catch retry errors
-  if (error instanceof RetryError) {
-    return {
-      ok: false,
-      message:
-        "Could not get a response from the server after multiple attempts",
-    };
-  }
-
+  status?: number,
+): SDKError<TErr> => {
   // Catch connection errors
   if (
     error instanceof TypeError &&
@@ -44,7 +108,7 @@ export const parseError = <TErr>(
   }
 
   // Catch Forbidden
-  if (error instanceof Error && error.message.includes("Forbidden")) {
+  if (status === STATUS_CODE.Forbidden) {
     return {
       ok: false,
       message:
@@ -52,15 +116,10 @@ export const parseError = <TErr>(
     };
   }
 
-  // Catch regular errors
-  if (error instanceof Error) {
-    return { ok: false, message: `${error.name} - ${error.message}` };
-  }
-
   // Catch AccessTokenError
   if (
     typeof error === "object" && error !== null && "error" in error &&
-    "error_description" in error && "trace_id" in error
+    "error_description" in error
   ) {
     return {
       ok: false,
@@ -69,47 +128,25 @@ export const parseError = <TErr>(
     };
   }
 
-  // Catch Problem JSON
+  // Catch Recurring Azure Error
   if (
-    typeof error === "object" && error !== null && "type" in error &&
-    "title" in error && "status" in error
+    typeof error === "object" && error !== null && "responseInfo" in error &&
+    error["responseInfo"] === "object" && "result" in error &&
+    error["result"] === "object"
   ) {
+    const azureError = error as RecurringErrorFromAzure;
     return {
       ok: false,
-      message: `${error.status} - ${error.title}`,
+      message: azureError.result.message,
       error: error as TErr,
     };
   }
 
-  // Catch Checkout Error JSON
-  if (
-    typeof error === "object" && error !== null && "errorCode" in error &&
-    "errors" in error && typeof error["errors"] === "object"
-  ) {
-    const checkoutError = error as CheckoutErrorResponse;
-    const message = checkoutError.title || checkoutError.errorCode;
-    return {
-      ok: false,
-      message,
-      error: error as TErr,
-    };
-  }
-
-  // Catch QR Error JSON
-  if (
-    typeof error === "object" && error !== null && "title" in error &&
-    "detail" in error && "instance" in error
-  ) {
-    const qrError = error as QrErrorResponse;
-    const message = qrError.invalidParams?.[0]?.reason ?? qrError.detail ??
-      "Unknown error";
-    return {
-      ok: false,
-      message,
-      error: error as TErr,
-    };
+  // Catch regular errors
+  if (error instanceof Error) {
+    return { ok: false, message: `${error.name} - ${error.message}` };
   }
 
   // Default to error as string
-  return { ok: false, message: String(error) };
+  return { ok: false, message: "Unknown error" };
 };

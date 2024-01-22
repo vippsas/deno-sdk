@@ -9,7 +9,7 @@ Deno.test("agreements - create - check correct url in TEST/MT", async () => {
     assertEquals(req.url, "https://apitest.vipps.no/recurring/v3/agreements");
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });

@@ -1,19 +1,11 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { EPaymentErrorResponse } from "../src/apis/types/epayment_types.ts";
 import { QrErrorResponse } from "../src/apis/types/qr_types.ts";
-import { RetryError } from "../src/deps.ts";
-import { parseError } from "../src/errors.ts";
-import { assertEquals } from "./test_deps.ts";
+import { parseError, parseProblemJSON } from "../src/errors.ts";
+import { Client } from "../src/mod.ts";
+import { assertEquals, mf } from "./test_deps.ts";
 
-Deno.test("parseError - Should return correct error message for RetryError", () => {
-  const error = new RetryError("foo", 3);
-  const result = parseError(error);
-  assertEquals(result.ok, false);
-  assertEquals(
-    result.message,
-    "Could not get a response from the server after multiple attempts",
-  );
-});
+////// Parse Error Tests //////
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
   const error = new TypeError("error trying to connect");
@@ -29,14 +21,24 @@ Deno.test("parseError - Should return correct error message for generic Error", 
   assertEquals(result.message, `${error.name} - ${error.message}`);
 });
 
-Deno.test("parseError should return correct error message for forbidden Error", () => {
-  const error = new Error("Forbidden");
-  const result = parseError(error);
+Deno.test("parseError - should return correct error message for forbidden Error", async () => {
+  mf.install();
+  mf.mock("GET@/epayment/v1/payments/", () => {
+    return new Response(JSON.stringify({ ok: false, data: {} }), {
+      status: 403,
+    });
+  });
+
+  const client = Client({
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    useTestMode: true,
+    retryRequests: false,
+  });
+
+  const result = await client.payment.info("testtoken", "123456789");
   assertEquals(result.ok, false);
-  assertEquals(
-    result.message,
-    "Your credentials are not authorized for this product, please visit portal.vipps.no",
-  );
+  mf.reset();
 });
 
 Deno.test("parseError - Should return correct error message for AccessTokenError", () => {
@@ -55,7 +57,30 @@ Deno.test("parseError - Should return correct error message for AccessTokenError
   assertEquals(result.error, error);
 });
 
-Deno.test("parseError - Should return correct error message for Problem JSON", () => {
+Deno.test("parseError should return correct error message for unknown error", () => {
+  const error = "Unknown error";
+  const result = parseError(error);
+
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Unknown error");
+});
+
+////// Parse Problem JSON Tests //////
+Deno.test("parseProblemJSON - Should return correct error message for Problem JSON", () => {
+  const error = {
+    type: "https://example.com/error",
+    title: "Some problem",
+    status: 400,
+    instance: "https://example.com/instance",
+    traceId: "123456789",
+    detail: "Some detail",
+  };
+  const result = parseProblemJSON(error);
+  assertEquals(result.ok, false);
+  assertEquals(result.message, `${error.detail}`);
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Problem JSON", () => {
   const error: EPaymentErrorResponse = {
     type: "https://example.com/error",
     title: "Some problem",
@@ -68,24 +93,24 @@ Deno.test("parseError - Should return correct error message for Problem JSON", (
     traceId: "123456789",
     detail: "Some detail",
   };
-  const result = parseError(error);
+  const result = parseProblemJSON(error);
   assertEquals(result.ok, false);
-  assertEquals(result.message, `${error.status} - ${error.title}`);
+  assertEquals(result.message, `Some name - Some reason`);
   assertEquals(result.error, error);
 });
 
-Deno.test("parseError - Should return detail as error message for QRErrorJSON", () => {
+Deno.test("parseProblemJSON - Should return detail as error message for QRErrorJSON", () => {
   const error = {
     title: "Invalid QR code",
     detail: "The QR code is expired",
     instance: "https://example.com/qr",
   };
-  const result = parseError(error);
+  const result = parseProblemJSON(error);
   assertEquals(result.ok, false);
   assertEquals(result.message, "The QR code is expired");
 });
 
-Deno.test("parseError - Should return reason as error message for QRErrorJSON", () => {
+Deno.test("parseProblemJSON - Should return reason as error message for QRErrorJSON", () => {
   const error: QrErrorResponse = {
     title: "Invalid QR code",
     detail: "The QR code is expired",
@@ -97,14 +122,8 @@ Deno.test("parseError - Should return reason as error message for QRErrorJSON", 
       },
     ],
   };
-  const result = parseError(error);
-  assertEquals(result.ok, false);
-  assertEquals(result.message, "Some reason");
-});
+  const result = parseProblemJSON(error);
 
-Deno.test("parseError should return correct error message for unknown error", () => {
-  const error = "Unknown error";
-  const result = parseError(error);
   assertEquals(result.ok, false);
-  assertEquals(result.message, String(error));
+  assertEquals(result.message, "Some name - Some reason");
 });

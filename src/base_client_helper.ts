@@ -1,4 +1,13 @@
-import { filterKeys, isErrorStatus, parseMediaType, retry } from "./deps.ts";
+import { STATUS_CODE } from "https://deno.land/std@0.212.0/http/status.ts";
+import {
+  filterKeys,
+  isServerErrorStatus,
+  isSuccessfulStatus,
+  parseMediaType,
+  retry,
+} from "./deps.ts";
+import { parseRetryError } from "./errors.ts";
+import { isRetryError } from "./errors.ts";
 import { parseError, parseProblemJSON } from "./errors.ts";
 import {
   ClientConfig,
@@ -21,11 +30,11 @@ export const fetchRetry = async <TOk, TErr>(
 ): Promise<ClientResponse<TOk, TErr>> => {
   // Execute request without retry
   if (!retryRequest) {
-    return await fetchJSON<TOk, TErr>(request);
+    return await fetchJSON<TOk, TErr>(request, retryRequest);
   }
   // Execute request using retry
   const req = retry(async () => {
-    return await fetchJSON<TOk, TErr>(request);
+    return await fetchJSON<TOk, TErr>(request, retryRequest);
   }, {
     multiplier: 2,
     maxTimeout: 3000,
@@ -38,60 +47,94 @@ export const fetchRetry = async <TOk, TErr>(
 
 /**
  * Fetches JSON data from the specified request.
+ *
  * @param request - The request to fetch JSON data from.
- * @returns A promise that resolves to a ClientResponse object containing the fetched data.
+ * @param retryModeEnabled - Whether retry mode is enabled or not.
+ * @returns A ClientResponse object containing the fetched data.
  * @template TOk - The type of the successful response data.
  * @template TErr - The type of the error response data.
  */
 export const fetchJSON = async <TOk, TErr>(
   request: Request,
+  retryModeEnabled: boolean,
 ): Promise<ClientResponse<TOk, TErr>> => {
   const response = await fetch(request);
+  let json: JSON;
 
-  //console.log("RESPONSE");
-  // Check media type of response
-  const parsedMediaType = parseMediaType(
-    response.headers.get("content-type") || "",
-  );
-  const mediaType: string | undefined = parsedMediaType[0];
+  /**
+   * Check MIME type of the response, assuming headers are case insensitive
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+   */
+  const contentHeader = response.headers.get("content-type");
+  const mediaType = contentHeader
+    ? parseMediaType(contentHeader)[0]
+    : undefined;
 
-  if (mediaType === "application/json") {
-    console.log("JSON CONTENT TYPE");
-  } else if (mediaType === "application/problem+json") {
+  /**
+   * If the MIME is a ProblemJSON, parse it and return it as an error.
+   * By returning an error object, the request will not be retried.
+   *
+   * Read more about ProblemJSON here: https://tools.ietf.org/html/rfc7807
+   */
+  if (mediaType === "application/problem+json") {
     const error = await response.json();
     return parseProblemJSON<TErr>(error);
-  } else {
-    console.log("OTHER CONTENT TYPE");
-    console.log(mediaType);
   }
 
-  if (isErrorStatus(response.status)) {
-    console.log("ERROR STATUS");
-
-    // Avoid retries on errors that will not benefit from a retry attemp
-    // 400 - Bad Request, 401 - Unauthorized, 403 - Forbidden, 404 - Not Found
-    if (
-      response.status === 400 || response.status === 401 ||
-      response.status === 403 || response.status === 404
-    ) {
-      const error = await response.json();
-      return parseError<TErr>(error);
-    } else {
-      // Throwing an error here will trigger a retry
-      throw new Error(response.statusText);
-    }
-  }
-  const text = await response.text();
-  // Handle empty response body
-  if (text === "") {
+  /**
+   * Check if the response is empty.
+   */
+  if (response.status === STATUS_CODE.NoContent) {
     return { ok: true, data: {} as TOk };
   }
-  const json = JSON.parse(text);
-  return { ok: true, data: json as TOk };
+
+  /**
+   * Parse the response body as JSON.
+   */
+  try {
+    if (mediaType === "application/json") {
+      json = await response.json();
+    } else {
+      // Handle non JSON responses
+      const text = await response.text();
+      json = JSON.parse(text);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+
+  /**
+   * If the response status is a successful status, return the JSON as TOk.
+   */
+  if (isSuccessfulStatus(response.status)) {
+    return { ok: true, data: json as TOk };
+  }
+
+  /**
+   * If the retry limit has been reached, return an error object.
+   */
+  if (retryModeEnabled && isRetryError(json)) {
+    return parseRetryError();
+  }
+
+  /**
+   * If retry mode is enabled, the retry limit has not been reached and
+   * a server error is returned, throw an error.
+   * The request will be retried if retryRequest is true.
+   */
+  if (retryModeEnabled && isServerErrorStatus(response.status)) {
+    throw new Error(response.statusText);
+  }
+
+  /**
+   * For any other type of error, return an Error object.
+   */
+  return parseError<TErr>(json, response.status);
 };
 
 /**
  * Builds a Request object based on the provided configuration and request data.
+ *
  * @param cfg - The client configuration.
  * @param requestData - The request data containing method, headers, token, body, and URL.
  * @returns A Request object.

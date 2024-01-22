@@ -80,3 +80,9 @@ export type ProblemJSON = {
    */
   instance?: string | null;
 };
+
+export type SDKError<TErr> = {
+  ok: false;
+  message: string;
+  error?: TErr;
+};

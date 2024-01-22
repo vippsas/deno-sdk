@@ -19,8 +19,9 @@ Deno.test("fetchJSON - Returns successful response", async () => {
 
   const request = new Request("https://example.com/api");
 
-  const result = await fetchJSON(request);
+  const result = await fetchJSON(request, false);
   assertEquals(result, { ok: true, data: { message: "Success" } });
+  mf.reset();
 });
 
 Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
@@ -35,9 +36,169 @@ Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
 
   const request = new Request("https://example.com/api");
   // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
+  const result = await fetchJSON(request, false) as any;
   assertEquals(result.ok, false);
   assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      statusText: "Forbidden",
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+  assertEquals(result.ok, false);
+  assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Returns parseError on Unauthorized", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      statusText: "Unauthorized",
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+  assertEquals(result.ok, false);
+  assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Returns parseError on Not Found", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({ error: "Not Found" }), {
+      status: 404,
+      statusText: "Not Found",
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+  assertEquals(result.ok, false);
+  assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Returns parseError on Internal Server Error", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+  assertEquals(result.ok, false);
+  assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Catch JSON", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({}), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+
+  assertEquals(result.ok, true);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Catch Empty Response", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(undefined, {
+      status: 204,
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+
+  assertEquals(result.ok, true);
+  assertEquals(result.data, {});
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Catch Problem JSON", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(
+      JSON.stringify({ type: "https://example.com/error" }),
+      { headers: { "content-type": "application/problem+json" } },
+    );
+  });
+
+  const request = new Request("https://example.com/api");
+  // deno-lint-ignore no-explicit-any
+  const result = await fetchJSON(request, false) as any;
+
+  assertEquals(result.ok, false);
+  assert(result.message !== undefined);
+  mf.reset();
+});
+
+Deno.test("fetchJSON - Catch Problem JSON - Case insensitive", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/foo", () => {
+    return new Response(
+      JSON.stringify({ type: "https://example.com/error" }),
+      { headers: { "Content-type": "application/problem+json" } },
+    );
+  });
+
+  mf.mock("GET@/bar", () => {
+    return new Response(
+      JSON.stringify({ type: "https://example.com/error" }),
+      { headers: { "Content-Type": "application/problem+json" } },
+    );
+  });
+
+  const requestFoo = new Request("https://example.com/foo");
+  // deno-lint-ignore no-explicit-any
+  const resultFoo = await fetchJSON(requestFoo, false) as any;
+
+  assertEquals(resultFoo.ok, false);
+
+  const requestBar = new Request("https://example.com/bar");
+  // deno-lint-ignore no-explicit-any
+  const resultBar = await fetchJSON(requestBar, false) as any;
+
+  assertEquals(resultBar.ok, false);
+
+  mf.reset();
 });
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
