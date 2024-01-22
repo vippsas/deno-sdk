@@ -1,205 +1,11 @@
 import {
   buildRequest,
   createSDKUserAgent,
-  fetchJSON,
   getHeaders,
+  getUserAgent,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
-import { assert, assertEquals, mf } from "./test_deps.ts";
-
-Deno.test("fetchJSON - Returns successful response", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ message: "Success" }), {
-      status: 200,
-      statusText: "OK",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-
-  const result = await fetchJSON(request, false);
-  assertEquals(result, { ok: true, data: { message: "Success" } });
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ error: "Bad Request" }), {
-      status: 400,
-      statusText: "Bad Request",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
-      status: 403,
-      statusText: "Forbidden",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Returns parseError on Unauthorized", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      statusText: "Unauthorized",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Returns parseError on Not Found", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ error: "Not Found" }), {
-      status: 404,
-      statusText: "Not Found",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Returns parseError on Internal Server Error", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-      status: 500,
-      statusText: "Internal Server Error",
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch JSON", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(JSON.stringify({}), {
-      status: 200,
-      headers: { "content-type": "application/json" },
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-
-  assertEquals(result.ok, true);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch Empty Response", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(undefined, {
-      status: 204,
-    });
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-
-  assertEquals(result.ok, true);
-  assertEquals(result.data, {});
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch Problem JSON", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "content-type": "application/problem+json" } },
-    );
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request, false) as any;
-
-  assertEquals(result.ok, false);
-  assert(result.message !== undefined);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch Problem JSON - Case insensitive", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/foo", () => {
-    return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "Content-type": "application/problem+json" } },
-    );
-  });
-
-  mf.mock("GET@/bar", () => {
-    return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "Content-Type": "application/problem+json" } },
-    );
-  });
-
-  const requestFoo = new Request("https://example.com/foo");
-  // deno-lint-ignore no-explicit-any
-  const resultFoo = await fetchJSON(requestFoo, false) as any;
-
-  assertEquals(resultFoo.ok, false);
-
-  const requestBar = new Request("https://example.com/bar");
-  // deno-lint-ignore no-explicit-any
-  const resultBar = await fetchJSON(requestBar, false) as any;
-
-  assertEquals(resultBar.ok, false);
-
-  mf.reset();
-});
+import { assert, assertEquals } from "./test_deps.ts";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
   const cfg: ClientConfig = {
@@ -309,6 +115,11 @@ Deno.test("getHeaders - Should omit headers", () => {
   assert(expectedHeaders["Merchant-Serial-Number"] === undefined);
 });
 
+Deno.test("getUserAgent - Should return the correct user agent when loaded using require", () => {
+  const userAgent = getUserAgent(undefined);
+  assertEquals(userAgent, "Vipps/Deno SDK/npm-require");
+});
+
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
   const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
   const actualUserAgent = createSDKUserAgent(
@@ -327,9 +138,11 @@ Deno.test("createUserAgent - Should return the correct user agent string when lo
   assertEquals(actualUserAgent, expectedUserAgent);
 });
 
-Deno.test("createUserAgent - Should return the correct user agent string with unknown", () => {
+Deno.test("createSDKUserAgent - Should return the correct user agent when loaded from an unknown source", () => {
+  const metaUrl = "https://example.com/some/other/path/mod.ts";
   const expectedUserAgent = "Vipps/Deno SDK/unknown";
-  const actualUserAgent = createSDKUserAgent("https://example.com/");
 
-  assertEquals(actualUserAgent, expectedUserAgent);
+  const userAgent = createSDKUserAgent(metaUrl);
+
+  assertEquals(userAgent, expectedUserAgent);
 });

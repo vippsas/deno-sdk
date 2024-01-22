@@ -1,8 +1,18 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { EPaymentErrorResponse } from "../src/apis/types/epayment_types.ts";
 import { QrErrorResponse } from "../src/apis/types/qr_types.ts";
-import { parseError, parseProblemJSON } from "../src/errors.ts";
-import { Client } from "../src/mod.ts";
+import { RetryError } from "../src/deps.ts";
+import {
+  isRetryError,
+  parseError,
+  parseProblemJSON,
+  parseRetryError,
+} from "../src/errors.ts";
+import {
+  CheckoutErrorResponse,
+  Client,
+  RecurringErrorFromAzure,
+} from "../src/mod.ts";
 import { assertEquals, mf } from "./test_deps.ts";
 
 ////// Parse Error Tests //////
@@ -65,7 +75,23 @@ Deno.test("parseError should return correct error message for unknown error", ()
   assertEquals(result.message, "Unknown error");
 });
 
+Deno.test("parseError - Should return correct error message for Recurring Azure Error", () => {
+  const error: RecurringErrorFromAzure = {
+    responseInfo: {
+      responseCode: 123,
+      responseMessage: "Response message",
+    },
+    result: {
+      message: "Result message",
+    },
+  };
+  const result = parseError(error);
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Result message");
+});
+
 ////// Parse Problem JSON Tests //////
+
 Deno.test("parseProblemJSON - Should return correct error message for Problem JSON", () => {
   const error = {
     type: "https://example.com/error",
@@ -80,7 +106,7 @@ Deno.test("parseProblemJSON - Should return correct error message for Problem JS
   assertEquals(result.message, `${error.detail}`);
 });
 
-Deno.test("parseProblemJSON - Should return correct error message for Problem JSON", () => {
+Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON with extraDetails", () => {
   const error: EPaymentErrorResponse = {
     type: "https://example.com/error",
     title: "Some problem",
@@ -91,12 +117,101 @@ Deno.test("parseProblemJSON - Should return correct error message for Problem JS
     }],
     instance: "https://example.com/instance",
     traceId: "123456789",
+  };
+  const result = parseProblemJSON(error);
+  assertEquals(result.message, `Some name - Some reason`);
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON with multiple extraDetails", () => {
+  const error: EPaymentErrorResponse = {
+    type: "https://example.com/error",
+    title: "Some problem",
+    status: 400,
+    extraDetails: [{
+      name: "Some name",
+      reason: "Some reason",
+    }, {
+      name: "Another name",
+      reason: "Another reason",
+    }],
+    instance: "https://example.com/instance",
+    traceId: "123456789",
+  };
+  const result = parseProblemJSON(error);
+  assertEquals(result.message, `Some name - Some reason`);
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON without extraDetails", () => {
+  const error: EPaymentErrorResponse = {
+    type: "https://example.com/error",
+    title: "Some problem",
+    status: 400,
+    extraDetails: [],
+    instance: "https://example.com/instance",
+    traceId: "123456789",
     detail: "Some detail",
   };
   const result = parseProblemJSON(error);
+  assertEquals(result.message, `Some detail`);
+});
+
+Deno.test("parseProblemJSON - Unknown error", () => {
+  const error = {
+    detail: "Unknown error",
+  };
+
+  const result = parseProblemJSON(error);
+
   assertEquals(result.ok, false);
-  assertEquals(result.message, `Some name - Some reason`);
+  assertEquals(result.message, "Unknown error");
   assertEquals(result.error, error);
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Checkout Problem JSON - Has errors", () => {
+  const error: CheckoutErrorResponse = {
+    errorCode: "Some error code",
+    errors: {
+      err: ["Some error"],
+    },
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Some error");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Checkout Problem JSON - Has multiple errors", () => {
+  const error: CheckoutErrorResponse = {
+    errorCode: "Some error code",
+    errors: {
+      err: ["Some error", "Another error"],
+    },
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Some error");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Checkout Problem JSON - Has Details", () => {
+  const error: CheckoutErrorResponse = {
+    detail: "Some detail",
+    errorCode: "Some error code",
+    errors: {},
+  };
+  const result = parseProblemJSON(error);
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Some detail");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Checkout Problem JSON - Unknown", () => {
+  const error: CheckoutErrorResponse = {
+    errorCode: "Some error code",
+    errors: {},
+  };
+  const result = parseProblemJSON(error);
+  assertEquals(result.ok, false);
+  assertEquals(result.message, "Unknown error");
 });
 
 Deno.test("parseProblemJSON - Should return detail as error message for QRErrorJSON", () => {
@@ -113,7 +228,6 @@ Deno.test("parseProblemJSON - Should return detail as error message for QRErrorJ
 Deno.test("parseProblemJSON - Should return reason as error message for QRErrorJSON", () => {
   const error: QrErrorResponse = {
     title: "Invalid QR code",
-    detail: "The QR code is expired",
     instance: "https://example.com/qr",
     invalidParams: [
       {
@@ -126,4 +240,29 @@ Deno.test("parseProblemJSON - Should return reason as error message for QRErrorJ
 
   assertEquals(result.ok, false);
   assertEquals(result.message, "Some name - Some reason");
+});
+
+////// Parse Retry Error Tests //////
+
+Deno.test("isRetryError - Should return true when input is an instance of RetryError", () => {
+  const input = new RetryError({ foo: "bar" }, 3);
+  const result = isRetryError(input);
+  assertEquals(result, true);
+});
+
+Deno.test("isRetryError - Should return false when input is not an instance of RetryError", () => {
+  const input = "foo";
+  const result = isRetryError(input);
+  assertEquals(result, false);
+});
+
+Deno.test("parseRetryError - Should return an SDKError object with ok set to false and a specific message", () => {
+  const expectedError = {
+    ok: false,
+    message: "Retry limit reached. Could not get a response from the server",
+  };
+
+  const actualError = parseRetryError();
+
+  assertEquals(actualError, expectedError);
 });

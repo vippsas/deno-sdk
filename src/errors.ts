@@ -13,16 +13,18 @@ import { RecurringErrorFromAzure, RecurringErrorV3 } from "./mod.ts";
 export const parseProblemJSON = <TErr>(
   error: ProblemJSON,
 ): SDKError<TErr> => {
-  let customMessage: string | undefined | null = error.detail;
+  // If we have details return them
+  if (error.detail) {
+    return { ok: false, message: error.detail, error: error as TErr };
+  }
 
   // Catch EPayment and Webhook Problem JSON
   if ("extraDetails" in error && typeof error["extraDetails"] === "object") {
     const ePaymentError = error as EPaymentErrorResponse;
-    customMessage = (ePaymentError.extraDetails.length > 0)
-      ? `${ePaymentError.extraDetails?.[0].name} - ${
-        ePaymentError.extraDetails?.[0].reason
-      }`
-      : undefined;
+    const first = ePaymentError.extraDetails[0];
+    const message = first && `${first.name} - ${first.reason}` ||
+      "Unknown error";
+    return { ok: false, message, error: error as TErr };
   }
 
   // Catch Checkout Problem JSON
@@ -31,7 +33,9 @@ export const parseProblemJSON = <TErr>(
     typeof error["errors"] === "object"
   ) {
     const checkoutError = error as CheckoutErrorResponse;
-    customMessage = checkoutError.errors[0][0] || undefined;
+    const [first] = Object.values(checkoutError.errors);
+    const message = first && first[0] || "Unknown error";
+    return { ok: false, message, error: error as TErr };
   }
 
   // Catch QR Problem JSON
@@ -39,9 +43,10 @@ export const parseProblemJSON = <TErr>(
     "invalidParams" in error && typeof error["invalidParams"] === "object"
   ) {
     const qrError = error as QrErrorResponse;
-    customMessage = (qrError.invalidParams && qrError.invalidParams?.length > 0)
-      ? `${qrError.invalidParams[0].name} - ${qrError.invalidParams[0].reason}`
-      : undefined;
+    const first = qrError.invalidParams && qrError.invalidParams[0];
+    const message = first && `${first.name} - ${first.reason}` ||
+      "Unknown error";
+    return { ok: false, message, error: error as TErr };
   }
 
   // Catch Recurring Problem JSON
@@ -50,19 +55,13 @@ export const parseProblemJSON = <TErr>(
     typeof error["extraDetails"] === "object"
   ) {
     const recurringError = error as RecurringErrorV3;
-    customMessage =
-      (recurringError.extraDetails && recurringError.extraDetails?.length > 0)
-        ? `${recurringError.extraDetails[0].field} - ${
-          recurringError.extraDetails[0].text
-        }`
-        : undefined;
+    const first = recurringError.extraDetails && recurringError.extraDetails[0];
+    const message = first && `${first.field} - ${first.text}` ||
+      "Unknown error";
+    return { ok: false, message, error: error as TErr };
   }
 
-  return {
-    ok: false,
-    message: customMessage || "Unknown error",
-    error: error as TErr,
-  };
+  return { ok: false, message: "Unknown error", error: error as TErr };
 };
 
 /**
@@ -71,7 +70,7 @@ export const parseProblemJSON = <TErr>(
  * @returns True if the JSON object is an instance of RetryError,
  * false otherwise.
  */
-export const isRetryError = (json: JSON) => {
+export const isRetryError = (json: unknown) => {
   return json instanceof RetryError;
 };
 
@@ -131,8 +130,7 @@ export const parseError = <TErr>(
   // Catch Recurring Azure Error
   if (
     typeof error === "object" && error !== null && "responseInfo" in error &&
-    error["responseInfo"] === "object" && "result" in error &&
-    error["result"] === "object"
+    "result" in error
   ) {
     const azureError = error as RecurringErrorFromAzure;
     return {
