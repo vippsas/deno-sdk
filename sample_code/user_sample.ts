@@ -42,14 +42,12 @@ const payment = await client.payment.create(token, {
     value: 1000, // This value equals 10 NOK
   },
   paymentMethod: { type: "WALLET" },
-  customer: { phoneNumber: "4745044187" },
+  customer: { phoneNumber: "4712345678" },
   returnUrl: `https://yourwebsite.com/redirect`,
   userFlow: "WEB_REDIRECT",
   paymentDescription: "One pair of socks",
   profile: { scope: "name phoneNumber address birthDate" },
 });
-
-console.log("TODO REMOVE OWN PHONE NUMBER");
 
 // Check if the payment was created successfully
 if (!payment.ok) {
@@ -64,7 +62,7 @@ console.log("🎉 Payment created successfully!");
 const approve = await client.payment.forceApprove(
   token,
   payment.data.reference,
-  { customer: { phoneNumber: "4745044187" } },
+  { customer: { phoneNumber: "4712345678" } },
 );
 
 // Check if the payment was approved successfully
