@@ -26,7 +26,7 @@ const config = await client.login.discovery();
 
 if (!config.ok) {
   console.error("😟 Error discovering configuration 😟");
-  console.error(config.message);
+  console.error(config.error);
   Deno.exit(1);
 }
 

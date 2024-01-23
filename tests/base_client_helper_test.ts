@@ -2,7 +2,6 @@ import {
   buildRequest,
   createSDKUserAgent,
   getHeaders,
-  getUserAgent,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
 import { assert, assertEquals } from "./test_deps.ts";
@@ -115,10 +114,11 @@ Deno.test("getHeaders - Should omit headers", () => {
   assert(expectedHeaders["Merchant-Serial-Number"] === undefined);
 });
 
-Deno.test("getUserAgent - Should return the correct user agent", () => {
-  import.meta.url = "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts";
-  const userAgent = getUserAgent();
-  assert(userAgent !== "Vipps/Deno SDK/npm-require");
+Deno.test("createUserAgent - Should return the correct user agent for require", () => {
+  const expectedUserAgent = "Vipps/Deno SDK/npm-require";
+  const actualUserAgent = createSDKUserAgent(undefined);
+
+  assertEquals(actualUserAgent, expectedUserAgent);
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {

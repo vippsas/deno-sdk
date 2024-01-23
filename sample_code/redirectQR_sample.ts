@@ -27,7 +27,7 @@ const accessToken = await client.auth.getToken({
 // Check if the token was retrieved successfully
 if (!accessToken.ok) {
   console.error("😟 Error retrieving token 😟");
-  console.error(accessToken.message);
+  console.error(accessToken.error);
   Deno.exit(1);
 }
 
@@ -44,7 +44,7 @@ const qr = await client.redirectQR.create(token, "image/png", {
 // Check if the QR was created successfully
 if (!qr.ok) {
   console.error("😟 Error creating QR 😟");
-  console.error(qr.message);
+  console.error(qr.error);
   Deno.exit(1);
 }
 
@@ -53,7 +53,7 @@ const qrInfo = await client.redirectQR.info(token, qrId, "image/png");
 // Check if the QR was retrieved successfully
 if (!qrInfo.ok) {
   console.error("😟 Error retrieving QR 😟");
-  console.error(qrInfo.message);
+  console.error(qrInfo.error);
   Deno.exit(1);
 }
 

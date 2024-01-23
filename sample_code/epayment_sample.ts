@@ -28,7 +28,7 @@ const accessToken = await client.auth.getToken({
 // Check if the token was retrieved successfully
 if (!accessToken.ok) {
   console.error("😟 Error retrieving token 😟");
-  console.error(accessToken.message);
+  console.error(accessToken.error);
   Deno.exit(1);
 }
 
