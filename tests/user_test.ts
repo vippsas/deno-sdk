@@ -8,7 +8,7 @@ Deno.test("userRequestFactory.info should return the correct RequestData object"
   const expectedRequestData = {
     url: "/vipps-userinfo-api/userinfo/your-sub",
     method: "GET",
-    token: "your-token"
+    token: "your-token",
   };
 
   const requestData = userRequestFactory.info(token, sub);
