@@ -53,7 +53,7 @@ export const getHeaders = (
   const defaultHeaders: DefaultHeaders = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token || ""}`,
-    "User-Agent": getUserAgent(import.meta.url),
+    "User-Agent": getUserAgent(),
     "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
     "Merchant-Serial-Number": cfg.merchantSerialNumber,
     "Vipps-System-Name": cfg.systemName || "",
@@ -80,7 +80,9 @@ export const getHeaders = (
  * Returns the user agent string for the client.
  * @returns The user agent string.
  */
-export const getUserAgent = (metaUrl?: string): string => {
+export const getUserAgent = (): string => {
+  const metaUrl: string | undefined = import.meta.url;
+  
   // If the sdk is loaded using require, import.meta.url will be undefined
   if (!metaUrl) {
     return "Vipps/Deno SDK/npm-require";

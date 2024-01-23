@@ -1,6 +1,7 @@
 import { baseClient } from "../src/base_client.ts";
 import { assertEquals, mf } from "./test_deps.ts";
 import { RequestData } from "../src/types.ts";
+import { RetryError } from "../src/deps.ts";
 
 Deno.test("makeRequest - Should exist", () => {
   const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
@@ -85,9 +86,49 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
   mf.mock("GET@/foo", () => {
     count++;
     if (count < 3) {
-      return new Response(JSON.stringify({ ok: false, error: "Bad Request" }), {
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ ok: false, error: "Internal Server Error" }),
+        {
+          status: 500,
+        },
+      );
+    }
+
+    return new Response(JSON.stringify({}), {
+      status: 200,
+    });
+  });
+
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    retryRequests: true,
+  };
+  const requestData: RequestData<unknown, unknown> = {
+    method: "GET",
+    url: "/foo",
+  };
+
+  const client = baseClient(cfg);
+
+  const response = await client.makeRequest(requestData);
+  assertEquals(response.ok, true);
+
+  mf.reset();
+});
+
+Deno.test("makeRequest - Should not return ok after 4 retries", async () => {
+  mf.install(); // mock out calls to `fetch`
+  let count = 0;
+  mf.mock("GET@/foo", () => {
+    count++;
+    if (count < 5) {
+      return new Response(
+        JSON.stringify({ ok: false, error: "Internal Server Error" }),
+        {
+          status: 500,
+        },
+      );
     }
     return new Response(JSON.stringify({}), {
       status: 200,
@@ -106,12 +147,31 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
 
   const client = baseClient(cfg);
 
-  const firstResponse = await client.makeRequest(requestData);
-  assertEquals(firstResponse.ok, false);
+  const response = await client.makeRequest(requestData);
+  assertEquals(response.ok, false);
 
-  const secondResponse = await client.makeRequest(requestData);
-  assertEquals(secondResponse.ok, false);
+  mf.reset();
+});
 
-  const thirdResponse = await client.makeRequest(requestData);
-  assertEquals(thirdResponse.ok, true);
+Deno.test("makeRequest - Should catch Retry Errors", async () => {
+  mf.install(); // mock out calls to `fetch`
+  mf.mock("GET@/foo", () => {
+    throw new RetryError({ foo: "bar" }, 3);
+  });
+
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    retryRequests: true,
+  };
+  const requestData: RequestData<unknown, unknown> = {
+    method: "GET",
+    url: "/foo",
+  };
+
+  const client = baseClient(cfg);
+
+  const response = await client.makeRequest(requestData);
+  assertEquals(response.ok, false);
+  mf.reset();
 });

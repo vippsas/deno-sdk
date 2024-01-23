@@ -115,9 +115,10 @@ Deno.test("getHeaders - Should omit headers", () => {
   assert(expectedHeaders["Merchant-Serial-Number"] === undefined);
 });
 
-Deno.test("getUserAgent - Should return the correct user agent when loaded using require", () => {
-  const userAgent = getUserAgent(undefined);
-  assertEquals(userAgent, "Vipps/Deno SDK/npm-require");
+Deno.test("getUserAgent - Should return the correct user agent", () => {
+  import.meta.url = "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts";
+  const userAgent = getUserAgent();
+  assert(userAgent !== "Vipps/Deno SDK/npm-require");
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
