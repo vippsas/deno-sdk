@@ -96,22 +96,6 @@ const isQrProblemJSON = (json: unknown): json is QrErrorResponse => {
 };
 
 /**
- * Returns the error message for the EPaymentErrorResponse.
- * If the error has extra details, it returns the first detail's name and reason.
- * Otherwise, it returns "Unknown error".
- *
- * @param error - The EPaymentErrorResponse object.
- * @returns The error message.
- */
-const getEPaymentMessage = (error: EPaymentErrorResponse) => {
-  if (error.extraDetails && error.extraDetails.length > 0) {
-    const first = error.extraDetails[0];
-    return `${first.name} - ${first.reason}`;
-  }
-  return "Unknown error";
-};
-
-/**
  * Checks if the provided JSON object is a CheckoutErrorResponse.
  *
  * @param json The JSON object to check.
@@ -138,9 +122,24 @@ const isRecurringProblemJSON = (
 ): json is RecurringErrorV3 => {
   return (
     typeof json === "object" && json !== null &&
-    "contextId" in json && "extraDetails" in json &&
-    typeof json["extraDetails"] === "object" && json["extraDetails"] !== null
+    "extraDetails" in json
   );
+};
+
+/**
+ * Returns the error message for the EPaymentErrorResponse.
+ * If the error has extra details, it returns the first detail's name and reason.
+ * Otherwise, it returns "Unknown error".
+ *
+ * @param error - The EPaymentErrorResponse object.
+ * @returns The error message.
+ */
+const getEPaymentMessage = (error: EPaymentErrorResponse) => {
+  if (error.extraDetails && error.extraDetails.length > 0) {
+    const first = error.extraDetails[0];
+    return `${first.name} - ${first.reason}`;
+  }
+  return "Unknown error";
 };
 
 /**
@@ -166,8 +165,8 @@ const getCheckoutMessage = (error: CheckoutErrorResponse) => {
  * @returns The QR message if available, otherwise "Unknown error".
  */
 const getQrMessage = (error: QrErrorResponse) => {
-  const first = error.invalidParams && error.invalidParams[0];
-  if (first) {
+  if (error.invalidParams && error.invalidParams.length > 0) {
+    const first = error.invalidParams[0];
     return `${first.name} - ${first.reason}`;
   }
   return "Unknown error";
@@ -182,8 +181,8 @@ const getQrMessage = (error: QrErrorResponse) => {
  * @returns The recurring error message.
  */
 const getRecurringMessage = (error: RecurringErrorV3) => {
-  const first = error.extraDetails && error.extraDetails[0];
-  if (first && first.field && first.text) {
+  if (error.extraDetails && error.extraDetails.length > 0) {
+    const first = error.extraDetails[0];
     return `${first.field} - ${first.text}`;
   }
   return "Unknown error";

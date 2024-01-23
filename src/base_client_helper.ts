@@ -82,7 +82,7 @@ export const getHeaders = (
  */
 export const getUserAgent = (): string => {
   const metaUrl: string | undefined = import.meta.url;
-  
+
   // If the sdk is loaded using require, import.meta.url will be undefined
   if (!metaUrl) {
     return "Vipps/Deno SDK/npm-require";

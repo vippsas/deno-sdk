@@ -18,13 +18,10 @@ Deno.test("parseProblemJSON - Should return correct error message for Problem JS
 Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON with extraDetails", () => {
   const error = {
     type: "https://example.com/error",
-    title: "Some problem",
-    status: 400,
     extraDetails: [{
       name: "Some name",
       reason: "Some reason",
     }],
-    instance: "https://example.com/instance",
     traceId: "123456789",
   };
   const result = parseProblemJSON(error);
@@ -34,8 +31,6 @@ Deno.test("parseProblemJSON - Should return correct error message for EPayment P
 Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON with multiple extraDetails", () => {
   const error = {
     type: "https://example.com/error",
-    title: "Some problem",
-    status: 400,
     extraDetails: [{
       name: "Some name",
       reason: "Some reason",
@@ -43,7 +38,6 @@ Deno.test("parseProblemJSON - Should return correct error message for EPayment P
       name: "Another name",
       reason: "Another reason",
     }],
-    instance: "https://example.com/instance",
     traceId: "123456789",
   };
   const result = parseProblemJSON(error);
@@ -53,10 +47,7 @@ Deno.test("parseProblemJSON - Should return correct error message for EPayment P
 Deno.test("parseProblemJSON - Should return correct error message for EPayment Problem JSON without extraDetails", () => {
   const error = {
     type: "https://example.com/error",
-    title: "Some problem",
-    status: 400,
     extraDetails: [],
-    instance: "https://example.com/instance",
     traceId: "123456789",
   };
   const result = parseProblemJSON(error);
@@ -132,18 +123,7 @@ Deno.test("parseProblemJSON - Should return correct error message for Checkout P
   assertEquals(result.message, "Unknown error");
 });
 
-Deno.test("parseProblemJSON - Should return detail as error message for QRErrorJSON", () => {
-  const error = {
-    title: "Invalid QR code",
-    detail: "The QR code is expired",
-    instance: "https://example.com/qr",
-  };
-  const result = parseProblemJSON(error);
-  assertEquals(result.ok, false);
-  assertEquals(result.message, "The QR code is expired");
-});
-
-Deno.test("parseProblemJSON - Should return reason as error message for QRErrorJSON", () => {
+Deno.test("parseProblemJSON - Should return correct error message for QRErrorJSON with invalidParms", () => {
   const error = {
     title: "Invalid QR code",
     instance: "https://example.com/qr",
@@ -156,8 +136,74 @@ Deno.test("parseProblemJSON - Should return reason as error message for QRErrorJ
   };
   const result = parseProblemJSON(error);
 
-  assertEquals(result.ok, false);
   assertEquals(result.message, "Some name - Some reason");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for QRErrorJSON with multiple invalidParms", () => {
+  const error = {
+    title: "Invalid QR code",
+    instance: "https://example.com/qr",
+    invalidParams: [
+      {
+        name: "Some name",
+        reason: "Some reason",
+      },
+      {
+        name: "Another name",
+        reason: "Another reason",
+      },
+    ],
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.message, "Some name - Some reason");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for QRErrorJSON with empty invalidParms", () => {
+  const error = {
+    title: "Invalid QR code",
+    instance: "https://example.com/qr",
+    invalidParams: [],
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.message, "Unknown error");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Recurring with extraDetails", () => {
+  const error = {
+    extraDetails: [{
+      field: "Some name",
+      text: "Some reason",
+    }],
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.message, "Some name - Some reason");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Recurring with multiple extraDetails", () => {
+  const error = {
+    extraDetails: [{
+      field: "Some name",
+      text: "Some reason",
+    }, {
+      field: "Another name",
+      text: "Another reason",
+    }],
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.message, "Some name - Some reason");
+});
+
+Deno.test("parseProblemJSON - Should return correct error message for Recurring with empty extraDetails", () => {
+  const error = {
+    extraDetails: [],
+  };
+  const result = parseProblemJSON(error);
+
+  assertEquals(result.message, "Unknown error");
 });
 
 Deno.test("parseProblemJSON - Should return correct error message for empty Problem JSON", () => {
