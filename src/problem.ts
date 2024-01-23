@@ -58,7 +58,7 @@ export const parseProblemJSON = <TErr>(
  * @param json The JSON object to check.
  * @returns True if the JSON object is a ProblemJSON with a detail property, false otherwise.
  */
-const isProblemJSONwithDetail = (
+export const isProblemJSONwithDetail = (
   json: unknown,
 ): json is ProblemJSON & { detail: string } => {
   return (

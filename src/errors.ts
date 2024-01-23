@@ -1,6 +1,7 @@
 import { RetryError, STATUS_CODE } from "./deps.ts";
 import { SDKError } from "./apis/types/shared_types.ts";
 import { RecurringErrorFromAzure } from "./mod.ts";
+import { isProblemJSONwithDetail } from "./problem.ts";
 
 /**
  * Checks if the provided JSON object is an instance of RetryError.
@@ -33,6 +34,14 @@ export const parseError = <TErr>(
   error: unknown,
   status?: number,
 ): SDKError<TErr> => {
+  /**
+   * Some times, problem jsons are returned without the correct mime type.
+   * Therefore we check for them here and return the detail message.
+   */
+  if (isProblemJSONwithDetail(error)) {
+    return { ok: false, message: error.detail };
+  }
+
   // Catch connection errors
   if (
     error instanceof TypeError &&
@@ -82,6 +91,8 @@ export const parseError = <TErr>(
   if (error instanceof Error) {
     return { ok: false, message: `${error.name} - ${error.message}` };
   }
+
+  console.log("DEFAULT");
 
   // Default to error as string
   return { ok: false, message: "Unknown error" };
