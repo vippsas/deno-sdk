@@ -9,7 +9,7 @@ Deno.test("getToken - Should have correct url and header", async () => {
   mf.mock("POST@/accesstoken/get", (req: Request) => {
     assertEquals(req.url, "https://api.vipps.no/accesstoken/get");
     assertEquals(req.headers.has("client_id"), true);
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
+    return new Response(JSON.stringify({}), {
       status: 200,
     });
   });

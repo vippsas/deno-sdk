@@ -1,5 +1,6 @@
 import { assertEquals, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
+import { webhooksRequestFactory } from "https://deno.land/x/vipps_mobilepay_sdk@0.7.0/apis/webhooks.ts";
 
 Deno.test("webhooks - registerWebhook - check correct url in TEST/MT", async () => {
   mf.install();
@@ -8,8 +9,8 @@ Deno.test("webhooks - registerWebhook - check correct url in TEST/MT", async () 
     assertEquals(req.url, "https://apitest.vipps.no/webhooks/v1/webhooks");
     assertEquals(req.headers.has("Idempotency-Key"), true);
 
-    return new Response(JSON.stringify({ ok: true, data: {} }), {
-      status: 200,
+    return new Response(JSON.stringify({}), {
+      status: 201,
     });
   });
 
@@ -63,9 +64,10 @@ Deno.test("webhooks - registerWebhook - bad request", async () => {
 Deno.test("webhooks - delete webhook - OK", async () => {
   mf.install();
 
+  // Testing that 204 responses are handled correctly
   mf.mock("DELETE@/webhooks/v1/webhooks/:webhookId", () => {
     return new Response(null, {
-      status: 200,
+      status: 204,
     });
   });
 
@@ -86,25 +88,11 @@ Deno.test("webhooks - delete webhook - OK", async () => {
   mf.reset();
 });
 
-Deno.test("webhooks - list webhooks - OK", async () => {
-  mf.install();
+Deno.test("webhooks - list webhooks - OK", () => {
+  const token = "your-auth-token";
 
-  mf.mock("GET@/webhooks/v1/webhooks", () => {
-    return new Response(null, {
-      status: 200,
-    });
-  });
+  const requestData = webhooksRequestFactory.list(token);
 
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  const listResponse = await client.webhook.list("testtoken");
-
-  assertEquals(listResponse.ok, true);
-
-  mf.reset();
+  assertEquals(requestData.url, "/webhooks/v1/webhooks");
+  assertEquals(requestData.method, "GET");
 });

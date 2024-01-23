@@ -1,5 +1,30 @@
 import { Scope } from "./shared_types.ts";
 
+/**
+ * ErrorResponse
+ * Error responses are sent when an error (e.g. unauthorized,
+ * bad request, etc) occurred.
+ *
+ * @example {"error":"invalid_request","error_code":400,
+ * "error_debug":"The request is missing a required parameter,
+ * includes an invalid parameter or is otherwise malformed."}
+ */
+export type LoginErrorResponse = {
+  /** Name is the error name. */
+  error: string;
+  /**
+   * Code represents the error status code (404, 403, 401, ...).
+   *
+   * @format int64
+   */
+  error_code?: number;
+  /**
+   * Debug contains debug information.
+   * This is usually not available and has to be enabled.
+   */
+  error_debug?: string;
+};
+
 export type LoginAuthQueryParams = {
   /** Value MUST be set to "code". */
   response_type: "code";
@@ -180,29 +205,4 @@ export type LoginWellKnownResponse = {
    * as described in Section 9 of OpenID Connect Core 1.0
    */
   token_endpoint_auth_methods_supported?: string[];
-};
-
-/**
- * ErrorResponse
- * Error responses are sent when an error (e.g. unauthorized,
- * bad request, etc) occurred.
- *
- * @example {"error":"invalid_request","error_code":400,
- * "error_debug":"The request is missing a required parameter,
- * includes an invalid parameter or is otherwise malformed."}
- */
-export type LoginErrorResponse = {
-  /** Name is the error name. */
-  error: string;
-  /**
-   * Code represents the error status code (404, 403, 401, ...).
-   *
-   * @format int64
-   */
-  error_code?: number;
-  /**
-   * Debug contains debug information.
-   * This is usually not available and has to be enabled.
-   */
-  error_debug?: string;
 };

@@ -1,74 +1,14 @@
-import { filterKeys, isErrorStatus, retry } from "./deps.ts";
-import { parseError } from "./errors.ts";
+import { filterKeys } from "./deps.ts";
 import {
   ClientConfig,
-  ClientResponse,
   DefaultHeaders,
   OmitHeaders,
   RequestData,
 } from "./types.ts";
 
 /**
- * Executes a fetch request with optional retry logic.
- *
- * @param request - The request to be executed.
- * @param retryRequest - Whether to retry the request if it fails. Default is true.
- * @returns A promise that resolves to the response of the request.
- */
-export const fetchRetry = async <TOk, TErr>(
-  request: Request,
-  retryRequest = true,
-): Promise<ClientResponse<TOk, TErr>> => {
-  // Execute request without retry
-  if (!retryRequest) {
-    return await fetchJSON<TOk, TErr>(request);
-  }
-  // Execute request using retry
-  const req = retry(async () => {
-    return await fetchJSON<TOk, TErr>(request);
-  }, {
-    multiplier: 2,
-    maxTimeout: 3000,
-    maxAttempts: 3,
-    minTimeout: 1000,
-    jitter: 0,
-  });
-  return req;
-};
-
-/**
- * Fetches JSON data from the specified request.
- * @param request - The request to fetch JSON data from.
- * @returns A promise that resolves to a ClientResponse object containing the fetched data.
- * @template TOk - The type of the successful response data.
- * @template TErr - The type of the error response data.
- */
-export const fetchJSON = async <TOk, TErr>(
-  request: Request,
-): Promise<ClientResponse<TOk, TErr>> => {
-  const response = await fetch(request);
-
-  if (isErrorStatus(response.status)) {
-    // Bad Request
-    if (response.status === 400) {
-      const error = await response.json();
-      return parseError<TErr>(error);
-    } else {
-      // Throwing an error here will trigger a retry
-      throw new Error(response.statusText);
-    }
-  }
-  const text = await response.text();
-  // Handle empty response body
-  if (text === "") {
-    return { ok: true, data: {} as TOk };
-  }
-  const json = JSON.parse(text);
-  return { ok: true, data: json as TOk };
-};
-
-/**
  * Builds a Request object based on the provided configuration and request data.
+ *
  * @param cfg - The client configuration.
  * @param requestData - The request data containing method, headers, token, body, and URL.
  * @returns A Request object.
@@ -141,7 +81,8 @@ export const getHeaders = (
  * @returns The user agent string.
  */
 export const getUserAgent = (): string => {
-  const metaUrl = import.meta.url || undefined;
+  const metaUrl: string | undefined = import.meta.url;
+
   // If the sdk is loaded using require, import.meta.url will be undefined
   if (!metaUrl) {
     return "Vipps/Deno SDK/npm-require";
@@ -160,7 +101,6 @@ export const getUserAgent = (): string => {
 export const createSDKUserAgent = (metaUrl: string): string => {
   const url = new URL(metaUrl);
 
-  let userAgent = "Vipps/Deno SDK/";
   // Check if the module was loaded from deno.land
   if (
     url.host === "deno.land" &&
@@ -168,13 +108,10 @@ export const createSDKUserAgent = (metaUrl: string): string => {
   ) {
     // Extract the module version from the URL
     const sdkVersion = url.pathname.split("@")[1].split("/")[0];
-    userAgent += sdkVersion;
+    return `Vipps/Deno SDK/${sdkVersion}`;
   } // Or if the module was loaded from npm
   else if (url.pathname.includes("node_modules")) {
-    userAgent += "npm-module";
+    return `Vipps/Deno SDK/npm-module`;
   } // Otherwise, we don't know where the module was loaded from
-  else {
-    userAgent += "unknown";
-  }
-  return userAgent;
+  return `Vipps/Deno SDK/unknown`;
 };

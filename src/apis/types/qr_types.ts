@@ -1,6 +1,18 @@
 import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
 
 /**
+ * Represents the response for a QR error.
+ */
+export type QrErrorResponse = ProblemJSON & {
+  invalidParams?: {
+    /** @minLength 1 */
+    name: string;
+    /** @minLength 1 */
+    reason: string;
+  }[];
+};
+
+/**
  * @description Requested image format.
  * Supported values: {image/*,image/png, image/svg+xml, text/targetUrl}
  * @example "image/png"
@@ -144,13 +156,4 @@ export type QrWebhookEvent = {
    * @example "2023-10-06T10:45:40.3061965Z"
    */
   initiatedAt: string;
-};
-
-export type QrErrorResponse = ProblemJSON & {
-  invalidParams?: {
-    /** @minLength 1 */
-    name: string;
-    /** @minLength 1 */
-    reason: string;
-  }[];
 };
