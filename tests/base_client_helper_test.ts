@@ -2,7 +2,6 @@ import {
   buildRequest,
   createSDKUserAgent,
   getHeaders,
-  getUserAgent,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
 import { assert, assertEquals } from "./test_deps.ts";

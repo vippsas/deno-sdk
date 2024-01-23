@@ -1,5 +1,4 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
-import { RetryError } from "../src/deps.ts";
 import { parseError } from "../src/errors.ts";
 import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
 import { assertEquals, mf } from "./test_deps.ts";
