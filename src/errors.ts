@@ -1,7 +1,6 @@
 import { RetryError, STATUS_CODE } from "./deps.ts";
 import { SDKError } from "./apis/types/shared_types.ts";
 import { RecurringErrorFromAzure } from "./mod.ts";
-import { isProblemJSONwithDetail } from "./problem.ts";
 
 /**
  * Checks if the provided JSON object is an instance of RetryError.
@@ -34,10 +33,7 @@ export const parseError = <TErr>(
   error: unknown,
   status?: number,
 ): SDKError<TErr> => {
-  /**
-   * Some times, problem jsons are returned without the correct mime type.
-   * Therefore we check for them here and return the detail message.
-   */
+  // Catch ProblemJSON with details
   if (isProblemJSONwithDetail(error)) {
     return { ok: false, message: error.detail };
   }
@@ -94,4 +90,17 @@ export const parseError = <TErr>(
 
   // Default to error as string
   return { ok: false, message: "Unknown error" };
+};
+
+/**
+ * Checks if the given JSON object is a ProblemJSON with a detail property.
+ *
+ * @param json The JSON object to check.
+ * @returns True if the JSON object is a ProblemJSON with a detail property, false otherwise.
+ */
+const isProblemJSONwithDetail = (json: unknown): json is { detail: string } => {
+  return (
+    typeof json === "object" && json !== null &&
+    "detail" in json && typeof json["detail"] === "string"
+  );
 };

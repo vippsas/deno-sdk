@@ -111,13 +111,16 @@ Deno.test("fetchJSON - Catch Empty Response", async () => {
   mf.reset();
 });
 
-Deno.test("fetchJSON - Catch Problem JSON", async () => {
+Deno.test("fetchJSON - Catch Problem JSON with detail", async () => {
   mf.install(); // mock out calls to `fetch`
 
   mf.mock("GET@/api", () => {
     return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "content-type": "application/problem+json" } },
+      JSON.stringify({
+        type: "https://example.com/error",
+        detail: "Some detail",
+      }),
+      { headers: { "content-type": "application/problem+json" }, status: 400 },
     );
   });
 
@@ -126,36 +129,6 @@ Deno.test("fetchJSON - Catch Problem JSON", async () => {
   const result = await fetchJSON(request) as any;
 
   assertEquals(result.ok, false);
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch Problem JSON - Case insensitive", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/foo", () => {
-    return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "Content-type": "application/problem+json" } },
-    );
-  });
-
-  mf.mock("GET@/bar", () => {
-    return new Response(
-      JSON.stringify({ type: "https://example.com/error" }),
-      { headers: { "Content-Type": "application/problem+json" } },
-    );
-  });
-
-  const requestFoo = new Request("https://example.com/foo");
-  // deno-lint-ignore no-explicit-any
-  const resultFoo = await fetchJSON(requestFoo) as any;
-
-  assertEquals(resultFoo.ok, false);
-
-  const requestBar = new Request("https://example.com/bar");
-  // deno-lint-ignore no-explicit-any
-  const resultBar = await fetchJSON(requestBar) as any;
-
-  assertEquals(resultBar.ok, false);
+  assertEquals(result.message, "Some detail");
   mf.reset();
 });

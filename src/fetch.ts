@@ -1,12 +1,10 @@
 import {
   isServerErrorStatus,
   isSuccessfulStatus,
-  parseMediaType,
   retry,
   STATUS_CODE,
 } from "./deps.ts";
 import { parseError } from "./errors.ts";
-import { parseProblemJSON } from "./problem.ts";
 import { ClientResponse } from "./types.ts";
 
 /**
@@ -55,24 +53,6 @@ export const fetchJSON = async <TOk, TErr>(
    */
   if (response.status === STATUS_CODE.NoContent) {
     return { ok: true, data: {} as TOk };
-  }
-
-  /**
-   * Check MIME type of the response, assuming headers are case insensitive
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
-   */
-  const contentHeader = response.headers.get("content-type") || "";
-  const mediaType = parseMediaType(contentHeader)[0] || "";
-
-  /**
-   * If the MIME is a ProblemJSON, parse it and return it as an error.
-   * By returning an error object, the request will not be retried.
-   *
-   * Read more about ProblemJSON here: https://tools.ietf.org/html/rfc7807
-   */
-  if (mediaType === "application/problem+json") {
-    const error = await response.json();
-    return parseProblemJSON<TErr>(error);
   }
 
   /**
