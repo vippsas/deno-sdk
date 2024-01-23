@@ -37,15 +37,17 @@ export const Client = (options: ClientConfig) => {
   // Create the API client
   const apiClient = {
     auth: createApi(client, authRequestFactory),
-    callbackQR: createApi(client, callbackQRRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
     login: createApi(client, loginRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
+    qr: {
+      callback: createApi(client, callbackQRRequestFactory),
+      redirect: createApi(client, redirectQRRequestFactory),
+    },
     recurring: {
       charge: createApi(client, chargeRequestFactory),
       agreement: createApi(client, agreementRequestFactory),
     },
-    redirectQR: createApi(client, redirectQRRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
   } satisfies ApiClient;
 
