@@ -1,27 +1,5 @@
 import { RetryError, STATUS_CODE } from "./deps.ts";
-import { SDKError } from "./apis/types/shared_types.ts";
-import { RecurringErrorFromAzure } from "./mod.ts";
-
-/**
- * Checks if the provided JSON object is an instance of RetryError.
- * @param json The JSON object to check.
- * @returns True if the JSON object is an instance of RetryError,
- * false otherwise.
- */
-export const isRetryError = (json: unknown) => {
-  return json instanceof RetryError;
-};
-
-/**
- * Parses the error and returns an object with error details.
- * @returns An object with error details.
- */
-export const parseRetryError = (): SDKError<undefined> => {
-  return {
-    ok: false,
-    message: "Retry limit reached. Could not get a response from the server",
-  };
-};
+import { SDKError } from "./types.ts";
 
 /**
  * Parses the error and returns an object with error details.
@@ -33,9 +11,15 @@ export const parseError = <TErr>(
   error: unknown,
   status?: number,
 ): SDKError<TErr> => {
-  // Catch ProblemJSON with details
-  if (isProblemJSONwithDetail(error)) {
-    return { ok: false, message: error.detail };
+  // Catch RetryError
+  if (error instanceof RetryError) {
+    return {
+      ok: false,
+      error: {
+        message:
+          "Retry limit reached. Could not get a response from the server",
+      },
+    };
   }
 
   // Catch connection errors
@@ -45,7 +29,7 @@ export const parseError = <TErr>(
   ) {
     return {
       ok: false,
-      message: "Could not connect to Vipps MobilePay API",
+      error: { message: "Could not connect to Vipps MobilePay API" },
     };
   }
 
@@ -53,54 +37,23 @@ export const parseError = <TErr>(
   if (status === STATUS_CODE.Forbidden) {
     return {
       ok: false,
-      message:
-        "Your credentials are not authorized for this product, please visit portal.vipps.no",
-    };
-  }
-
-  // Catch AccessTokenError
-  if (
-    typeof error === "object" && error !== null && "error" in error &&
-    "error_description" in error
-  ) {
-    return {
-      ok: false,
-      message: `${error.error} - ${error.error_description}`,
-      error: error as TErr,
-    };
-  }
-
-  // Catch Recurring Azure Error
-  if (
-    typeof error === "object" && error !== null && "responseInfo" in error &&
-    "result" in error
-  ) {
-    const azureError = error as RecurringErrorFromAzure;
-    return {
-      ok: false,
-      message: azureError.result.message,
-      error: error as TErr,
+      error: {
+        message:
+          "Your credentials are not authorized for this product, please visit portal.vipps.no",
+      },
     };
   }
 
   // Catch regular errors
   if (error instanceof Error) {
-    return { ok: false, message: `${error.name} - ${error.message}` };
+    return { ok: false, error: { message: error.message } };
+  }
+
+  // If error is object, return it
+  if (typeof error === "object") {
+    return { ok: false, error: error as TErr };
   }
 
   // Default to error as string
-  return { ok: false, message: "Unknown error" };
-};
-
-/**
- * Checks if the given JSON object is a ProblemJSON with a detail property.
- *
- * @param json The JSON object to check.
- * @returns True if the JSON object is a ProblemJSON with a detail property, false otherwise.
- */
-const isProblemJSONwithDetail = (json: unknown): json is { detail: string } => {
-  return (
-    typeof json === "object" && json !== null &&
-    "detail" in json && typeof json["detail"] === "string"
-  );
+  return { ok: false, error: { message: String(error) } };
 };

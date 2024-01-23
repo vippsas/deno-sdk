@@ -32,7 +32,6 @@ Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
   // deno-lint-ignore no-explicit-any
   const result = await fetchJSON(request) as any;
   assertEquals(result.ok, false);
-  assert(result.message !== undefined);
   mf.reset();
 });
 
@@ -50,7 +49,7 @@ Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
   // deno-lint-ignore no-explicit-any
   const result = await fetchJSON(request) as any;
   assertEquals(result.ok, false);
-  assert(result.message !== undefined);
+  assert(result.error.message !== undefined);
   mf.reset();
 });
 
@@ -108,27 +107,5 @@ Deno.test("fetchJSON - Catch Empty Response", async () => {
 
   assertEquals(result.ok, true);
   assertEquals(result.data, {});
-  mf.reset();
-});
-
-Deno.test("fetchJSON - Catch Problem JSON with detail", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/api", () => {
-    return new Response(
-      JSON.stringify({
-        type: "https://example.com/error",
-        detail: "Some detail",
-      }),
-      { headers: { "content-type": "application/problem+json" }, status: 400 },
-    );
-  });
-
-  const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
-
-  assertEquals(result.ok, false);
-  assertEquals(result.message, "Some detail");
   mf.reset();
 });

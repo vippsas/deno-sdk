@@ -39,7 +39,7 @@ const checkout = await client.checkout.create(clientId, clientSecret, {
 // Check if the checkout session was created successfully
 if (!checkout.ok) {
   console.error("😟 Error creating checkout session 😟");
-  console.log(checkout.message);
+  console.log(checkout.error);
   Deno.exit(1);
 }
 

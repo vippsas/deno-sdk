@@ -8,11 +8,12 @@ export type ClientResponse<TOk, TErr> =
     ok: true;
     data: TOk;
   }
-  | {
-    ok: false;
-    message: string;
-    error?: TErr;
-  };
+  | SDKError<TErr>;
+
+export type SDKError<TErr> = {
+  ok: false;
+  error: TErr | { message: string };
+};
 
 export type ClientConfig = {
   /** Vipps Subscription key for the API product. Found in the Vipps portal.
