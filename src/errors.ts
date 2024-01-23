@@ -92,8 +92,6 @@ export const parseError = <TErr>(
     return { ok: false, message: `${error.name} - ${error.message}` };
   }
 
-  console.log("DEFAULT");
-
   // Default to error as string
   return { ok: false, message: "Unknown error" };
 };
