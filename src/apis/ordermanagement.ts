@@ -1,36 +1,49 @@
 import {
-  OrderManagementAddCategoryOKResponse,
   OrderManagementAddImageOKResponse,
-  OrderManagementAddImageRequest,
-  OrderManagementAddReceiptOKResponse,
-  OrderManagementAddReceiptRequest,
   OrderManagementErrorResponse,
   OrderManagementGetOrderOKResponse,
+  OrderManagementImage,
+  OrderManagementOKResponse,
+  OrderManagementOrder,
+  OrderManagementOrderId,
   OrderManagementPaymentType,
-  TypedOrderManagementAddCategoryToOrderRequest,
+  OrderManagementReceipt,
 } from "./types/ordermanagement_types.ts";
 import { RequestData } from "../types.ts";
 
+/**
+ * Factory object for creating request data for the Order Management API.
+ */
 export const orderManagementRequestFactory = {
-  addCategoryToOrder(
+  /**
+   * The category adds a link, specified by you, to the Transaction page on
+   * the Vipps MobilePay app. Only one (the latest) category is shown in the
+   * app.
+   */
+  addCategory(
     token: string,
+    orderId: OrderManagementOrderId,
     paymentType: OrderManagementPaymentType,
-    orderId: string,
-    body: TypedOrderManagementAddCategoryToOrderRequest,
+    body: OrderManagementOrder,
   ): RequestData<
-    OrderManagementAddCategoryOKResponse,
+    OrderManagementOKResponse,
     OrderManagementErrorResponse
   > {
     return {
       url: `/order-management/v2/${paymentType}/categories/${orderId}`,
       method: "PUT",
-      body: body,
+      body,
       token,
     };
   },
+
+  /**
+   * Endpoint for uploading images. A imageId will be returned that
+   * can be used when adding metadata to orders.
+   */
   addImage(
     token: string,
-    body: OrderManagementAddImageRequest,
+    body: OrderManagementImage,
   ): RequestData<
     OrderManagementAddImageOKResponse,
     OrderManagementErrorResponse
@@ -38,14 +51,38 @@ export const orderManagementRequestFactory = {
     return {
       url: "/order-management/v1/images",
       method: "POST",
-      body: body,
+      body,
       token,
     };
   },
-  getOrderWithCategoryAndReceipt(
+
+  /**
+   * Add receipt to an order.
+   */
+  addReceipt(
     token: string,
+    orderId: OrderManagementOrderId,
     paymentType: OrderManagementPaymentType,
-    orderId: string,
+    body: OrderManagementReceipt,
+  ): RequestData<
+    OrderManagementOKResponse,
+    OrderManagementErrorResponse
+  > {
+    return {
+      url: `/order-management/v2/${paymentType}/receipts/${orderId}`,
+      method: "POST",
+      body,
+      token,
+    };
+  },
+
+  /**
+   * Get order with category and receipt
+   */
+  info(
+    token: string,
+    orderId: OrderManagementOrderId,
+    paymentType: OrderManagementPaymentType,
   ): RequestData<
     OrderManagementGetOrderOKResponse,
     OrderManagementErrorResponse
@@ -53,22 +90,6 @@ export const orderManagementRequestFactory = {
     return {
       url: `/order-management/v2/${paymentType}/${orderId}`,
       method: "GET",
-      token,
-    };
-  },
-  addReceipt(
-    token: string,
-    body: OrderManagementAddReceiptRequest,
-    paymentType: OrderManagementPaymentType,
-    orderId: string,
-  ): RequestData<
-    OrderManagementAddReceiptOKResponse,
-    OrderManagementErrorResponse
-  > {
-    return {
-      url: `/order-management/v2/${paymentType}/receipts/${orderId}`,
-      method: "POST",
-      body: body,
       token,
     };
   },

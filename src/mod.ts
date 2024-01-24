@@ -45,7 +45,7 @@ export const Client = (options: ClientConfig) => {
     auth: createApi(client, authRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
     login: createApi(client, loginRequestFactory),
-    orderManagement: createApi(client, orderManagementRequestFactory),
+    order: createApi(client, orderManagementRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
     qr: {
       callback: createApi(client, callbackQRRequestFactory),
