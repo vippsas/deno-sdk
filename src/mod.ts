@@ -12,6 +12,7 @@ import {
   redirectQRRequestFactory,
 } from "./apis/qr.ts";
 import { loginRequestFactory } from "./apis/login.ts";
+import { orderManagementRequestFactory } from "./apis/ordermanagement.ts";
 
 /**
  * Export all API types, for convenience. All exported types are
@@ -24,6 +25,7 @@ export type * from "./apis/types/login_types.ts";
 export type * from "./apis/types/qr_types.ts";
 export type * from "./apis/types/recurring_types.ts";
 export type * from "./apis/types/webhooks_types.ts";
+export type * from "./apis/types/ordermanagement_types.ts";
 
 /**
  * Creates a client with the specified options.
@@ -47,6 +49,7 @@ export const Client = (options: ClientConfig) => {
     },
     redirectQR: createApi(client, redirectQRRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
+    orderManagement: createApi(client, orderManagementRequestFactory),
   } satisfies ApiClient;
 
   return apiClient;
