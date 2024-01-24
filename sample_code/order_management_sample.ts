@@ -11,7 +11,6 @@ const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
 const merchantSerialNumber = Deno.env.get("MERCHANT_SERIAL_NUMBER") || "";
 const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
 
-console.log(subscriptionKey);
 // Create a client
 const client = Client({
   merchantSerialNumber,
