@@ -54,12 +54,22 @@ export const fetchJSON = async <TOk, TErr>(
   if (response.status === STATUS_CODE.NoContent) {
     return { ok: true, data: {} as TOk };
   }
-
   /**
-   * Parse the response body as JSON. We trust that the server returns
+   * Parse the response body as JSON. We DO NOT trust that the server returns
    * a valid JSON response.
    */
-  const json = await response.json();
+  const responseBody = await response.text();
+  // TODO @tomas, what should we do if the responseBody is empty?
+  let json = {};
+  try {
+    json = JSON.parse(responseBody);
+  } catch(err) {
+    if(err instanceof SyntaxError) {
+      json = {data: responseBody, ok: true}
+    } else {
+      throw new Error("Unknown error during parsing of HTTP Response Body. " + err)
+    }
+  }
 
   /**
    * If a Server error is returned, throw an error.

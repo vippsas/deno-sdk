@@ -16,7 +16,7 @@ console.log(subscriptionKey);
 const client = Client({
   merchantSerialNumber,
   subscriptionKey,
-  useTestMode: false,
+  useTestMode: true,
   retryRequests: false,
 });
 
@@ -57,7 +57,7 @@ if (!payment.ok) {
   Deno.exit(1);
 }
 console.log("🎉 Payment created successfully!");
-
+console.log("📋 Payment reference:", payment.data.reference);
 console.log("We have a payment, let's open the browser...");
 await open(payment.data.redirectUrl);
 
@@ -73,12 +73,12 @@ if (shouldProceed === false) {
 }
 
 console.log("Aaaaaand we continue to the fun part!");
-const orderReference = payment.data.reference;
+const paymentReference = payment.data.reference;
 
 // Add a receipt to the order
 const receipt = await client.order.addReceipt(
   token,
-  orderReference,
+  paymentReference,
   "ecom",
   {
     orderLines: [
@@ -101,11 +101,12 @@ const receipt = await client.order.addReceipt(
 if (receipt.ok) {
   console.log("Receipt: ", receipt);
 } else {
-  console.log("Error adding receipt", receipt.error);
+  console.log("Error adding receipt", receipt.error, receipt);
+  Deno.exit(1);
 }
 
 // Retrieve the order
-const order = await client.order.info(token, orderReference, "ecom");
+const order = await client.order.info(token, paymentReference, "ecom");
 
 // Check if the order was retrieved successfully
 if (!order.ok) {
@@ -117,12 +118,12 @@ if (!order.ok) {
 // Add a category to the order
 const addCategoryToOrder = await client.order.addCategory(
   token,
-  orderReference,
+  paymentReference,
   "ecom",
   {
     category: "RECEIPT",
     imageId: null,
-    orderDetailsUrl: `https://example.com/portal/receipt/${orderReference}`,
+    orderDetailsUrl: `https://example.com/portal/receipt/${paymentReference}`,
   },
 );
 
