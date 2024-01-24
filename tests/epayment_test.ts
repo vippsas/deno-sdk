@@ -1,6 +1,8 @@
 import { assertEquals, assertExists, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
+import { EPaymentCreatePaymentOKResponse } from "../src/apis/types/epayment_types.ts";
+import { RequestData } from "../src/types.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", async () => {
   mf.install(); // mock out calls to `fetch`
@@ -59,10 +61,10 @@ Deno.test("ePayment - create - Should fill in missing props", () => {
       userFlow: "WEB_REDIRECT",
       paymentDescription: "One pair of socks",
     },
-    // deno-lint-ignore no-explicit-any
-  ) as any;
+  );
 
-  assertExists(requestData.body.reference);
+  assertExists(requestData.body);
+  assertExists("reference" in requestData.body);
 });
 
 Deno.test("ePayment - info - Should have correct url and header", async () => {

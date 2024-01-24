@@ -1,6 +1,11 @@
 import { checkoutRequestFactory } from "../src/apis/checkout.ts";
 import { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
-import { assertEquals, assertExists, assertNotEquals } from "./test_deps.ts";
+import {
+  assert,
+  assertEquals,
+  assertExists,
+  assertNotEquals,
+} from "./test_deps.ts";
 
 Deno.test("create - should return the correct request data", () => {
   const client_id = "your_client_id";
@@ -58,11 +63,18 @@ Deno.test("create - should fill in missing properties", () => {
     client_id,
     client_secret,
     body,
-    // deno-lint-ignore no-explicit-any
-  ) as any;
+  );
 
-  assertExists(requestData.body.transaction.reference);
-  assertExists(requestData.body.merchantInfo.callbackAuthorizationToken);
+  assertExists(requestData.body);
+  assert("transaction" in requestData.body);
+  assert(
+    "reference" in (requestData.body.transaction as Record<string, unknown>),
+  );
+  assert("merchantInfo" in requestData.body);
+  assert(
+    "callbackAuthorizationToken" in
+      (requestData.body.merchantInfo as Record<string, unknown>),
+  );
 });
 
 Deno.test("info - should return the correct request data", () => {

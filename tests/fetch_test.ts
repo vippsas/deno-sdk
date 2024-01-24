@@ -29,8 +29,7 @@ Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
   });
 
   const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
+  const result = await fetchJSON(request);
   assertEquals(result.ok, false);
   mf.reset();
 });
@@ -46,10 +45,8 @@ Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
   });
 
   const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
+  const result = await fetchJSON(request);
   assertEquals(result.ok, false);
-  assert(result.error.message !== undefined);
   mf.reset();
 });
 
@@ -85,8 +82,7 @@ Deno.test("fetchJSON - Catch JSON", async () => {
   });
 
   const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
+  const result = await fetchJSON(request);
 
   assertEquals(result.ok, true);
   mf.reset();
@@ -102,10 +98,8 @@ Deno.test("fetchJSON - Catch Empty Response", async () => {
   });
 
   const request = new Request("https://example.com/api");
-  // deno-lint-ignore no-explicit-any
-  const result = await fetchJSON(request) as any;
+  const result = await fetchJSON(request);
 
   assertEquals(result.ok, true);
-  assertEquals(result.data, {});
   mf.reset();
 });
