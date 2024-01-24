@@ -1,6 +1,7 @@
 import {
   isServerErrorStatus,
   isSuccessfulStatus,
+  parseMediaType,
   retry,
   STATUS_CODE,
 } from "./deps.ts";
@@ -54,21 +55,6 @@ export const fetchJSON = async <TOk, TErr>(
   if (response.status === STATUS_CODE.NoContent) {
     return { ok: true, data: {} as TOk };
   }
-  /**
-   * Parse the response body as JSON. We DO NOT trust that the server returns
-   * a valid JSON response.
-   */
-  const responseBody = await response.text();
-  let json = {};
-  try {
-    json = JSON.parse(responseBody);
-  } catch(err) {
-    if(err instanceof SyntaxError) {
-      json = {data: responseBody, ok: true}
-    } else {
-      throw new Error("Unknown error during parsing of HTTP Response Body. " + err)
-    }
-  }
 
   /**
    * If a Server error is returned, throw an error.
@@ -79,14 +65,36 @@ export const fetchJSON = async <TOk, TErr>(
   }
 
   /**
-   * If the response status is a successful status, return the JSON as TOk.
+   * Check if the content type is text/plain.
    */
-  if (isSuccessfulStatus(response.status)) {
-    return { ok: true, data: json as TOk };
-  }
+  const json = isText(response)
+    ? { text: await response.text() }
+    : await response.json();
 
   /**
    * For any other type of error, return an Error object.
    */
-  return parseError<TErr>(json, response.status);
+  if (!isSuccessfulStatus(response.status)) {
+    return parseError<TErr>(json, response.status);
+  }
+
+  return { ok: true, data: json as TOk };
+};
+
+const isText = (response: Response): boolean => {
+  const mediaType = getMediaType(response);
+  return mediaType === "text/plain";
+};
+
+export const getMediaType = (response: Response): string | undefined => {
+  /**
+   * Check MIME type of the response, assuming headers are case insensitive
+   */
+  const contentHeader = response.headers.get("content-type");
+  if (!contentHeader) {
+    return undefined;
+  }
+  const mediaType = parseMediaType(contentHeader);
+
+  return mediaType[0];
 };

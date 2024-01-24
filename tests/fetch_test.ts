@@ -1,4 +1,4 @@
-import { fetchJSON } from "../src/fetch.ts";
+import { fetchJSON, getMediaType } from "../src/fetch.ts";
 import { assert, assertEquals, mf } from "./test_deps.ts";
 
 Deno.test("fetchJSON - Returns successful response", async () => {
@@ -8,6 +8,7 @@ Deno.test("fetchJSON - Returns successful response", async () => {
     return new Response(JSON.stringify({ message: "Success" }), {
       status: 200,
       statusText: "OK",
+      headers: { "content-type": "application/json" },
     });
   });
 
@@ -88,6 +89,23 @@ Deno.test("fetchJSON - Catch JSON", async () => {
   mf.reset();
 });
 
+Deno.test("fetchJSON - Catch text/plain", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/api", () => {
+    return new Response(JSON.stringify({}), {
+      status: 200,
+      headers: { "content-type": "text/plain" },
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  const result = await fetchJSON(request);
+
+  assertEquals(result.ok, true);
+  mf.reset();
+});
+
 Deno.test("fetchJSON - Catch Empty Response", async () => {
   mf.install(); // mock out calls to `fetch`
 
@@ -102,4 +120,24 @@ Deno.test("fetchJSON - Catch Empty Response", async () => {
 
   assertEquals(result.ok, true);
   mf.reset();
+});
+
+Deno.test("getMediaType - should return undefined if content-type header is missing", () => {
+  const response = new Response();
+  const result = getMediaType(response);
+  assert(result === undefined);
+});
+
+Deno.test("getMediaType - should return undefined if media type cannot be parsed", () => {
+  const response = new Response(undefined, { headers: { "content-type": "" } });
+  const result = getMediaType(response);
+  assert(result === undefined);
+});
+
+Deno.test("getMediaType should return the parsed media type", () => {
+  const response = new Response(undefined, {
+    headers: { "content-type": "application/json" },
+  });
+  const result = getMediaType(response);
+  assertEquals(result, "application/json");
 });
