@@ -62,11 +62,13 @@ export const fetchJSON = async <TOk, TErr>(
   let json = {};
   try {
     json = JSON.parse(responseBody);
-  } catch(err) {
-    if(err instanceof SyntaxError) {
-      json = {data: responseBody, ok: true}
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      json = { data: responseBody, ok: true };
     } else {
-      throw new Error("Unknown error during parsing of HTTP Response Body. " + err)
+      throw new Error(
+        "Unknown error during parsing of HTTP Response Body. " + err,
+      );
     }
   }
 
