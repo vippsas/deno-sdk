@@ -1,8 +1,6 @@
 import { assertEquals, assertExists, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
-import { EPaymentCreatePaymentOKResponse } from "../src/apis/types/epayment_types.ts";
-import { RequestData } from "../src/types.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", async () => {
   mf.install(); // mock out calls to `fetch`
