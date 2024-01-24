@@ -9,7 +9,7 @@ const clientSecret = Deno.env.get("CLIENT_SECRET") || "";
 
 const merchantSerialNumber = Deno.env.get("MERCHANT_SERIAL_NUMBER") || "";
 const subscriptionKey = Deno.env.get("SUBSCRIPTION_KEY") || "";
-console.log(clientId)
+console.log(clientId);
 // Create a client
 const client = Client({
   merchantSerialNumber,
@@ -53,7 +53,9 @@ if (!payment.ok) {
 console.log("We have a payment, let's open the browser...");
 await open(payment.data.redirectUrl);
 
-const shouldProceed = confirm("Complete the order, then press 'y' and hit enter.");
+const shouldProceed = confirm(
+  "Complete the order, then press 'y' and hit enter.",
+);
 console.log("Aaaaaand we continue to the fun part!");
 const receipt = await client.orderManagement.addReceipt(
   token,
@@ -81,7 +83,8 @@ if (receipt.ok) {
   console.log("Error adding receipt", receipt.error);
 }
 
-const fetchedReceipt = await client.orderManagement.getOrderWithCategoryAndReceipt(token, "ecom", orderReference);
+const fetchedReceipt = await client.orderManagement
+  .getOrderWithCategoryAndReceipt(token, "ecom", orderReference);
 console.log(fetchedReceipt);
 // const addCategoryToOrderResult = await client.orderManagement
 //   .addCategoryToOrder(token, "ecom", orderReference, {
@@ -99,5 +102,3 @@ console.log(fetchedReceipt);
 //     addCategoryToOrderResult.error,
 //   );
 // }
-
-
