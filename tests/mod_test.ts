@@ -8,6 +8,10 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.checkout.create, "function");
   assertEquals(typeof client.checkout.info, "function");
   assertEquals(typeof client.login.discovery, "function");
+  assertEquals(typeof client.order.addCategory, "function");
+  assertEquals(typeof client.order.addImage, "function");
+  assertEquals(typeof client.order.addReceipt, "function");
+  assertEquals(typeof client.order.info, "function");
   assertEquals(typeof client.payment.create, "function");
   assertEquals(typeof client.payment.info, "function");
   assertEquals(typeof client.payment.cancel, "function");

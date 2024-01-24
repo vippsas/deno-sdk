@@ -5,6 +5,7 @@ import { authRequestFactory } from "./apis/auth.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { loginRequestFactory } from "./apis/login.ts";
+import { orderManagementRequestFactory } from "./apis/ordermanagement.ts";
 import {
   callbackQRRequestFactory,
   redirectQRRequestFactory,
@@ -24,6 +25,7 @@ export type * from "./apis/types/auth_types.ts";
 export type * from "./apis/types/checkout_types.ts";
 export type * from "./apis/types/epayment_types.ts";
 export type * from "./apis/types/login_types.ts";
+export type * from "./apis/types/ordermanagement_types.ts";
 export type * from "./apis/types/qr_types.ts";
 export type * from "./apis/types/recurring_types.ts";
 export type * from "./apis/types/user_types.ts";
@@ -43,6 +45,7 @@ export const Client = (options: ClientConfig) => {
     auth: createApi(client, authRequestFactory),
     checkout: createApi(client, checkoutRequestFactory),
     login: createApi(client, loginRequestFactory),
+    order: createApi(client, orderManagementRequestFactory),
     payment: createApi(client, ePaymentRequestFactory),
     qr: {
       callback: createApi(client, callbackQRRequestFactory),
