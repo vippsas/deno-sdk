@@ -59,7 +59,6 @@ export const fetchJSON = async <TOk, TErr>(
    * a valid JSON response.
    */
   const responseBody = await response.text();
-  // TODO @tomas, what should we do if the responseBody is empty?
   let json = {};
   try {
     json = JSON.parse(responseBody);
