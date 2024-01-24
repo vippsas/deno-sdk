@@ -56,6 +56,10 @@ await open(payment.data.redirectUrl);
 const shouldProceed = confirm(
   "Complete the order, then press 'y' and hit enter.",
 );
+if (shouldProceed === false) {
+  console.log("Ok, exiting.");
+  Deno.exit(1);
+}
 console.log("Aaaaaand we continue to the fun part!");
 const receipt = await client.orderManagement.addReceipt(
   token,
