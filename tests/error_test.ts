@@ -1,6 +1,7 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { parseError } from "../src/errors.ts";
 import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
+import { assert, assertExists } from "./test_deps.ts";
 import { assertEquals, mf } from "./test_deps.ts";
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
@@ -52,10 +53,11 @@ Deno.test("parseError - Should return correct error message for AccessTokenError
 
 Deno.test("parseError should return correct error message for unknown error", () => {
   const error = "Unknown error";
-  // deno-lint-ignore no-explicit-any
-  const result: any = parseError(error);
+  const result = parseError(error);
 
   assertEquals(result.ok, false);
+  assertExists(result.error);
+  assert("message" in result.error);
   assertEquals(result.error.message, "Unknown error");
 });
 

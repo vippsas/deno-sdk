@@ -32,8 +32,7 @@ Deno.test("createApi - Should return an error if method is not in factory", asyn
     },
   };
 
-  // deno-lint-ignore no-explicit-any
-  const api = createApi(client, factory) as any;
+  const api = createApi(client, factory) as unknown as { bar(): Promise<void> };
 
   try {
     await api.bar();
