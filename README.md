@@ -2,9 +2,11 @@
 
 SDK client for Vipps Mobilepay public APIs.
 
-A zero dependency, zero configuration ES Module built with Deno. The code is written entirely in TypeScript and has 100% test coverage.
+A zero dependency, zero configuration ES Module built with Deno. The code is
+written entirely in TypeScript and has 100% test coverage.
 
-Available on: [deno.land](https://deno.land/x/vipps_mobilepay_sdk) and [NPM](https://www.npmjs.com/package/@vippsmobilepay/sdk)
+Available on: [deno.land](https://deno.land/x/vipps_mobilepay_sdk) and
+[NPM](https://www.npmjs.com/package/@vippsmobilepay/sdk)
 
 ```ts
 import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts";
@@ -49,15 +51,17 @@ const payment = await client.payment.create(token, {
 
 ## General documentation and code samples
 
-Documentation of the SDK, and about Vipps MobilePay in general, please visit our [developer docs](https://developer.vippsmobilepay.com/docs/SDKs/).
+Documentation of the SDK, and about Vipps MobilePay in general, please visit our
+[developer docs](https://developer.vippsmobilepay.com/docs/SDKs/).
 
 A wide range of code samples are available in `sample_code/`.
 
 ## Importing types from the SDK
 
-All external exports are defined in `src/mod.ts`. Any exports not included in this file are deemed
-internal and any modifications will not be treated as breaking changes. As such,
-internal exports should be treated as unstable and used at your own risk.
+All external exports are defined in `src/mod.ts`. Any exports not included in
+this file are deemed internal and any modifications will not be treated as
+breaking changes. As such, internal exports should be treated as unstable and
+used at your own risk.
 
 ## Working on the code base
 
@@ -76,7 +80,9 @@ To get a full test coverage report in a nice HTML format, run:
 
 ### Packaging
 
-New tags are immediately available on [deno.land](https://deno.land/x/vipps_mobilepay_sdk) (using a webhook in the repo settings).
+New tags are immediately available on
+[deno.land](https://deno.land/x/vipps_mobilepay_sdk) (using a webhook in the
+repo settings).
 
 To package for NPM, run:
 
@@ -84,4 +90,8 @@ To package for NPM, run:
 
 ## Getting help
 
-We welcome contributions from everyone! Please submit your PR, report your issue, or simply raise a question directly here in Github to get in touch, we'd love to hear from you. To get in contact with our support team, or for other inquiries, please visit our [Contact page](https://developer.vippsmobilepay.com/docs/contact/)
+We welcome contributions from everyone! Please submit your PR, report your
+issue, or simply raise a question directly here in Github to get in touch, we'd
+love to hear from you. To get in contact with our support team, or for other
+inquiries, please visit our
+[Contact page](https://developer.vippsmobilepay.com/docs/contact/)
