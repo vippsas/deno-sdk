@@ -78,7 +78,7 @@ To get a full test coverage report in a nice HTML format, run:
 
 New tags are immediately available on [deno.land](https://deno.land/x/vipps_mobilepay_sdk) (using a webhook in the repo settings).
 
-To packaging for NPM, run:
+To package for NPM, run:
 
     deno run -A scripts/publish_latest_tag_to_npm.ts
 
