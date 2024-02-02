@@ -20,7 +20,7 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param body - The request body containing the payment details.
-   * @returns A `RequestData` object with the URL, method, body, and token.
+   * @returns A `EPaymentCreatePaymentOKResponse` or `EPaymentErrorResponse` object.
    */
   create(
     token: string,
@@ -43,7 +43,7 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @returns A `EPaymentGetPaymentOKResponse` or `EPaymentErrorResponse` object.
    */
   info(
     token: string,
@@ -60,7 +60,7 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
-   * @returns A `RequestData` object containing the URL, method, and token for the API request.
+   * @returns A `EPaymentGetEventLogOKResponse` or `EPaymentErrorResponse` object.
    */
   history(
     token: string,
@@ -77,7 +77,7 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment to cancel.
-   * @returns A RequestData object containing the URL, method, and token.
+   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
   cancel(
     token: string,
@@ -95,7 +95,7 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The modification request body.
-   * @returns A request data object containing the URL, method, body, and token.
+   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
   capture(
     token: string,
@@ -115,7 +115,7 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment to be refunded.
    * @param body - The request body containing the modification details.
-   * @returns A RequestData object with the refund request details.
+   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
   refund(
     token: string,
@@ -135,7 +135,7 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The request body containing additional information.
-   * @returns A RequestData object with void as the response data type and EpaymentErrorResponse as the error response type.
+   * @returns void or a `EPaymentErrorResponse` object.
    */
   forceApprove(
     token: string,
