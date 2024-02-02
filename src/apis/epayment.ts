@@ -1,3 +1,4 @@
+import { uuid } from "../deps.ts";
 import { RequestData } from "../types.ts";
 import {
   EPaymentCreatePaymentOKResponse,
@@ -28,7 +29,7 @@ export const ePaymentRequestFactory = {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
-      newBody.reference = crypto.randomUUID();
+      newBody.reference = uuid.generate();
     }
     return {
       url: "/epayment/v1/payments",
