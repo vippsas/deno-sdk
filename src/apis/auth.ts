@@ -1,4 +1,4 @@
-import { Credentials, RequestData } from "../types.ts";
+import { RequestData } from "../types.ts";
 import { AccessToken, AccessTokenError } from "./types/auth_types.ts";
 
 /**
@@ -14,17 +14,21 @@ export const authRequestFactory = {
    * the test environment and 24 hours in the production environment.
    * See: https://developer.vippsmobilepay.com/docs/APIs/access-token-api/
    *
-   * @param cred - The credentials.
-   * @returns The request data.
+   * @param clientId Client ID for the merchant (the "username").
+   * Found in the Vipps portal. Example: "fb492b5e-7907-4d83-bc20-c7fb60ca35de".
+   * @param clientSecret Client Secret for the merchant (the "password").
+   * Found in the Vipps portal. Example: "Y8Kteew6GE3ZmeycEt6egg=="
    */
-  getToken(cred: Credentials): RequestData<AccessToken, AccessTokenError> {
+  getToken(
+    clientId: string,
+    clientSecret: string,
+  ): RequestData<AccessToken, AccessTokenError> {
     return {
       method: "POST",
       url: "/accesstoken/get",
       additionalHeaders: {
-        "client_id": cred.clientId,
-        "client_secret": cred.clientSecret,
-        "Ocp-Apim-Subscription-Key": cred.subscriptionKey,
+        "client_id": clientId,
+        "client_secret": clientSecret,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };

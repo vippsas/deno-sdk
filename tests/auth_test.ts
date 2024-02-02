@@ -14,11 +14,7 @@ Deno.test("getToken - Should have correct url and header", async () => {
     });
   });
 
-  const token = await client.auth.getToken({
-    clientId: "fake",
-    clientSecret: "fake",
-    subscriptionKey: "fake",
-  });
+  const token = await client.auth.getToken("fake", "fake");
 
   assertEquals(token.ok, true);
 
@@ -36,13 +32,9 @@ Deno.test("getToken - Invalid credentials", async () => {
     });
   });
 
-  const resp = await client.auth.getToken({
-    clientId: "fake",
-    clientSecret: "fake",
-    subscriptionKey: "fake",
-  });
+  const token = await client.auth.getToken("fake", "fake");
 
-  assertEquals(resp.ok, false);
+  assertEquals(token.ok, false);
 
   mf.reset();
 });
@@ -58,13 +50,9 @@ Deno.test("Auth - getToken - Unauthorized subscription key", async () => {
     });
   });
 
-  const resp = await client.auth.getToken({
-    clientId: "fake",
-    clientSecret: "fake",
-    subscriptionKey: "fake",
-  });
+  const token = await client.auth.getToken("fake", "fake");
 
-  assertEquals(resp.ok, false);
+  assertEquals(token.ok, false);
 
   mf.reset();
 });
