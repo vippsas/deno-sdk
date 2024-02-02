@@ -1,3 +1,4 @@
+import { uuid } from "../deps.ts";
 import { RequestData } from "../types.ts";
 import {
   CheckoutErrorResponse,
@@ -29,10 +30,10 @@ export const checkoutRequestFactory = {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.transaction.reference) {
-      newBody.transaction.reference = crypto.randomUUID();
+      newBody.transaction.reference = uuid.generate();
     }
     if (!body.merchantInfo.callbackAuthorizationToken) {
-      newBody.merchantInfo.callbackAuthorizationToken = crypto.randomUUID();
+      newBody.merchantInfo.callbackAuthorizationToken = uuid.generate();
     }
 
     return {

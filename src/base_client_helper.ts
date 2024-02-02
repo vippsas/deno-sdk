@@ -1,4 +1,4 @@
-import { filterKeys } from "./deps.ts";
+import { filterKeys, uuid } from "./deps.ts";
 import {
   ClientConfig,
   DefaultHeaders,
@@ -60,7 +60,7 @@ export const getHeaders = (
     "Vipps-System-Version": cfg.systemVersion || "",
     "Vipps-System-Plugin-Name": cfg.pluginName || "",
     "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-    "Idempotency-Key": crypto.randomUUID(),
+    "Idempotency-Key": uuid.generate(),
   };
 
   // Remove omitted headers
