@@ -32,9 +32,9 @@ export type * from "./apis/types/user_types.ts";
 export type * from "./apis/types/webhooks_types.ts";
 
 /**
- * Creates a client with the specified options.
- * @param options The client configuration options.
- * @returns The API client.
+ * Creates a new SDK client.
+ *
+ * @param options - The client configuration options.
  */
 export const Client = (options: ClientConfig) => {
   // Create the base client
