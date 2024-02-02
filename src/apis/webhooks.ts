@@ -16,7 +16,7 @@ export const webhooksRequestFactory = {
    *
    * @param token - The authentication token.
    * @param body - The request body containing the webhook details.
-   * @returns A `RequestData` object with the URL, method, body, and token.
+   * @returns A `WebhooksRegisterOKResponse` or `WebhooksErrorResponse` object.
    */
   register(
     token: string,
@@ -33,7 +33,7 @@ export const webhooksRequestFactory = {
    * Retrieves a list of registered webhooks.
    *
    * @param token - The access token for authentication.
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @returns A `WebhooksGetRegisteredOKResponse` or `WebhooksErrorResponse` object.
    */
   list(
     token: string,
@@ -49,7 +49,7 @@ export const webhooksRequestFactory = {
    *
    * @param token - The authentication token.
    * @param webhookId - The ID of the webhook to delete.
-   * @returns A `RequestData` object with the URL, method, and token.
+   * @returns void or a `WebhooksErrorResponse` object.
    */
   delete(
     token: string,

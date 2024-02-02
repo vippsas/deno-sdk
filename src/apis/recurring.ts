@@ -36,7 +36,7 @@ export const agreementRequestFactory = {
    *
    * @param token - The authentication token.
    * @param body - The draft agreement data.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns A `DraftAgreementResponseV3` or `RecurringErrorResponse` object.
    */
   create(
     token: string,
@@ -58,7 +58,7 @@ export const agreementRequestFactory = {
    * @param token - The authentication token.
    * @param status - The status of the agreements to retrieve.
    * @param createdAfter - The timestamp indicating the minimum creation date of the agreements to retrieve.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns A `AgreementResponseV3` or `RecurringErrorResponse` object.
    */
   list(
     token: string,
@@ -78,7 +78,7 @@ export const agreementRequestFactory = {
    *
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement to retrieve.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns A `AgreementResponseV3` or `RecurringErrorResponse` object.
    */
   info(
     token: string,
@@ -98,7 +98,7 @@ export const agreementRequestFactory = {
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement to update.
    * @param body - The patch data for the agreement.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns void or a `RecurringErrorResponse` object.
    */
   update(
     token: string,
@@ -119,7 +119,7 @@ export const agreementRequestFactory = {
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement to force accept.
    * @param body - The force accept data for the agreement.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns void or a `RecurringErrorResponse` object.
    */
   forceAccept(
     token: string,
@@ -145,8 +145,9 @@ export const chargeRequestFactory = {
    * the charge will be retried based on retryDays
    *
    * @param token - The authentication token.
+   * @param agreementId - The ID of the agreement.
    * @param body - The request body containing the charge details.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns A `ChargeReference` or `RecurringErrorResponse` object.
    */
   create(
     token: string,
@@ -164,9 +165,9 @@ export const chargeRequestFactory = {
    * Fetches a single charge for a user.
    *
    * @param token - The authentication token.
-   * @param chargeId - The ID of the charge to retrieve.
    * @param agreementId - The ID of the agreement.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @param chargeId - The ID of the charge to retrieve.
+   * @returns A `ChargeResponseV3` or `RecurringErrorResponse` object.
    */
   info(
     token: string,
@@ -190,7 +191,7 @@ export const chargeRequestFactory = {
    *
    * @param token - The access token.
    * @param chargeId - The ID of the charge.
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @returns A `ChargeResponseV3` or `RecurringErrorResponse` object.
    */
   infoById(
     token: string,
@@ -208,7 +209,8 @@ export const chargeRequestFactory = {
    *
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @param status - The status of the charges to retrieve (optional).
+   * @returns An array of `ChargeResponseV3` objects, or a `RecurringErrorResponse` object.
    */
   list(
     token: string,
@@ -232,7 +234,7 @@ export const chargeRequestFactory = {
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement.
    * @param chargeId - The ID of the charge.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @returns void or a `RecurringErrorResponse` object.
    */
   cancel(
     token: string,
@@ -253,7 +255,8 @@ export const chargeRequestFactory = {
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement.
    * @param chargeId - The ID of the charge.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @param body - The request body containing the charge modification details.
+   * @returns void or a `RecurringErrorResponse` object.
    */
   capture(
     token: string,
@@ -276,7 +279,8 @@ export const chargeRequestFactory = {
    * @param token - The authentication token.
    * @param agreementId - The ID of the agreement.
    * @param chargeId - The ID of the charge.
-   * @returns A RequestData object containing the URL, method, and token for the API request.
+   * @param body - The request body containing the charge modification details.
+   * @returns void or a `RecurringErrorResponse` object.
    */
   refund(
     token: string,

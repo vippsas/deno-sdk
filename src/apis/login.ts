@@ -14,8 +14,7 @@ export const loginRequestFactory = {
    * endpoint, please refer to the specification at
    * https://openid.net/specs/openid-connect-discovery-1_0.html
    *
-   * @returns A `RequestData` object containing the URL and method for
-   * the API request.
+   * @returns A `LoginWellKnownResponse` or `LoginErrorResponse` object.
    */
   discovery(): RequestData<LoginWellKnownResponse, LoginErrorResponse> {
     return {

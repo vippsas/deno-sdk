@@ -19,6 +19,12 @@ export const orderManagementRequestFactory = {
    * The category adds a link, specified by you, to the Transaction page on
    * the Vipps MobilePay app. Only one (the latest) category is shown in the
    * app.
+   *
+   * @param token - The authentication token.
+   * @param orderId - The order ID.
+   * @param paymentType - The payment type.
+   * @param body - The request body containing the category details.
+   * @returns A `OrderManagementOKResponse` or `OrderManagementErrorResponse` object.
    */
   addCategory(
     token: string,
@@ -40,6 +46,10 @@ export const orderManagementRequestFactory = {
   /**
    * Endpoint for uploading images. A imageId will be returned that
    * can be used when adding metadata to orders.
+   *
+   * @param token - The authentication token.
+   * @param body - The request body containing the image details.
+   * @returns A `OrderManagementAddImageOKResponse` or `OrderManagementErrorResponse` object.
    */
   addImage(
     token: string,
@@ -58,6 +68,12 @@ export const orderManagementRequestFactory = {
 
   /**
    * Add receipt to an order.
+   *
+   * @param token - The authentication token.
+   * @param orderId - The order ID.
+   * @param paymentType - The payment type.
+   * @param body - The request body containing the receipt details.
+   * @returns A `OrderManagementOKResponse` or `OrderManagementErrorResponse` object.
    */
   addReceipt(
     token: string,
@@ -78,6 +94,11 @@ export const orderManagementRequestFactory = {
 
   /**
    * Get order with category and receipt
+   *
+   * @param token - The authentication token.
+   * @param orderId - The order ID.
+   * @param paymentType - The payment type.
+   * @returns A `OrderManagementGetOrderOKResponse` or `OrderManagementErrorResponse` object.
    */
   info(
     token: string,

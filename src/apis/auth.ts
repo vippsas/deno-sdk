@@ -18,6 +18,7 @@ export const authRequestFactory = {
    * Found in the Vipps portal. Example: "fb492b5e-7907-4d83-bc20-c7fb60ca35de".
    * @param clientSecret Client Secret for the merchant (the "password").
    * Found in the Vipps portal. Example: "Y8Kteew6GE3ZmeycEt6egg=="
+   * @returns A `AccessToken` or `AccessTokenError` object.
    */
   getToken(
     clientId: string,

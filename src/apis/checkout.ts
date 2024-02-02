@@ -20,7 +20,7 @@ export const checkoutRequestFactory = {
    * @param client_id - The client ID.
    * @param client_secret - The client secret.
    * @param body - The request body containing the checkout session details.
-   * @returns A `RequestData` object with the URL, method, body, and headers for the API request.
+   * @returns A `CheckoutInitiateSessionOKResponse` or `CheckoutErrorResponse` object.
    */
   create(
     client_id: string,
@@ -54,7 +54,7 @@ export const checkoutRequestFactory = {
    * @param client_id - The client ID.
    * @param client_secret - The client secret.
    * @param reference - The reference of the checkout session.
-   * @returns A RequestData object containing the URL, method, and headers for the API request.
+   * @returns A `CheckoutSessionOKResponse` or `CheckoutErrorResponse` object.
    */
   info(
     client_id: string,

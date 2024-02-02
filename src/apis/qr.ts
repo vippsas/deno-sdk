@@ -19,9 +19,11 @@ export const redirectQRRequestFactory = {
    * Generate a QR that works as a redirect back to the merchant
    *
    * @param token - The authentication token.
+   * @param imageFormat - The format of the QR code image to be returned.
    * @param body - The request body containing the merchant redirect
    * QR code details.
-   * @returns A RequestData object with the URL, method, body, and token.
+   * @returns A `RedirectQrResponse` or `QrErrorResponse` object.
+   * If response has statuscode 409, the response will be `{ id: string }`
    */
   create(
     token: string,
@@ -43,15 +45,14 @@ export const redirectQRRequestFactory = {
    * @param id - The ID of the QR code to update.
    * @param imageFormat - The format of the QR code image to be returned.
    * @param body - The request body containing the updated QR code data.
-   * @returns A `RequestData` object with the updated QR code response
-   * or an error response.
+   * @returns A `RedirectQrResponse` or `QrErrorResponse` object.
    */
   update(
     token: string,
     id: string,
     imageFormat: RedirectQrImageFormat,
     body: RedirectQrUpdateRequest,
-  ): RequestData<RedirectQrResponse, QrErrorResponse | { id: string }> {
+  ): RequestData<RedirectQrResponse, QrErrorResponse> {
     return {
       url: `/qr/v1/merchant-redirect/${id}`,
       method: "PUT",
@@ -65,7 +66,8 @@ export const redirectQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param id - The ID of the QR code.
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @param imageFormat - The format of the QR code image to be returned.
+   * @returns A `RedirectQrResponse` or `QrErrorResponse` object.
    */
   info(
     token: string,
@@ -84,8 +86,7 @@ export const redirectQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param imageFormat - The format of the QR code image.
-   * @returns A `RequestData` object containing the URL,
-   * method, headers, and token.
+   * @returns A `RedirectQrResponse` or `QrErrorResponse` object.
    */
   list(
     token: string,
@@ -103,8 +104,7 @@ export const redirectQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param id - The ID of the QR code to delete.
-   * @returns A `RequestData` object with the URL, method, and
-   * token for the delete request.
+   * @returns void or a `QrErrorResponse` object.
    */
   delete(
     token: string,
@@ -127,9 +127,8 @@ export const callbackQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param merchantQrId - The merchant defined identifier for a QR code.
-   * @param body - The request body.
-   * @returns  A `RequestData` object containing the URL, method, body and
-   * token.
+   * @param body - The request body containing the callback QR details.
+   * @returns  A void or a `QrErrorResponse` object.
    */
   create(
     token: string,
@@ -153,7 +152,7 @@ export const callbackQRRequestFactory = {
    * @param merchantQrId - The ID of the merchant callback QR code.
    * @param qrImageFormat - The format of the QR code image (default: "SVG").
    * @param qrImageSize - The size of the QR code image (optional).
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @returns A `CallbackQrResponse` or `QrErrorResponse` object.
    */
   info(
     token: string,
@@ -172,8 +171,8 @@ export const callbackQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param qrImageFormat - The format of the QR image. Defaults to "SVG".
-   * @param qrImageSize - The size of the QR image.
-   * @returns A `RequestData` object containing the URL, method, and token.
+   * @param qrImageSize - The size of the QR image (optional).
+   * @returns A `CallbackQrResponse` or `QrErrorResponse` object.
    */
   list(
     token: string,
@@ -192,8 +191,7 @@ export const callbackQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param merchantQrId - The ID of the merchant QR to delete.
-   * @returns A `RequestData` object with the URL, method, and
-   * token for the delete request.
+   * @returns A void or a `QrErrorResponse` object.
    */
   delete(
     token: string,
@@ -225,8 +223,8 @@ export const callbackQRRequestFactory = {
    *
    * @param token - The authentication token.
    * @param beaconId - The beacon ID.
-   * @param body - The request body.
-   * @returns The request data.
+   * @param body - The request body containing the callback QR details.
+   * @returns void or a `QrErrorResponse` object.
    */
   createMobilePayQR(
     token: string,
