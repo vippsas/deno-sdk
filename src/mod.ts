@@ -57,7 +57,7 @@ export const Client = (options: ClientConfig) => {
     },
     user: createApi(client, userRequestFactory),
     webhook: createApi(client, webhooksRequestFactory),
-  } satisfies ApiClient;
+  } as const satisfies ApiClient;
 
   return apiClient;
 };

@@ -18,27 +18,23 @@ type ApiProxy<TFac extends RequestFactory> = {
 
 /**
  * Creates an API proxy object that wraps a request factory and makes requests using a base client.
+ *
  * @param baseClient The base client used to make requests.
  * @param factory The request factory object.
- * @returns An API proxy object.
  */
-export const createApi = <T extends RequestFactory>(
-  baseClient: BaseClient,
-  factory: T,
+export const createApi = <TFac extends RequestFactory>(
+  client: BaseClient,
+  factory: TFac,
 ) => {
   return new Proxy(factory, {
-    // Intercept property access, e.g. client.payment.create
-    get(factory: T, prop) {
-      // Check if the property exists in the factory
-      if (typeof prop === "string" && prop in factory) {
+    get(target, prop, receiver) {
+      if (Reflect.ownKeys(target).includes(prop)) {
         // Return a function that makes a request using the base client
-        return (...args: Parameters<T[keyof T]>) => {
-          const requestData = factory[prop](...args);
-          // Make the request using the base client
-          return baseClient.makeRequest(requestData);
+        return (...args: Parameters<TFac[keyof TFac]>) => {
+          const requestData = Reflect.get(target, prop, receiver)(...args);
+          return client.makeRequest(requestData);
         };
       }
-      throw new Error(`Method ${String(prop)} does not exist in the factory.`);
     },
-  }) as unknown as ApiProxy<T>;
+  }) as unknown as ApiProxy<TFac>;
 };
