@@ -22,11 +22,11 @@ export const checkoutRequestFactory = {
    * @param body - The request body containing the checkout session details.
    * @returns A `CheckoutInitiateSessionOKResponse` or `CheckoutErrorResponse` object.
    */
-  create(
+  create: (
     client_id: string,
     client_secret: string,
     body: CheckoutInitiateSessionRequest,
-  ): RequestData<CheckoutInitiateSessionOKResponse, CheckoutErrorResponse> {
+  ): RequestData<CheckoutInitiateSessionOKResponse, CheckoutErrorResponse> => {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.transaction.reference) {
@@ -56,11 +56,11 @@ export const checkoutRequestFactory = {
    * @param reference - The reference of the checkout session.
    * @returns A `CheckoutSessionOKResponse` or `CheckoutErrorResponse` object.
    */
-  info(
+  info: (
     client_id: string,
     client_secret: string,
     reference: string,
-  ): RequestData<CheckoutSessionOKResponse, CheckoutErrorResponse> {
+  ): RequestData<CheckoutSessionOKResponse, CheckoutErrorResponse> => {
     return {
       url: `/checkout/v3/session/${reference}`,
       method: "GET",
@@ -70,4 +70,4 @@ export const checkoutRequestFactory = {
       },
     };
   },
-} as const;
+};

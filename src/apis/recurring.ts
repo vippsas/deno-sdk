@@ -38,10 +38,10 @@ export const agreementRequestFactory = {
    * @param body - The draft agreement data.
    * @returns A `DraftAgreementResponseV3` or `RecurringErrorResponse` object.
    */
-  create(
+  create: (
     token: string,
     body: DraftAgreementV3Request,
-  ): RequestData<DraftAgreementResponseV3, RecurringErrorResponse> {
+  ): RequestData<DraftAgreementResponseV3, RecurringErrorResponse> => {
     return {
       url: "/recurring/v3/agreements",
       method: "POST",
@@ -60,11 +60,11 @@ export const agreementRequestFactory = {
    * @param createdAfter - The timestamp indicating the minimum creation date of the agreements to retrieve.
    * @returns A `AgreementResponseV3` or `RecurringErrorResponse` object.
    */
-  list(
+  list: (
     token: string,
     status: AgreementStatus,
     createdAfter: number,
-  ): RequestData<AgreementResponseV3, RecurringErrorResponse> {
+  ): RequestData<AgreementResponseV3, RecurringErrorResponse> => {
     return {
       url:
         `/recurring/v3/agreements?status=${status}&createdAfter=${createdAfter}`,
@@ -80,10 +80,10 @@ export const agreementRequestFactory = {
    * @param agreementId - The ID of the agreement to retrieve.
    * @returns A `AgreementResponseV3` or `RecurringErrorResponse` object.
    */
-  info(
+  info: (
     token: string,
     agreementId: string,
-  ): RequestData<AgreementResponseV3, RecurringErrorResponse> {
+  ): RequestData<AgreementResponseV3, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
       method: "GET",
@@ -100,11 +100,11 @@ export const agreementRequestFactory = {
    * @param body - The patch data for the agreement.
    * @returns void or a `RecurringErrorResponse` object.
    */
-  update(
+  update: (
     token: string,
     agreementId: string,
     body: AgreementPatchV3Request,
-  ): RequestData<void, RecurringErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}`,
       method: "PATCH",
@@ -121,11 +121,11 @@ export const agreementRequestFactory = {
    * @param body - The force accept data for the agreement.
    * @returns void or a `RecurringErrorResponse` object.
    */
-  forceAccept(
+  forceAccept: (
     token: string,
     agreementId: string,
     body: AgreementForceAcceptV3Request,
-  ): RequestData<void, RecurringErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/accept`,
       method: "PATCH",
@@ -133,7 +133,7 @@ export const agreementRequestFactory = {
       token,
     };
   },
-} as const;
+};
 
 /**
  * Factory object for managing charge API requests.
@@ -149,11 +149,11 @@ export const chargeRequestFactory = {
    * @param body - The request body containing the charge details.
    * @returns A `ChargeReference` or `RecurringErrorResponse` object.
    */
-  create(
+  create: (
     token: string,
     agreementId: string,
     body: CreateChargeV3Request,
-  ): RequestData<ChargeReference, RecurringErrorResponse> {
+  ): RequestData<ChargeReference, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges`,
       method: "POST",
@@ -169,11 +169,11 @@ export const chargeRequestFactory = {
    * @param chargeId - The ID of the charge to retrieve.
    * @returns A `ChargeResponseV3` or `RecurringErrorResponse` object.
    */
-  info(
+  info: (
     token: string,
     agreementId: string,
     chargeId: string,
-  ): RequestData<ChargeResponseV3, RecurringErrorResponse> {
+  ): RequestData<ChargeResponseV3, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges/${chargeId}`,
       method: "GET",
@@ -193,10 +193,10 @@ export const chargeRequestFactory = {
    * @param chargeId - The ID of the charge.
    * @returns A `ChargeResponseV3` or `RecurringErrorResponse` object.
    */
-  infoById(
+  infoById: (
     token: string,
     chargeId: string,
-  ): RequestData<ChargeResponseV3, RecurringErrorResponse> {
+  ): RequestData<ChargeResponseV3, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/charges/${chargeId}`,
       method: "GET",
@@ -212,11 +212,11 @@ export const chargeRequestFactory = {
    * @param status - The status of the charges to retrieve (optional).
    * @returns An array of `ChargeResponseV3` objects, or a `RecurringErrorResponse` object.
    */
-  list(
+  list: (
     token: string,
     agreementId: string,
     status?: ChargeStatus,
-  ): RequestData<ChargeResponseV3[], RecurringErrorResponse> {
+  ): RequestData<ChargeResponseV3[], RecurringErrorResponse> => {
     const url = status
       ? `/recurring/v3/agreements/${agreementId}/charges?status=${status}`
       : `/recurring/v3/agreements/${agreementId}/charges`;
@@ -236,11 +236,11 @@ export const chargeRequestFactory = {
    * @param chargeId - The ID of the charge.
    * @returns void or a `RecurringErrorResponse` object.
    */
-  cancel(
+  cancel: (
     token: string,
     agreementId: string,
     chargeId: string,
-  ): RequestData<void, RecurringErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges/${chargeId}`,
       method: "DELETE",
@@ -258,12 +258,12 @@ export const chargeRequestFactory = {
    * @param body - The request body containing the charge modification details.
    * @returns void or a `RecurringErrorResponse` object.
    */
-  capture(
+  capture: (
     token: string,
     agreementId: string,
     chargeId: string,
     body: ChargeModificationRequest,
-  ): RequestData<void, RecurringErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> => {
     return {
       url:
         `/recurring/v3/agreements/${agreementId}/charges/${chargeId}/capture`,
@@ -282,12 +282,12 @@ export const chargeRequestFactory = {
    * @param body - The request body containing the charge modification details.
    * @returns void or a `RecurringErrorResponse` object.
    */
-  refund(
+  refund: (
     token: string,
     agreementId: string,
     chargeId: string,
     body: ChargeModificationRequest,
-  ): RequestData<void, RecurringErrorResponse> {
+  ): RequestData<void, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges/${chargeId}/refund`,
       method: "POST",
@@ -295,4 +295,4 @@ export const chargeRequestFactory = {
       token,
     };
   },
-} as const;
+};

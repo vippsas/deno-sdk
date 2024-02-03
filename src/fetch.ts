@@ -48,7 +48,7 @@ export const fetchJSON = async <TOk, TErr>(
   request: Request,
 ): Promise<ClientResponse<TOk, TErr>> => {
   const response = await fetch(request);
-  
+
   /**
    * Check if the response is empty.
    */
@@ -63,7 +63,6 @@ export const fetchJSON = async <TOk, TErr>(
   if (isServerErrorStatus(response.status)) {
     throw new Error(response.statusText);
   }
-
 
   /**
    * Check if the content type is text/plain or has zero content length.
@@ -90,7 +89,7 @@ const isText = (response: Response): boolean => {
 const isContentLengthZero = (response: Response): boolean => {
   const contentLength = response.headers.get("content-length");
   return contentLength === "0";
-}
+};
 
 export const getMediaType = (response: Response): string | undefined => {
   /**

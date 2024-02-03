@@ -20,10 +20,10 @@ export const authRequestFactory = {
    * Found in the Vipps portal. Example: "Y8Kteew6GE3ZmeycEt6egg=="
    * @returns A `AccessToken` or `AccessTokenError` object.
    */
-  getToken(
+  getToken: (
     clientId: string,
     clientSecret: string,
-  ): RequestData<AccessToken, AccessTokenError> {
+  ): RequestData<AccessToken, AccessTokenError> => {
     return {
       method: "POST",
       url: "/accesstoken/get",
@@ -34,4 +34,4 @@ export const authRequestFactory = {
       },
     };
   },
-} as const;
+};

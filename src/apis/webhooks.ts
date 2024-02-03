@@ -18,10 +18,10 @@ export const webhooksRequestFactory = {
    * @param body - The request body containing the webhook details.
    * @returns A `WebhooksRegisterOKResponse` or `WebhooksErrorResponse` object.
    */
-  register(
+  register: (
     token: string,
     body: WebhooksRegisterRequest,
-  ): RequestData<WebhooksRegisterOKResponse, WebhooksErrorResponse> {
+  ): RequestData<WebhooksRegisterOKResponse, WebhooksErrorResponse> => {
     return {
       url: "/webhooks/v1/webhooks",
       method: "POST",
@@ -35,9 +35,9 @@ export const webhooksRequestFactory = {
    * @param token - The access token for authentication.
    * @returns A `WebhooksGetRegisteredOKResponse` or `WebhooksErrorResponse` object.
    */
-  list(
+  list: (
     token: string,
-  ): RequestData<WebhooksGetRegisteredOKResponse, WebhooksErrorResponse> {
+  ): RequestData<WebhooksGetRegisteredOKResponse, WebhooksErrorResponse> => {
     return {
       url: "/webhooks/v1/webhooks",
       method: "GET",
@@ -51,14 +51,14 @@ export const webhooksRequestFactory = {
    * @param webhookId - The ID of the webhook to delete.
    * @returns void or a `WebhooksErrorResponse` object.
    */
-  delete(
+  delete: (
     token: string,
     webhookId: `${string}-${string}-${string}-${string}-${string}`,
-  ): RequestData<void, WebhooksErrorResponse> {
+  ): RequestData<void, WebhooksErrorResponse> => {
     return {
       url: `/webhooks/v1/webhooks/${webhookId}`,
       method: "DELETE",
       token,
     };
   },
-} as const;
+};
