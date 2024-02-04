@@ -22,10 +22,10 @@ export const ePaymentRequestFactory = {
    * @param body - The request body containing the payment details.
    * @returns A `EPaymentCreatePaymentOKResponse` or `EPaymentErrorResponse` object.
    */
-  create(
+  create: (
     token: string,
     body: EPaymentCreatePaymentRequest,
-  ): RequestData<EPaymentCreatePaymentOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentCreatePaymentOKResponse, EPaymentErrorResponse> => {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
@@ -45,10 +45,10 @@ export const ePaymentRequestFactory = {
    * @param reference - The reference of the payment.
    * @returns A `EPaymentGetPaymentOKResponse` or `EPaymentErrorResponse` object.
    */
-  info(
+  info: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentGetPaymentOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentGetPaymentOKResponse, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/payments/${reference}`,
       method: "GET",
@@ -62,10 +62,10 @@ export const ePaymentRequestFactory = {
    * @param reference - The reference of the payment.
    * @returns A `EPaymentGetEventLogOKResponse` or `EPaymentErrorResponse` object.
    */
-  history(
+  history: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentGetEventLogOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentGetEventLogOKResponse, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/payments/${reference}/events`,
       method: "GET",
@@ -79,10 +79,10 @@ export const ePaymentRequestFactory = {
    * @param reference - The reference of the payment to cancel.
    * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
-  cancel(
+  cancel: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/payments/${reference}/cancel`,
       method: "POST",
@@ -97,11 +97,11 @@ export const ePaymentRequestFactory = {
    * @param body - The modification request body.
    * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
-  capture(
+  capture: (
     token: string,
     reference: string,
     body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/payments/${reference}/capture`,
       method: "POST",
@@ -117,11 +117,11 @@ export const ePaymentRequestFactory = {
    * @param body - The request body containing the modification details.
    * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
    */
-  refund(
+  refund: (
     token: string,
     reference: string,
     body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> {
+  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/payments/${reference}/refund`,
       method: "POST",
@@ -137,11 +137,11 @@ export const ePaymentRequestFactory = {
    * @param body - The request body containing additional information.
    * @returns void or a `EPaymentErrorResponse` object.
    */
-  forceApprove(
+  forceApprove: (
     token: string,
     reference: string,
     body: EPaymentForceApproveRequest,
-  ): RequestData<void, EPaymentErrorResponse> {
+  ): RequestData<void, EPaymentErrorResponse> => {
     return {
       url: `/epayment/v1/test/payments/${reference}/approve`,
       method: "POST",
@@ -149,4 +149,4 @@ export const ePaymentRequestFactory = {
       token,
     };
   },
-} as const;
+};

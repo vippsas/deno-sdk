@@ -65,9 +65,9 @@ export const fetchJSON = async <TOk, TErr>(
   }
 
   /**
-   * Check if the content type is text/plain.
+   * Check if the content type is text/plain or has zero content length.
    */
-  const json = isText(response)
+  const json = isText(response) || isContentLengthZero(response)
     ? { text: await response.text() }
     : await response.json();
 
@@ -84,6 +84,11 @@ export const fetchJSON = async <TOk, TErr>(
 const isText = (response: Response): boolean => {
   const mediaType = getMediaType(response);
   return mediaType === "text/plain";
+};
+
+const isContentLengthZero = (response: Response): boolean => {
+  const contentLength = response.headers.get("content-length");
+  return contentLength === "0";
 };
 
 export const getMediaType = (response: Response): string | undefined => {

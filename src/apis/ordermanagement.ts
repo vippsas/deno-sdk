@@ -26,15 +26,12 @@ export const orderManagementRequestFactory = {
    * @param body - The request body containing the category details.
    * @returns A `OrderManagementOKResponse` or `OrderManagementErrorResponse` object.
    */
-  addCategory(
+  addCategory: (
     token: string,
     orderId: OrderManagementOrderId,
     paymentType: OrderManagementPaymentType,
     body: OrderManagementOrder,
-  ): RequestData<
-    OrderManagementOKResponse,
-    OrderManagementErrorResponse
-  > {
+  ): RequestData<OrderManagementOKResponse, OrderManagementErrorResponse> => {
     return {
       url: `/order-management/v2/${paymentType}/categories/${orderId}`,
       method: "PUT",
@@ -51,13 +48,13 @@ export const orderManagementRequestFactory = {
    * @param body - The request body containing the image details.
    * @returns A `OrderManagementAddImageOKResponse` or `OrderManagementErrorResponse` object.
    */
-  addImage(
+  addImage: (
     token: string,
     body: OrderManagementImage,
   ): RequestData<
     OrderManagementAddImageOKResponse,
     OrderManagementErrorResponse
-  > {
+  > => {
     return {
       url: "/order-management/v1/images",
       method: "POST",
@@ -75,15 +72,12 @@ export const orderManagementRequestFactory = {
    * @param body - The request body containing the receipt details.
    * @returns A `OrderManagementOKResponse` or `OrderManagementErrorResponse` object.
    */
-  addReceipt(
+  addReceipt: (
     token: string,
     orderId: OrderManagementOrderId,
     paymentType: OrderManagementPaymentType,
     body: OrderManagementReceipt,
-  ): RequestData<
-    OrderManagementOKResponse,
-    OrderManagementErrorResponse
-  > {
+  ): RequestData<OrderManagementOKResponse, OrderManagementErrorResponse> => {
     return {
       url: `/order-management/v2/${paymentType}/receipts/${orderId}`,
       method: "POST",
@@ -100,18 +94,18 @@ export const orderManagementRequestFactory = {
    * @param paymentType - The payment type.
    * @returns A `OrderManagementGetOrderOKResponse` or `OrderManagementErrorResponse` object.
    */
-  info(
+  info: (
     token: string,
     orderId: OrderManagementOrderId,
     paymentType: OrderManagementPaymentType,
   ): RequestData<
     OrderManagementGetOrderOKResponse,
     OrderManagementErrorResponse
-  > {
+  > => {
     return {
       url: `/order-management/v2/${paymentType}/${orderId}`,
       method: "GET",
       token,
     };
   },
-} as const;
+};

@@ -12,11 +12,11 @@ export const userRequestFactory = {
    * @param sub - The sub claim of the user.
    * @returns A `UserInfo` or `UserInfoError` object.
    */
-  info(token: string, sub: string): RequestData<UserInfo, UserInfoError> {
+  info: (token: string, sub: string): RequestData<UserInfo, UserInfoError> => {
     return {
       url: `/vipps-userinfo-api/userinfo/${sub}`,
       method: "GET",
       token,
     };
   },
-} as const;
+};

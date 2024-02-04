@@ -16,11 +16,11 @@ export const loginRequestFactory = {
    *
    * @returns A `LoginWellKnownResponse` or `LoginErrorResponse` object.
    */
-  discovery(): RequestData<LoginWellKnownResponse, LoginErrorResponse> {
+  discovery: (): RequestData<LoginWellKnownResponse, LoginErrorResponse> => {
     return {
       url: `/access-management-1.0/access/.well-known/openid-configuration`,
       method: "GET",
       omitHeaders: ["Ocp-Apim-Subscription-Key"],
     };
   },
-} as const;
+};
