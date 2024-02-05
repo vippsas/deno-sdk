@@ -3,6 +3,29 @@ export type BaseClient = {
     requestData: RequestData<unknown, unknown>,
   ) => Promise<ClientResponse<unknown, unknown>>;
 };
+
+export type RequestFactory = {
+  // deno-lint-ignore no-explicit-any
+  [key: string]: (...args: any[]) => RequestData<unknown, unknown>;
+};
+
+export type ApiProxy<TFac extends RequestFactory> = {
+  [key in keyof TFac]: TFac[key] extends (
+    ...args: infer TArgs
+  ) => RequestData<infer TOk, infer TErr>
+    ? (...args: TArgs) => Promise<ClientResponse<TOk, TErr>>
+    : never;
+};
+
+export type RequestData<TOk, TErr> = {
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  url: string;
+  additionalHeaders?: Record<string, string>;
+  omitHeaders?: OmitHeaders;
+  body?: unknown;
+  token?: string;
+};
+
 export type ClientResponse<TOk, TErr> =
   | {
     ok: true;
@@ -34,15 +57,6 @@ export type ClientConfig = {
   useTestMode?: boolean;
   /** If true retries requests 2 times. @default true */
   retryRequests?: boolean;
-};
-
-export type RequestData<TOk, TErr> = {
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  url: string;
-  additionalHeaders?: Record<string, string>;
-  omitHeaders?: OmitHeaders;
-  body?: unknown;
-  token?: string;
 };
 
 export type DefaultHeaders = {

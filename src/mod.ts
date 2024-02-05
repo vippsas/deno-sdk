@@ -1,6 +1,7 @@
 import { ClientConfig } from "./types.ts";
 import { baseClient } from "./base_client.ts";
-import { ApiClient, createApi } from "./api_proxy.ts";
+import { proxifyFactory } from "./api_proxy.ts";
+
 import { authRequestFactory } from "./apis/auth.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
@@ -42,22 +43,22 @@ export const Client = (options: ClientConfig) => {
 
   // Create the API client
   const apiClient = {
-    auth: createApi(client, authRequestFactory),
-    checkout: createApi(client, checkoutRequestFactory),
-    login: createApi(client, loginRequestFactory),
-    order: createApi(client, orderManagementRequestFactory),
-    payment: createApi(client, ePaymentRequestFactory),
+    auth: proxifyFactory(client, authRequestFactory),
+    checkout: proxifyFactory(client, checkoutRequestFactory),
+    login: proxifyFactory(client, loginRequestFactory),
+    order: proxifyFactory(client, orderManagementRequestFactory),
+    payment: proxifyFactory(client, ePaymentRequestFactory),
     qr: {
-      callback: createApi(client, callbackQRRequestFactory),
-      redirect: createApi(client, redirectQRRequestFactory),
+      callback: proxifyFactory(client, callbackQRRequestFactory),
+      redirect: proxifyFactory(client, redirectQRRequestFactory),
     },
     recurring: {
-      charge: createApi(client, chargeRequestFactory),
-      agreement: createApi(client, agreementRequestFactory),
+      charge: proxifyFactory(client, chargeRequestFactory),
+      agreement: proxifyFactory(client, agreementRequestFactory),
     },
-    user: createApi(client, userRequestFactory),
-    webhook: createApi(client, webhooksRequestFactory),
-  } as const satisfies ApiClient;
+    user: proxifyFactory(client, userRequestFactory),
+    webhook: proxifyFactory(client, webhooksRequestFactory),
+  } as const;
 
   return apiClient;
 };
