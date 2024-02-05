@@ -5,7 +5,8 @@ export type BaseClient = {
 };
 
 export type RequestFactory = {
-  [key: string]: (...args: never[]) => RequestData<unknown, unknown>;
+  // deno-lint-ignore no-explicit-any
+  [key: string]: (...args: any[]) => RequestData<unknown, unknown>;
 };
 
 export type ApiProxy<TFac extends RequestFactory> = {
