@@ -1,9 +1,9 @@
-import { createApi } from "../src/api_proxy.ts";
+import { proxifyFactory } from "../src/api_proxy.ts";
 import { baseClient } from "../src/base_client.ts";
 import { assertEquals } from "./test_deps.ts";
 import { RequestData } from "../src/types.ts";
 
-Deno.test("createApi - Should return a Proxy object with method", () => {
+Deno.test("proxifyFactory - Should return a Proxy object with method", () => {
   const client = baseClient({ merchantSerialNumber: "", subscriptionKey: "" });
 
   const factory = {
@@ -15,7 +15,7 @@ Deno.test("createApi - Should return a Proxy object with method", () => {
     },
   };
 
-  const api = createApi(client, factory);
+  const api = proxifyFactory(client, factory);
   assertEquals(typeof api, "object");
   assertEquals(typeof api.foo, "function");
 });
