@@ -4,13 +4,8 @@ export type BaseClient = {
   ) => Promise<ClientResponse<unknown, unknown>>;
 };
 
-export type ApiClient = {
-  [key: string]: ApiProxy<RequestFactory> | ApiClient;
-};
-
 export type RequestFactory = {
-  // deno-lint-ignore no-explicit-any
-  [key: string]: (...args: any[]) => RequestData<unknown, unknown>;
+  [key: string]: (...args: never[]) => RequestData<unknown, unknown>;
 };
 
 export type ApiProxy<TFac extends RequestFactory> = {

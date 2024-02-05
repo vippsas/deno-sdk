@@ -1,4 +1,4 @@
-import { ApiClient, ClientConfig } from "./types.ts";
+import { ClientConfig } from "./types.ts";
 import { baseClient } from "./base_client.ts";
 import { proxifyFactory } from "./api_proxy.ts";
 
@@ -58,7 +58,7 @@ export const Client = (options: ClientConfig) => {
     },
     user: proxifyFactory(client, userRequestFactory),
     webhook: proxifyFactory(client, webhooksRequestFactory),
-  } as const satisfies ApiClient;
+  } as const;
 
   return apiClient;
 };

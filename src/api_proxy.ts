@@ -17,8 +17,8 @@ export const proxifyFactory = <TFac extends RequestFactory>(
         return Reflect.get(fac, prop); // Fallback to the original object
       }
       return new Proxy(Reflect.get(fac, prop), {
-        apply(factoryMethod, _this, args) {
-          return client.makeRequest(factoryMethod(...args));
+        apply(facFn, _this, args: Parameters<TFac[keyof TFac]>) {
+          return client.makeRequest(facFn(...args));
         },
       });
     },
