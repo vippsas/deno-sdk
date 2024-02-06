@@ -122,7 +122,7 @@ Deno.test("createUserAgent - Should return the correct user agent for require", 
 });
 
 Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
-  const expectedUserAgent = "Vipps/Deno SDK/1.0.0";
+  const expectedUserAgent = "Vipps/Deno SDK/1.1.0";
   const actualUserAgent = createSDKUserAgent(
     "https://deno.land/x/vipps_mobilepay_sdk@1.1.0/mod.ts",
   );
