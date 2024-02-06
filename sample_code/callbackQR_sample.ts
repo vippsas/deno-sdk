@@ -1,5 +1,5 @@
 import "https://deno.land/std@0.214.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.0.0/mod.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.1.0/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -18,11 +18,7 @@ const client = Client({
 });
 
 // Grab a token
-const accessToken = await client.auth.getToken({
-  clientId,
-  clientSecret,
-  subscriptionKey,
-});
+const accessToken = await client.auth.getToken(clientId, clientSecret);
 
 // Check if the token was retrieved successfully
 if (!accessToken.ok) {
@@ -35,7 +31,7 @@ const token = accessToken.data.access_token;
 
 const qrId = crypto.randomUUID();
 
-const qr = await client.callbackQR.create(token, qrId, {
+const qr = await client.qr.callback.create(token, qrId, {
   locationDescription: "Kasse 1",
 });
 
@@ -46,7 +42,7 @@ if (!qr.ok) {
   Deno.exit(1);
 }
 
-const qrInfo = await client.callbackQR.info(token, qrId);
+const qrInfo = await client.qr.callback.info(token, qrId);
 
 // Check if the QR was retrieved successfully
 if (!qrInfo.ok) {
