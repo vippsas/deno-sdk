@@ -39,12 +39,8 @@ export type SDKError<TErr> = {
 };
 
 export type ClientConfig = {
-  /** Vipps Subscription key for the API product. Found in the Vipps portal.
-   * Example: "0f14ebcab0eb4b29ae0cb90d91b4a84a". */
-  subscriptionKey: string;
-  /** Vipps assigned unique number for a merchant. Found in the Vipps portal.
-   * Example: "123456". */
-  merchantSerialNumber: string;
+  subscriptionKey: OcpApimSubscriptionKey;
+  merchantSerialNumber: MerchantSerialNumber;
   /** Example: "My Ecommerce System" */
   systemName?: string;
   /** Example: "1.0.0" */
@@ -63,13 +59,53 @@ export type DefaultHeaders = {
   "Content-Type": "application/json";
   "Authorization": string;
   "User-Agent": string;
-  "Ocp-Apim-Subscription-Key": string;
-  "Merchant-Serial-Number": string;
+  "Ocp-Apim-Subscription-Key": OcpApimSubscriptionKey;
+  "Merchant-Serial-Number": MerchantSerialNumber;
+  /**
+   * The name of the ecommerce solution. Example: "Acme Commerce".
+   *
+   * @maxLength 30
+   */
   "Vipps-System-Name": string;
+  /**
+   * The version number of the ecommerce solution. Example: "3.1.2"..
+   *
+   * @maxLength 30
+   */
   "Vipps-System-Version": string;
+  /**
+   * The name of the ecommerce plugin. Example: "acme-webshop".
+   *
+   * @maxLength 30
+   */
   "Vipps-System-Plugin-Name": string;
+  /**
+   * The version number of the ecommerce plugin. Example: "4.5.6".
+   *
+   * @maxLength 30
+   */
   "Vipps-System-Plugin-Version": string;
   "Idempotency-Key": string;
 };
 
 export type OmitHeaders = (keyof DefaultHeaders)[];
+
+/**
+ * The merchant serial number (MSN) for the sales unit.
+ * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+ *
+ * @minLength 4
+ * @maxLength 6
+ * @pattern ^[0-9]{4,6}$
+ * @example "123456"
+ */
+export type MerchantSerialNumber = string;
+
+/**
+ * Vipps Subscription key for the API product.
+ * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+ *
+ * @minLength 1
+ * @example "0f14ebcab0eb4b29ae0cb90d91b4a84a"
+ */
+export type OcpApimSubscriptionKey = string;

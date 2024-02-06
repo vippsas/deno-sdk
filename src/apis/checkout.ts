@@ -4,7 +4,7 @@ import {
   CheckoutErrorResponse,
   CheckoutInitiateSessionOKResponse,
   CheckoutInitiateSessionRequest,
-  CheckoutSessionOKResponse,
+  CheckoutSessionResponse,
 } from "./types/checkout_types.ts";
 
 /**
@@ -17,8 +17,10 @@ export const checkoutRequestFactory = {
    * See https://developer.vippsmobilepay.com/docs/APIs/checkout-api/
    * for more details.
    *
-   * @param client_id - The client ID.
-   * @param client_secret - The client secret.
+   * @param client_id - Client ID for the merchant (the "username").
+   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+   * @param client_secret - Client Secret for the merchant (the "password").
+   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
    * @param body - The request body containing the checkout session details.
    * @returns A `CheckoutInitiateSessionOKResponse` or `CheckoutErrorResponse` object.
    */
@@ -60,7 +62,7 @@ export const checkoutRequestFactory = {
     client_id: string,
     client_secret: string,
     reference: string,
-  ): RequestData<CheckoutSessionOKResponse, CheckoutErrorResponse> => {
+  ): RequestData<CheckoutSessionResponse, CheckoutErrorResponse> => {
     return {
       url: `/checkout/v3/session/${reference}`,
       method: "GET",

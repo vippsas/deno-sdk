@@ -1,26 +1,27 @@
-import { MerchantSerialNumber, ProblemJSON } from "./shared_types.ts";
+import { MerchantSerialNumber } from "../../types.ts";
+import { ProblemJSON } from "./shared_types.ts";
 
 /////////////// Error Types ///////////////
 export type CheckoutErrorResponse = ProblemJSON & {
   errorCode: string;
-  errors: {
-    [key: string]: string[];
-  };
+  errors: Record<string, string[]>;
 };
 
 /**
- * The currency identifier according to ISO 4217. Only NOK is supported at the moment.
- * Support for EUR, DKK, and SEK will be provided in early 2024.
+ * The currency identifier according to ISO 4217.
+ * Available types of currency are NOK and EUR.
  *
  * @example "NOK"
  */
 export type CheckoutCurrency = "NOK";
 
-/** Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre.
- * Example: 499 kr = 49900 øre. */
+/**
+ * Amounts are specified in minor units. For example: 10.00 NOK should be
+ * written as 1000; 20.50 EUR should be written as 2050.
+ */
 export type CheckoutAmount = {
   /**
-   * Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int32
    * @min 0
    */
@@ -139,43 +140,9 @@ export type CheckoutInitiateSessionOKResponse = {
   pollingUrl: string;
 };
 
-/** Configuration required to enable Instabox logistics options */
-export type CheckoutInstabox = {
-  /**
-   * The client id provided to you by Instabox
-   * @minLength 1
-   */
-  clientId: string;
-  /**
-   * The client secret provided to you by Instabox
-   * @minLength 1
-   */
-  clientSecret: string;
-};
-
-/** Details needed to book an instabox order */
-export type CheckoutInstaboxBookingDetails = {
-  /** Identifies when the delivery options were fetched */
-  availabilityToken: string;
-  /** Identifies the service (For example "EXPRESS") */
-  serviceType: string;
-  /** Identifies the location */
-  sortCode: string;
-};
-
-export type CheckoutInstaboxLogisticsOption = CheckoutLogisticsOptionBase & {
-  type?: CheckoutInstaboxLogisticsType | null;
-  customType?: string | null;
-  brand: "INSTABOX";
-};
-
-export type CheckoutInstaboxLogisticsType = "HOME_DELIVERY" | "PICKUP_POINT";
-
 export type CheckoutIntegrations = {
   /** Configuration required to enable Porterbuddy logistics options */
   porterbuddy?: CheckoutPorterbuddy | null;
-  /** Configuration required to enable Instabox logistics options */
-  instabox?: CheckoutInstabox | null;
   /** Configuration required to enable Helthjem logistics options */
   helthjem?: CheckoutHelthjem | null;
 };
@@ -191,19 +158,45 @@ export type CheckoutLogistics = {
   /** Merchant's Callback URL for providing dynamic logistics options based on customer address. Example: "https://example.com/vipps/dynamiclogisticsoption". Can not be used with AddressFields set to false. */
   dynamicOptionsCallback?: string | null;
   /** Fixed list of logistics options. */
-  fixedOptions?: CheckoutLogisticsOption[] | null;
+  fixedOptions?:
+    | (
+      | CheckoutPostenLogisticsOption
+      | CheckoutPostnordLogisticsOption
+      | CheckoutPorterbuddyLogisticsOption
+      | CheckoutHelthjemLogisticsOption
+      | CheckoutPostiLogisticsOption
+      | CheckoutOtherLogisticsOption
+    )[]
+    | null;
   /** Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false. */
   integrations?: CheckoutIntegrations | null;
 };
 
 export type CheckoutLogisticsOptionBase = {
-  /** Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre. */
-  amount: CheckoutAmount;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
   id: string;
-  /** @format int32 */
+  /**
+   * @format int32
+   * @min 0
+   */
   priority: number;
   isDefault: boolean;
   description?: string | null;
+};
+
+/** Information about the customer address used when retrieving dynamic logistics options. */
+export type CheckoutMerchantLogisticsCallbackRequestBody = {
+  /** Example: "Robert Levins gate 5" */
+  streetAddress: string;
+  /** Example: "0154" */
+  postalCode: string;
+  /** Example: "Oslo" */
+  region: string;
+  /** The ISO-3166-1 Alpha-2 representation of the country. Example: "NO" */
+  country: string;
 };
 
 export type CheckoutOrderBottomLine = {
@@ -214,17 +207,20 @@ export type CheckoutOrderBottomLine = {
    */
   currency: CheckoutCurrency;
   /**
-   * Tip amount for the order. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Tip amount for the order. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    */
   tipAmount?: number | null;
   /**
-   * Amount paid by gift card or coupon. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Amount paid by gift card or coupon. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    */
   giftCardAmount?: number | null;
   /** Identifier of the terminal / point of sale. */
   terminalId?: string | null;
+  /** May be used to indicate that the payment comes from multiple sources. Example: giftcard + card */
+  paymentSources?: CheckoutPaymentSources | null;
+  receiptNumber?: string | null;
 };
 
 export type CheckoutOrderLine = {
@@ -241,19 +237,19 @@ export type CheckoutOrderLine = {
    */
   id: string;
   /**
-   * Total amount of the order line, including tax and discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Total amount of the order line, including tax and discount. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    * @min 0
    */
   totalAmount: number;
   /**
-   * Total amount of order line with discount excluding tax. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Total amount of order line with discount excluding tax. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    * @min 0
    */
   totalAmountExcludingTax: number;
   /**
-   * Total tax amount paid for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Total tax amount paid for the order line. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    * @min 0
    */
@@ -268,7 +264,7 @@ export type CheckoutOrderLine = {
   /** If no quantity info is provided the order line will default to 1 pcs. */
   unitInfo?: CheckoutOrderUnitInfo | null;
   /**
-   * Total discount for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Total discount for the order line. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    */
   discount?: number | null;
@@ -292,7 +288,7 @@ export type CheckoutOrderSummary = {
 
 export type CheckoutOrderUnitInfo = {
   /**
-   * Total price per unit, including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+   * Total price per unit, including tax and excluding discount. Must be in minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
    * @format int64
    * @min 0
    */
@@ -304,7 +300,13 @@ export type CheckoutOrderUnitInfo = {
 };
 
 export type CheckoutOtherLogisticsOption = CheckoutLogisticsOptionBase & {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
   title: string;
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
+  amount: CheckoutAmount;
   brand: "OTHER";
 };
 
@@ -322,12 +324,35 @@ export type CheckoutPaymentMerchantInfo = {
   termsAndConditionsUrl?: string | null;
 };
 
-export type CheckoutPaymentMethod = "Wallet" | "Card" | "Swish" | "Mobilepay";
+export type CheckoutPaymentMethod = "Wallet" | "Card" | "BankTransfer";
+
+export type CheckoutPaymentSources = {
+  /**
+   * Amount from gift card
+   * @format int64
+   */
+  giftCard?: number | null;
+  /**
+   * Amount from card
+   * @format int64
+   */
+  card?: number | null;
+  /**
+   * Amount from voucher
+   * @format int64
+   */
+  voucher?: number | null;
+  /**
+   * Amount from cash
+   * @format int64
+   */
+  cash?: number | null;
+};
 
 export type CheckoutPaymentState = "CREATED" | "AUTHORIZED" | "TERMINATED";
 
 export type CheckoutPaymentTransaction = {
-  /** Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre. */
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
   amount: CheckoutAmount;
   /**
    * The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid
@@ -337,7 +362,7 @@ export type CheckoutPaymentTransaction = {
    */
   reference?: string;
   /**
-   * Description visible to the customer during payment. Example: "One pair of Vipps socks".
+   * Description visible to the customer during payment. Example: "One pair of socks".
    * @minLength 3
    * @maxLength 100
    */
@@ -362,8 +387,6 @@ export type CheckoutPickupPoint = {
   country: string;
   /** Pickup point's opening hours. Example: Man-Søn: 1000-2000 */
   openingHours?: string[] | null;
-  /** Instabox details */
-  instabox?: CheckoutInstaboxBookingDetails | null;
 };
 
 /** Configuration required to enable Porterbuddy logistics options */
@@ -380,10 +403,14 @@ export type CheckoutPorterbuddy = {
 };
 
 export type CheckoutPorterbuddyLogisticsOption = CheckoutLogisticsOptionBase & {
-  type?: "HOME_DELIVERY" | null;
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
+  amount?: CheckoutAmount | null;
+  type?: CheckoutPorterbuddyLogisticsType | null;
   customType?: string | null;
   brand: "PORTERBUDDY";
 };
+
+export type CheckoutPorterbuddyLogisticsType = "HOME_DELIVERY";
 
 /** Details about the sender of the Porterbuddy parcels */
 export type CheckoutPorterbuddyOrigin = {
@@ -409,6 +436,8 @@ export type CheckoutPorterbuddyOriginAddress = {
 };
 
 export type CheckoutPostenLogisticsOption = CheckoutLogisticsOptionBase & {
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
+  amount: CheckoutAmount;
   type?: CheckoutPostenLogisticsType | null;
   customType?: string | null;
   brand: "POSTEN";
@@ -419,7 +448,23 @@ export type CheckoutPostenLogisticsType =
   | "PICKUP_POINT"
   | "HOME_DELIVERY";
 
+export type CheckoutPostiLogisticsOption = CheckoutLogisticsOptionBase & {
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
+  amount: CheckoutAmount;
+  type?: CheckoutPostiLogisticsType | null;
+  customType?: string | null;
+  /**
+   * @default "POSTI"
+   * @pattern POSTI
+   */
+  brand: "POSTI";
+};
+
+export type CheckoutPostiLogisticsType = "MAILBOX" | "PICKUP_POINT";
+
 export type CheckoutPostnordLogisticsOption = CheckoutLogisticsOptionBase & {
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
+  amount: CheckoutAmount;
   type?: CheckoutPostnordLogisticsType | null;
   customType?: string | null;
   brand: "POSTNORD";
@@ -454,15 +499,50 @@ export type CheckoutPrefillCustomer = {
 
 export type CheckoutQuantityUnit = "PCS" | "KG" | "KM" | "MINUTE" | "LITRE";
 
-/** Defines the details of the payment. */
-export type CheckoutResponsePaymentDetails = {
+/** Defines the details of a bank transfer payment. */
+export type CheckoutResponseBankTransferPaymentDetails =
+  & CheckoutResponsePaymentDetailsBase
+  & {
+    /**
+     * @default "BankTransfer"
+     * @pattern BankTransfer
+     */
+    type: "BankTransfer";
+  };
+
+/** Defines the details of a card payment. */
+export type CheckoutResponseCardPaymentDetails =
+  & CheckoutResponsePaymentDetailsBase
+  & {
+    state: CheckoutPaymentState;
+    aggregate?: CheckoutTransactionAggregate | null;
+    /**
+     * @default "Card"
+     * @pattern Card
+     */
+    type: "Card";
+  };
+
+export type CheckoutResponsePaymentDetailsBase = {
+  /** Amounts are specified in minor units. For example: 10.00 NOK should be written as 1000; 20.50 EUR should be written as 2050. */
   amount: CheckoutAmount;
-  state: CheckoutPaymentState;
-  aggregate?: CheckoutTransactionAggregate | null;
 };
 
+/** Defines the details of a wallet payment. */
+export type CheckoutResponseWalletPaymentDetails =
+  & CheckoutResponsePaymentDetailsBase
+  & {
+    state: CheckoutPaymentState;
+    aggregate?: CheckoutTransactionAggregate | null;
+    /**
+     * @default "Wallet"
+     * @pattern Wallet
+     */
+    type: "Wallet";
+  };
+
 /** Session information */
-export type CheckoutSessionOKResponse = {
+export type CheckoutSessionResponse = {
   /** The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2". */
   sessionId: string;
   merchantSerialNumber?: MerchantSerialNumber | null;
@@ -471,7 +551,11 @@ export type CheckoutSessionOKResponse = {
   /** The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State. */
   sessionState: CheckoutExternalSessionState;
   paymentMethod?: CheckoutPaymentMethod | null;
-  paymentDetails?: CheckoutResponsePaymentDetails | null;
+  paymentDetails?:
+    | CheckoutResponseWalletPaymentDetails
+    | CheckoutResponseCardPaymentDetails
+    | CheckoutResponseBankTransferPaymentDetails
+    | null;
   userInfo?: CheckoutUserInfo | null;
   shippingDetails?: CheckoutShippingDetails | null;
   billingDetails?: CheckoutBillingDetails | null;
@@ -513,16 +597,8 @@ export type CheckoutUserFlow = "WEB_REDIRECT" | "NATIVE_REDIRECT";
 
 /** Data from the UserInfo endpoint. Will only be present if UserInfo flow is used. */
 export type CheckoutUserInfo = {
-  /** The openid sub that uniquely identifies a Vipps user. */
+  /** The openid sub that uniquely identifies a user. */
   sub: string;
   /** Example: "user@example.com" */
   email?: string | null;
 };
-
-export type CheckoutLogisticsOption =
-  | CheckoutPostenLogisticsOption
-  | CheckoutPostnordLogisticsOption
-  | CheckoutPorterbuddyLogisticsOption
-  | CheckoutInstaboxLogisticsOption
-  | CheckoutHelthjemLogisticsOption
-  | CheckoutOtherLogisticsOption;
