@@ -8,6 +8,7 @@ Deno.test("create - should return the correct RequestData object", () => {
   const requestData = chargeRequestFactory.create(token, agreementId, {
     amount: 1000,
     transactionType: "DIRECT_CAPTURE",
+    type: "RECURRING",
     description: "Test charge",
     due: "2030-12-31",
     retryDays: 5,

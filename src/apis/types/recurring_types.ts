@@ -10,18 +10,23 @@ export type RecurringErrorV3 = ProblemJSON & {
    * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
    */
   contextId?: string;
-  extraDetails?: {
-    /**
-     * Field to provide additional details on
-     * @example "productName"
-     */
-    field?: string;
-    /**
-     * Details for the error of a specific field
-     * @example "must not be empty"
-     */
-    text?: string;
-  }[];
+  extraDetails?: ExtraDetails[];
+};
+
+// Extra details about the error
+type ExtraDetails = {
+  /**
+   * Name of the field related to the error
+   *
+   * @example "amount"
+   */
+  name: string;
+  /**
+   * Details about the error
+   *
+   * @example "Must be a positive integer larger than 100"
+   */
+  reason: string;
 };
 
 /**
@@ -48,25 +53,49 @@ export type RecurringErrorFromAzure = {
 //////////////// Common types /////////////////
 
 /**
- * Only NOK is supported at the moment. Support for EUR and DKK will be provided in early 2024.
+ * Available types of currency are NOK, EUR and DKK.
+ *
  * @minLength 3
  * @maxLength 3
  * @pattern ^[A-Z]{3}$
  * @example "NOK"
  */
-export type RecurringCurrencyV3 = "NOK";
+export type RecurringCurrencyV3 = "NOK" | "EUR" | "DKK";
 
 /**
  * @default "RECURRING"
  * @example "RECURRING"
  */
-export type ChargeType = "INITIAL" | "RECURRING";
+export type ChargeTypeV2 = "INITIAL" | "RECURRING";
+
+/**
+ * @default "RECURRING"
+ * @example "RECURRING"
+ */
+export type ChargeTypeV3 = "INITIAL" | "RECURRING" | "UNSCHEDULED";
+
+/**
+ * @default "RECURRING"
+ * @example "RECURRING"
+ */
+export type ChargeCreationTypeV3 = "RECURRING" | "UNSCHEDULED";
 
 /**
  * Type of transaction, either direct capture or reserve capture
  * @example "DIRECT_CAPTURE"
  */
 export type RecurringTransactionType = "DIRECT_CAPTURE" | "RESERVE_CAPTURE";
+
+/**
+ * Country code for the agreement according to ISO 3166-2 (two capital
+ * letters). Needs to be set based on the merchant's market/country. Cross
+ * border agreements are not supported, e.g., Norwegian merchants can only
+ * create agreements for Norwegian customers and countryCode should be NO.
+ *
+ * @pattern '^[A-Z]{2}$'
+ * @example "NO"
+ */
+export type RecurringCountryCode = "NO" | "DK" | "FI";
 
 //////////////// Charge types /////////////////
 
@@ -83,6 +112,7 @@ export type CreateChargeV3Request = {
   amount: number;
   /** Type of transaction, either direct capture or reserve capture */
   transactionType: RecurringTransactionType;
+  type: ChargeCreationTypeV3;
   /**
    * This field is visible to the end user in-app
    * @min 1
@@ -219,7 +249,7 @@ export type ChargeResponseV3 = {
    * @example "5001419121"
    */
   transactionId: string;
-  type: ChargeType;
+  type: ChargeTypeV3;
   /** Type of transaction, either direct capture or reserve capture */
   transactionType: RecurringTransactionType;
   /**
@@ -460,7 +490,7 @@ export type DraftAgreementV3Request = {
    * @pattern ^[A-Z]{2}$
    * @example "NO"
    */
-  countryCode?: string;
+  countryCode?: RecurringCountryCode;
 };
 
 export type AgreementPricingRequest = {
@@ -693,7 +723,7 @@ export type AgreementResponseV3 = {
    * @pattern ^[A-Z]{2}$
    * @example "NO"
    */
-  countryCode: string;
+  countryCode: RecurringCountryCode;
   /**
    * UUID (RFC 4122) representation of ID
    * @format uuid
@@ -832,7 +862,7 @@ export type AgreementPatchV3Request = {
      * @default "RECURRING"
      * @example "RECURRING"
      */
-    type?: ChargeType;
+    type?: ChargeTypeV2;
     /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
     period?: AgreementTimePeriod;
   };

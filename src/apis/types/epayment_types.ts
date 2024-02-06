@@ -1,4 +1,5 @@
-import { MerchantSerialNumber, ProblemJSON, Scope } from "./shared_types.ts";
+import { MerchantSerialNumber } from "../../types.ts";
+import { ProblemJSON, Scope } from "./shared_types.ts";
 
 /////////////// Error Types ///////////////
 export type EPaymentErrorResponse = ProblemJSON & {
@@ -114,6 +115,13 @@ export type EPaymentCreatePaymentRequest = {
   paymentDescription?: string;
   receipt?: EPaymentReceipt;
   metadata?: EPaymentMetadata;
+  /**
+   * The URL where a receipt can be viewed or downloaded.
+   * The URL must use the `https://` scheme or a custom URL scheme.
+   *
+   * @example 'https://example.com/receipt/9876543210'
+   */
+  receiptUrl?: string | null;
 };
 
 export type EPaymentAmount = {
