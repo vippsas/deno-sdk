@@ -123,7 +123,19 @@ export const redirectQRRequestFactory = {
  */
 export const callbackQRRequestFactory = {
   /**
-   * Creates a callback QR request.
+   * Create or update callback QR.
+   *
+   * **NOTE: MobilePay integrators that needs to migrate existing QRs cannot
+   * use this endpoint. They must use the dedicated endpoint:
+   * PUT /qr/v1/merchant-callback/mobilepay/{beaconId} **
+   *
+   * Creates or updates the QR code that encapsulates the provided
+   * `merchantSerialNumber` and `merchantQrId`.
+   * See [Webhooks API](/docs/APIs/webhooks-api) to create a webhook
+   * that will send callbacks when this QR code is scanned by a Vipps or
+   * MobilePay user. If the endpoint is called with the same `merchantQrId`
+   * twice or more, it is the last call that defines the location property.
+   * The actual QR code image will not be updated on consecutive calls.
    *
    * @param token - The authentication token.
    * @param merchantQrId - The merchant defined identifier for a QR code.
@@ -205,7 +217,7 @@ export const callbackQRRequestFactory = {
   },
   /**
    * NOTE: This endpoint is only intended for MobilePay PoS customers.
-   * It will be removed as soon as migration is completed.
+   * It will be removed in the future.
    *
    * This endpoint is for migrating existing MobilePay PoS QR codes from the
    * current solution that will end its lifetime. It is meant for merchants
