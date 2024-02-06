@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.212.0/dotenv/load.ts";
+import "https://deno.land/std@0.214.0/dotenv/load.ts";
 import {
   Client,
   LoginAuthQueryParams,
