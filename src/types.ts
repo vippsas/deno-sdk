@@ -95,9 +95,9 @@ export type OmitHeaders = (keyof DefaultHeaders)[];
  * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
  *
  * @minLength 4
- * @maxLength 6
- * @pattern ^[0-9]{4,6}$
- * @example "123456"
+ * @maxLength 7
+ * @pattern ^[0-9]{4,7}$
+ * @example "1234567"
  */
 export type MerchantSerialNumber = string;
 

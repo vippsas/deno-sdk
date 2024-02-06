@@ -115,6 +115,13 @@ export type EPaymentCreatePaymentRequest = {
   paymentDescription?: string;
   receipt?: EPaymentReceipt;
   metadata?: EPaymentMetadata;
+  /**
+   * The URL where a receipt can be viewed or downloaded.
+   * The URL must use the `https://` scheme or a custom URL scheme.
+   *
+   * @example 'https://example.com/receipt/9876543210'
+   */
+  receiptUrl?: string | null;
 };
 
 export type EPaymentAmount = {
