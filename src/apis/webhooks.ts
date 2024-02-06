@@ -11,8 +11,8 @@ import {
  */
 export const webhooksRequestFactory = {
   /**
-   * Registers a webhook. At most 5 webhooks (five separate URLs) can be
-   * registered per event, please contact us if a higher limit is required.
+   * There is a limit to the number of webhooks that can be registered
+   * per event, see the developer guide for more information.
    *
    * @param token - The authentication token.
    * @param body - The request body containing the webhook details.
