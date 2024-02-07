@@ -1,4 +1,4 @@
-import { colors, delay, gt, parse } from "./script_deps.ts";
+import { colors, greaterThan, parse } from "./script_deps.ts";
 import { run } from "./run.ts";
 
 const PACKAGE_NAME = `@vippsmobilepay/sdk`;
@@ -24,7 +24,7 @@ console.log(colors.gray(`Latest npm version: ${latestNpmVersion}`));
 try {
   const latestSemVer = parse(trimmedTag);
   const latestNpmSemVer = parse(latestNpmVersion);
-  const tagIsGreaterThanNpm = gt(latestSemVer, latestNpmSemVer);
+  const tagIsGreaterThanNpm = greaterThan(latestSemVer, latestNpmSemVer);
   if (!tagIsGreaterThanNpm) {
     console.log(
       colors.white(
@@ -54,38 +54,8 @@ const buildOutput = await run(
   `Building...`,
 );
 console.log(buildOutput);
+console.log(" ");
 
-const publish = prompt(
-  colors.green(
-    colors.bold(`Do you want to publish ${trimmedTag} to npm? (y/n)`),
-  ),
-);
-if (publish?.toLowerCase().trim() !== "y") {
-  console.log(`No problemo. Bye! 👋`);
-  Deno.exit(0);
-}
-
-// Igonre npm errors since we are checking for them later
-await run(`npm publish ./npm --access public`, `Publishing...`, true);
-
-const newNpmVersion = await run(
-  `npm view ${PACKAGE_NAME} version`,
-  `Checking new published npm package...`,
-);
-// Wait for npm to update
-await delay(4000);
-
-if (newNpmVersion.trim() !== trimmedTag) {
-  console.log(
-    colors.red(`💥 Published version ${newNpmVersion} != ${trimmedTag}`),
-  );
-  console.log(colors.red(`💥 Something went wrong. Please check npm logs.`));
-  Deno.exit(1);
-}
-
-console.log(colors.white(`🚀 Published package! 🚀`));
-console.log(
-  colors.white(
-    `🔗 https://www.npmjs.com/package/${PACKAGE_NAME}/v/${trimmedTag}`,
-  ),
-);
+// Ask the user to publish, this is a manual step for now
+console.log(colors.white(`🚀 Ready to publish, run; 🚀`));
+console.log(colors.white(`npm publish ./npm --access public`));

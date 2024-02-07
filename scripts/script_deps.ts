@@ -1,4 +1,4 @@
-export { gt, parse } from "https://deno.land/std@0.214.0/semver/mod.ts";
+export { greaterThan, parse } from "https://deno.land/std@0.214.0/semver/mod.ts";
 export { Spinner } from "https://deno.land/std@0.214.0/cli/mod.ts";
 export * as colors from "https://deno.land/std@0.214.0/fmt/colors.ts";
 export { delay } from "https://deno.land/std@0.214.0/async/delay.ts";
