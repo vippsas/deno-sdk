@@ -9,7 +9,7 @@ Available on: [deno.land](https://deno.land/x/vipps_mobilepay_sdk) and
 [NPM](https://www.npmjs.com/package/@vippsmobilepay/sdk)
 
 ```ts
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.1.0/mod.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
 
 // Create a client
 const client = Client({
@@ -20,11 +20,7 @@ const client = Client({
 });
 
 // Grab a token
-const accessToken = await client.auth.getToken({
-  clientId,
-  clientSecret,
-  subscriptionKey,
-});
+const accessToken = await client.auth.getToken(clientId, clientSecret);
 
 // Check if the token was retrieved successfully
 if (!accessToken.ok) {
