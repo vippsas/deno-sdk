@@ -1,4 +1,3 @@
-import { uuid } from "../deps.ts";
 import { RequestData } from "../types.ts";
 import {
   CheckoutErrorResponse,
@@ -29,19 +28,10 @@ export const checkoutRequestFactory = {
     client_secret: string,
     body: CheckoutInitiateSessionRequest,
   ): RequestData<CheckoutInitiateSessionOKResponse, CheckoutErrorResponse> => {
-    const newBody = { ...body };
-    // Fill in missing props
-    if (!body.transaction.reference) {
-      newBody.transaction.reference = uuid.generate();
-    }
-    if (!body.merchantInfo.callbackAuthorizationToken) {
-      newBody.merchantInfo.callbackAuthorizationToken = uuid.generate();
-    }
-
     return {
       url: "/checkout/v3/session",
       method: "POST",
-      body: newBody,
+      body,
       additionalHeaders: {
         client_id,
         client_secret,
