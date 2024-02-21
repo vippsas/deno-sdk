@@ -216,9 +216,6 @@ export const callbackQRRequestFactory = {
     };
   },
   /**
-   * NOTE: This endpoint is only intended for MobilePay PoS customers.
-   * It will be removed in the future.
-   *
    * This endpoint is for migrating existing MobilePay PoS QR codes from the
    * current solution that will end its lifetime. It is meant for merchants
    * that have printed QR codes and want them to stay functional for the new

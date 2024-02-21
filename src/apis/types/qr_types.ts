@@ -106,6 +106,8 @@ export type CallbackQrRequest = {
    * A description of where the QR code will be located.
    * It will be shown in the app when a user scans the QR code.
    * Examples could be ‘Kasse 1’ , ‘Kiosk’ or ‘Platform 3’.
+   * 
+   * @maxLength 36
    */
   locationDescription: string;
 };
