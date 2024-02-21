@@ -80,6 +80,7 @@ const charge = await client.recurring.charge.create(token, agreementId, {
   due: tenDaysFromToday,
   retryDays: 5,
   transactionType: "DIRECT_CAPTURE",
+  type: "RECURRING"
 });
 
 // Check if the charge was created successfully
