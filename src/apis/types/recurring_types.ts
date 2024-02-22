@@ -10,23 +10,23 @@ export type RecurringErrorV3 = ProblemJSON & {
    * @example "f70b8bf7-c843-4bea-95d9-94725b19895f"
    */
   contextId?: string;
-  extraDetails?: ExtraDetails[];
+  extraDetails?: RecurringExtraDetails[];
 };
 
 // Extra details about the error
-type ExtraDetails = {
+export type RecurringExtraDetails = {
   /**
    * Name of the field related to the error
    *
    * @example "amount"
    */
-  name: string;
+  name?: string;
   /**
    * Details about the error
    *
    * @example "Must be a positive integer larger than 100"
    */
-  reason: string;
+  reason?: string;
 };
 
 /**
@@ -66,19 +66,13 @@ export type RecurringCurrencyV3 = "NOK" | "EUR" | "DKK";
  * @default "RECURRING"
  * @example "RECURRING"
  */
-export type ChargeTypeV2 = "INITIAL" | "RECURRING";
+export type RecurringChargeTypeV3 = "INITIAL" | "RECURRING" | "UNSCHEDULED";
 
 /**
  * @default "RECURRING"
  * @example "RECURRING"
  */
-export type ChargeTypeV3 = "INITIAL" | "RECURRING" | "UNSCHEDULED";
-
-/**
- * @default "RECURRING"
- * @example "RECURRING"
- */
-export type ChargeCreationTypeV3 = "RECURRING" | "UNSCHEDULED";
+export type RecurringChargeCreationTypeV3 = "RECURRING" | "UNSCHEDULED";
 
 /**
  * Type of transaction, either direct capture or reserve capture
@@ -99,7 +93,7 @@ export type RecurringCountryCode = "NO" | "DK" | "FI";
 
 //////////////// Charge types /////////////////
 
-export type CreateChargeV3Request = {
+export type RecurringCreateChargeV3 = {
   /**
    * Amount to be paid by the customer.
    *
@@ -112,7 +106,7 @@ export type CreateChargeV3Request = {
   amount: number;
   /** Type of transaction, either direct capture or reserve capture */
   transactionType: RecurringTransactionType;
-  type: ChargeCreationTypeV3;
+  type: RecurringChargeCreationTypeV3;
   /**
    * This field is visible to the end user in-app
    * @min 1
@@ -168,7 +162,115 @@ export type CreateChargeV3Request = {
   externalId?: string;
 };
 
-export type ChargeReference = {
+export type RecurringCreateChargeAsyncV3 = {
+  /**
+   * Id of a an agreement which user may agree to.
+   * Initially the agreement is in a pending state waiting for user approval.
+   * It enters active state once the user has approved it in the Vipps or MobilePay app
+   * @example "agr_asdf123"
+   */
+  agreementId: string;
+  /**
+   * Amount to be paid by the customer.
+   *
+   * Amounts are specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @min 100
+   * @example 19900
+   */
+  amount: number;
+  /** Type of transaction, either direct capture or reserve capture */
+  transactionType: RecurringTransactionType;
+  /**
+   * This field is visible to the end user in-app
+   * @min 1
+   * @max 45
+   * @example "Månedsabonnement"
+   */
+  description: string;
+  /**
+   * The date when the charge is due to be processed.
+   *
+   * Must be at least two days in advance in the production environment,
+   * and at least one day in the test environment.
+   *
+   * If the charge is `DIRECT_CAPTURE`, the charge is processed and charged on the `due` date.
+   * If the charge is `RESERVE_CAPTURE`, the charge is `RESERVED` on `due` date.
+   *
+   * Must be in the format `YYYY-MM-DD` and ISO 8601.
+   * @example "2030-12-31"
+   */
+  due: string;
+  /**
+   * The service will attempt to charge the customer for the number of days
+   * specified in `retryDays` after the `due` date.
+   * We recommend at least two days retry.
+   * @format int32
+   * @min 0
+   * @max 14
+   * @example 5
+   */
+  retryDays: number;
+  /**
+   * An optional, but recommended `orderId` for the charge.
+   * If provided, this will be the `chargeId` for this charge.
+   * This is the unique identifier of the payment, from the payment is initiated and all the way to the settlement data.
+   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/orderid/
+   * If no `orderId` is specified, the `chargeId` will be automatically generated.
+   * @minLength 1
+   * @maxLength 50
+   * @pattern ^[a-zA-Z\d-]+
+   * @example "acme-shop-123-order123abc"
+   */
+  orderId?: string;
+  /**
+   * An optional external ID for the charge, that takes the place of the `orderId` in settlement reports without overriding the default `chargeId`
+   * The `externalId` can be used by the merchant to map the `chargeId` to an ID in a subscription system or similar.
+   * Note that while `orderId` must be unique per merchant, `externalId` does not have this limitation,
+   * so you need to avoid assigning the same `externalId` to multiple charges if you want to keep them separate in settlement reports.
+   * @minLength 1
+   * @maxLength 64
+   * @pattern ^.{1,64}$
+   * @example "external-id-2468"
+   */
+  externalId?: string;
+};
+
+export type RecurringAsyncChargeResponse = {
+  chargeBatchItemDto: RecurringChargeBatchItemDto;
+  errors: string[];
+};
+
+export type RecurringChargeBatchItemDto = {
+  /** @example "2024-02-09" */
+  due: string;
+  /**
+   * @format int32
+   * @example 3
+   */
+  retryDays: number;
+  /**
+   * @format int32
+   * @example 300
+   */
+  amount: number;
+  /** @example "charge description" */
+  description: string;
+  /** @example "DIRECT_CAPTURE" */
+  transactionType: "DIRECT_CAPTURE" | "RESERVE_CAPTURE";
+  /**
+   * @minLength 1
+   * @maxLength 50
+   * @pattern ^[a-zA-Z\d-]+
+   * @example "ea929435-d761-4a80-9271-c896d131b796"
+   */
+  orderId: string;
+  agreementId?: string;
+  externalId?: string;
+};
+
+export type RecurringChargeReference = {
   /**
    * Unique identifier for this charge, up to 15 characters.
    * @maxLength 15
@@ -177,7 +279,7 @@ export type ChargeReference = {
   chargeId: string;
 };
 
-export type ChargeResponseV3 = {
+export type RecurringChargeResponseV3 = {
   /**
    * Amount to be paid by the customer.
    *
@@ -241,7 +343,7 @@ export type ChargeResponseV3 = {
    * @example 5
    */
   retryDays: number;
-  status: ChargeStatus;
+  status: RecurringChargeStatus;
   /**
    * Contains null until the status has reached CHARGED
    * @maxLength 36
@@ -249,7 +351,7 @@ export type ChargeResponseV3 = {
    * @example "5001419121"
    */
   transactionId: string;
-  type: ChargeTypeV3;
+  type: RecurringChargeTypeV3;
   /** Type of transaction, either direct capture or reserve capture */
   transactionType: RecurringTransactionType;
   /**
@@ -278,13 +380,13 @@ export type ChargeResponseV3 = {
    */
   failureDescription?: string;
   /** A summary of the amounts captured, refunded and cancelled */
-  summary: ChargeSummary;
+  summary: RecurringChargeSummary;
   /** List of events related to the charge. */
-  history: ChargeEvent[];
+  history: RecurringChargeEvent[];
 };
 
 /** @example "PENDING" */
-export type ChargeStatus =
+export type RecurringChargeStatus =
   | "PENDING"
   | "DUE"
   | "RESERVED"
@@ -297,7 +399,7 @@ export type ChargeStatus =
   | "PROCESSING";
 
 /** A summary of the amounts captured, refunded and cancelled */
-export type ChargeSummary = {
+export type RecurringChargeSummary = {
   /**
    * The total amount which has been captured/charged, in case of status charged/partial capture.
    * Amounts are specified in minor units.
@@ -325,16 +427,8 @@ export type ChargeSummary = {
   cancelled: number;
 };
 
-export type ChargeEventType =
-  | "CREATE"
-  | "RESERVE"
-  | "CAPTURE"
-  | "REFUND"
-  | "CANCEL"
-  | "FAIL";
-
 /** Describes the operation that was performed on the charge */
-export type ChargeEvent = {
+export type RecurringChargeEvent = {
   /**
    * Date and time of the event, as timestamp on the format `yyyy-MM-dd'T'HH:mm:ss'Z'`,
    * with or without milliseconds.
@@ -343,7 +437,7 @@ export type ChargeEvent = {
    */
   occurred: string;
   /** @example "RESERVE" */
-  event: ChargeEventType;
+  event: "CREATE" | "RESERVE" | "CAPTURE" | "REFUND" | "CANCEL" | "FAIL";
   /**
    * The amount related to the operation.
    * Amounts are specified in minor units.
@@ -359,7 +453,7 @@ export type ChargeEvent = {
 };
 
 /** Refund charge request */
-export type ChargeModificationRequest = {
+export type RecurringRefundRequest = {
   /**
    * The amount to refund/capture on a charge.
    *
@@ -378,18 +472,37 @@ export type ChargeModificationRequest = {
   description: string;
 };
 
+export type RecurringCaptureRequestV3 = {
+  /**
+   * The amount to capture on a reserved charge.
+   *
+   * Amounts are specified in minor units.
+   * For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+   * @format int32
+   * @min 100
+   * @example 5000
+   */
+  amount: number;
+  /**
+   * A textual description of the operation, which will be displayed in the user's app.
+   * @min 1
+   * @example "Not all items were in stock. Partial capture."
+   */
+  description: string;
+};
+
 ////////////// Agreement types ////////////////
 /**
  * Status of the agreement.
  * @default "ACTIVE"
  * @example "ACTIVE"
  */
-export type AgreementStatus = "PENDING" | "ACTIVE" | "STOPPED" | "EXPIRED";
+export type RecurringStatus = "PENDING" | "ACTIVE" | "STOPPED" | "EXPIRED";
 
 ////////////// Create agreement ///////////////
-export type DraftAgreementV3Request = {
-  campaign?: AgreementCampaignV3;
-  pricing: AgreementPricingRequest;
+export type RecurringDraftAgreementV3 = {
+  campaign?: RecurringCampaignV3;
+  pricing: RecurringPricingRequest;
   /**
    * Customers phone number (if available). Used to simplify the
    * following interaction. MSISDN: https://en.wikipedia.org/wiki/MSISDN
@@ -401,9 +514,9 @@ export type DraftAgreementV3Request = {
    * An initial charge for a new agreement.
    * The charge will be processed immediately when the user approves the agreement.
    */
-  initialCharge?: AgreementInitialChargeV3;
+  initialCharge?: RecurringInitialChargeV3;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriod;
+  interval: RecurringTimePeriod;
   /**
    * This optional parameter indicates whether payment request is triggered from
    * Mobile App or Web browser. Based on this value, response will be
@@ -493,7 +606,7 @@ export type DraftAgreementV3Request = {
   countryCode?: RecurringCountryCode;
 };
 
-export type AgreementPricingRequest = {
+export type RecurringPricingRequest = {
   /**
    * The type of pricing. This decides which properties are required.
    * @default "LEGACY"
@@ -529,7 +642,7 @@ export type AgreementPricingRequest = {
  * An initial charge for a new agreement.
  * The charge will be processed immediately when the user approves the agreement.
  */
-export type AgreementInitialChargeV3 = {
+export type RecurringInitialChargeV3 = {
   /**
    * The amount that must be paid or approved before starting the agreement.
    *
@@ -573,12 +686,12 @@ export type AgreementInitialChargeV3 = {
  * Time Period request
  * A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units)
  */
-export type AgreementTimePeriod = {
+export type RecurringTimePeriod = {
   /**
    * Unit for time period
    * @example "WEEK"
    */
-  unit: AgreementInterval;
+  unit: RecurringInterval;
   /**
    * Number of units in the time period. Example: unit=week, count=2 to define two weeks
    * @format int32
@@ -597,9 +710,9 @@ export type AgreementTimePeriod = {
  * @pattern ^(YEAR|MONTH|WEEK|DAY)$
  * @example "MONTH"
  */
-export type AgreementInterval = "YEAR" | "MONTH" | "WEEK" | "DAY";
+export type RecurringInterval = "YEAR" | "MONTH" | "WEEK" | "DAY";
 
-export type DraftAgreementResponseV3 = {
+export type RecurringDraftAgreementResponseV3 = {
   /**
    * Id of a an agreement which user may agree to.
    * Initially the agreement is in a pending state waiting for user approval.
@@ -632,9 +745,9 @@ export type DraftAgreementResponseV3 = {
 };
 
 /////////////// Agreement Info ////////////////
-export type AgreementResponseV3 = {
-  campaign?: AgreementCampaignResponseV3 | null;
-  pricing: AgreementPricingResponse;
+export type RecurringAgreementResponseV3 = {
+  campaign?: RecurringCampaignResponseV3 | null;
+  pricing: RecurringPricingResponse;
   /**
    * Uniquely identifies this agreement
    * @maxLength 36
@@ -642,7 +755,7 @@ export type AgreementResponseV3 = {
    */
   id: string;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriodResponse;
+  interval: RecurringTimePeriodResponse;
   /**
    * Product name (short)
    * @maxLength 45
@@ -675,7 +788,7 @@ export type AgreementResponseV3 = {
    */
   stop?: string | null;
   /** Status of the agreement. */
-  status?: AgreementStatus;
+  status?: RecurringStatus;
   /**
    * URL where we can send the customer to view/manage their
    * subscription. Typically a "My page" where the user can change, pause, cancel, etc.
@@ -745,12 +858,12 @@ export type AgreementResponseV3 = {
  * Time Period response
  * A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units)
  */
-export type AgreementTimePeriodResponse = {
+export type RecurringTimePeriodResponse = {
   /**
    * Unit for time period
    * @example "WEEK"
    */
-  unit?: AgreementInterval;
+  unit?: RecurringInterval;
   /**
    * Number of units in the time period. Example: unit=week, count=2 to define two weeks
    * @format int32
@@ -764,13 +877,13 @@ export type AgreementTimePeriodResponse = {
   text?: string;
 };
 
-export type AgreementPricingResponse =
-  | AgreementLegacyPricingResponse
-  | AgreementVariableAmountPricingResponse;
+export type RecurringPricingResponse =
+  | RecurringLegacyPricingResponse
+  | RecurringVariableAmountResponse;
 
-export type AgreementLegacyPricingResponse = {
+export type RecurringLegacyPricingResponse = {
   /** The type of pricing. This decides which properties are present. */
-  type: "LEGACY";
+  type: "LEGACY" | "VARIABLE";
   /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
   currency: RecurringCurrencyV3;
   /**
@@ -784,11 +897,7 @@ export type AgreementLegacyPricingResponse = {
   amount: number;
 };
 
-export type AgreementVariableAmountPricingResponse = {
-  /** The type of pricing. This decides which properties are present. */
-  type: "VARIABLE";
-  /** ISO-4217: https://www.iso.org/iso-4217-currency-codes.html */
-  currency: RecurringCurrencyV3;
+export type RecurringVariableAmountResponse = {
   /**
    * The suggested max amount that the customer should choose, present if type is VARIABLE.
    *
@@ -797,7 +906,7 @@ export type AgreementVariableAmountPricingResponse = {
    * @format int32
    * @example 30000
    */
-  suggestedMaxAmount: number;
+  suggestedMaxAmount?: number;
   /**
    * The max amount chosen by the customer.
    *
@@ -806,11 +915,11 @@ export type AgreementVariableAmountPricingResponse = {
    * @format int32
    * @example 30000
    */
-  maxAmount: number;
+  maxAmount?: number;
 };
 
 ////////////// Update agreements //////////////
-export type AgreementPatchV3Request = {
+export type RecurringPatchAgreementV3 = {
   /**
    * Name of the product being subscribed to.
    * @maxLength 45
@@ -849,8 +958,8 @@ export type AgreementPatchV3Request = {
    * Status of the agreement.
    * @example "STOPPED"
    */
-  status?: AgreementStatus;
-  pricing?: AgreementPricingUpdateRequest;
+  status?: RecurringStatus;
+  pricing?: RecurringPricingUpdateRequest;
   /**
    * The interval of the agreement.
    *
@@ -862,13 +971,13 @@ export type AgreementPatchV3Request = {
      * @default "RECURRING"
      * @example "RECURRING"
      */
-    type?: ChargeTypeV2;
+    type?: RecurringChargeTypeV3;
     /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-    period?: AgreementTimePeriod;
+    period?: RecurringTimePeriod;
   };
 };
 
-export type AgreementPricingUpdateRequest = {
+export type RecurringPricingUpdateRequest = {
   /**
    * The price of the agreement, can only be updated if agreement type is LEGACY
    *
@@ -892,22 +1001,31 @@ export type AgreementPricingUpdateRequest = {
   suggestedMaxAmount?: number;
 };
 
-export type AgreementForceAcceptV3Request = {
+export type RecurringForceAcceptAgreementV3 = {
   /** @example "4791234567" */
   phoneNumber: string;
 };
 
+/** Force accept agreement request */
+export type RecurringForceAcceptAgreement = {
+  /** @example "91234567" */
+  customerPhoneNumber: string;
+};
+
 ////////////////// Campaigns //////////////////
-export type AgreementCampaignV3 =
-  | AgreementPriceCampaignV3
-  | AgreementPeriodCampaignV3
-  | AgreementEventCampaignV3
-  | AgreementFullFlexCampaignV3;
+export type RecurringCampaignV3 =
+  | RecurringPriceCampaignV3
+  | RecurringPeriodCampaignV3
+  | RecurringEventCampaignV3
+  | RecurringFullFlexCampaignV3;
 
-export type AgreementPriceCampaignV3 = {
+export type RecurringPriceCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "PRICE_CAMPAIGN";
-
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -925,10 +1043,13 @@ export type AgreementPriceCampaignV3 = {
   end: string;
 } | null;
 
-export type AgreementPeriodCampaignV3 = {
+export type RecurringPeriodCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "PERIOD_CAMPAIGN";
-
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -939,12 +1060,16 @@ export type AgreementPeriodCampaignV3 = {
    */
   price: number;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  period: AgreementTimePeriod;
+  period: RecurringTimePeriod;
 } | null;
 
-export type AgreementEventCampaignV3 = {
+export type RecurringEventCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "EVENT_CAMPAIGN";
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -967,9 +1092,13 @@ export type AgreementEventCampaignV3 = {
   eventText: string;
 } | null;
 
-export type AgreementFullFlexCampaignV3 = {
+export type RecurringFullFlexCampaignV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "FULL_FLEX_CAMPAIGN";
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -980,7 +1109,7 @@ export type AgreementFullFlexCampaignV3 = {
    */
   price: number;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriod;
+  interval: RecurringTimePeriod;
   /**
    * The date and time the campaign ends.
    * Needs to be UTC.
@@ -989,17 +1118,20 @@ export type AgreementFullFlexCampaignV3 = {
   end: string;
 } | null;
 
-export type AgreementCampaignResponseV3 =
-  | AgreementPriceCampaignResponseV3
-  | AgreementPeriodCampaignResponseV3
-  | AgreementEventCampaignResponseV3
-  | AgreementFullFlexCampaignResponseV3
-  | AgreementLegacyCampaignResponseV3;
+export type RecurringCampaignResponseV3 =
+  | RecurringPriceCampaignResponseV3
+  | RecurringPeriodCampaignResponseV3
+  | RecurringEventCampaignResponseV3
+  | RecurringFullFlexCampaignResponseV3
+  | RecurringLegacyCampaignResponseV3;
 
-export type AgreementPriceCampaignResponseV3 = {
+export type RecurringPriceCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "PRICE_CAMPAIGN";
-
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -1022,10 +1154,13 @@ export type AgreementPriceCampaignResponseV3 = {
   explanation?: string;
 };
 
-export type AgreementPeriodCampaignResponseV3 = {
+export type RecurringPeriodCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "PERIOD_CAMPAIGN";
-
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -1042,7 +1177,7 @@ export type AgreementPeriodCampaignResponseV3 = {
    */
   end: string;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  period: AgreementTimePeriod;
+  period: RecurringTimePeriod;
   /**
    * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
    * @example "Ordinary price 399 kr starts 6/12/2022"
@@ -1050,10 +1185,13 @@ export type AgreementPeriodCampaignResponseV3 = {
   explanation?: string;
 };
 
-export type AgreementEventCampaignResponseV3 = {
+export type RecurringEventCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "EVENT_CAMPAIGN";
-
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -1081,9 +1219,14 @@ export type AgreementEventCampaignResponseV3 = {
   explanation?: string;
 };
 
-export type AgreementFullFlexCampaignResponseV3 = {
+export type RecurringFullFlexCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "FULL_FLEX_CAMPAIGN";
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN"
+    | "LEGACY_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *
@@ -1100,7 +1243,7 @@ export type AgreementFullFlexCampaignResponseV3 = {
    */
   end: string;
   /** A period of time, defined by a unit (DAY, WEEK, ...) and a count (number of said units) */
-  interval: AgreementTimePeriod;
+  interval: RecurringTimePeriod;
   /**
    * The text displayed in the Vipps or MobilePay app to explain the campaign to the user
    * @example "Ordinary price 399 kr starts 6/12/2022"
@@ -1108,9 +1251,14 @@ export type AgreementFullFlexCampaignResponseV3 = {
   explanation?: string;
 };
 
-export type AgreementLegacyCampaignResponseV3 = {
+export type RecurringLegacyCampaignResponseV3 = {
   /** The type of campaign. This decides which properties are required */
-  type: "LEGACY_CAMPAIGN";
+  type:
+    | "PRICE_CAMPAIGN"
+    | "PERIOD_CAMPAIGN"
+    | "EVENT_CAMPAIGN"
+    | "FULL_FLEX_CAMPAIGN"
+    | "LEGACY_CAMPAIGN";
   /**
    * The price of the agreement in the discount period. The lowering of the price will be displayed in-app.
    *

@@ -49,6 +49,7 @@ Deno.test("create - should fill in missing properties", () => {
       callbackUrl: "https://example.com/vipps/callbacks-for-checkout",
       returnUrl:
         "https://example.com/vipps/fallback-result-page-for-both-success-and-failure",
+      callbackAuthorizationToken: "1234",
     },
     transaction: {
       amount: {
@@ -56,6 +57,7 @@ Deno.test("create - should fill in missing properties", () => {
         value: 1000,
       },
       paymentDescription: "One pair of socks.",
+      reference: "foobar",
     },
   };
 

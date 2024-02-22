@@ -1,14 +1,14 @@
 export {
   retry,
   RetryError,
-} from "https://deno.land/std@0.214.0/async/retry.ts";
+} from "https://deno.land/std@0.217.0/async/retry.ts";
 export {
   isServerErrorStatus,
   isSuccessfulStatus,
   STATUS_CODE,
-} from "https://deno.land/std@0.214.0/http/status.ts";
-export { parseMediaType } from "https://deno.land/std@0.214.0/media_types/parse_media_type.ts";
-export { filterKeys } from "https://deno.land/std@0.214.0/collections/mod.ts";
+} from "https://deno.land/std@0.217.0/http/status.ts";
+export { parseMediaType } from "https://deno.land/std@0.217.0/media_types/parse_media_type.ts";
+export { filterKeys } from "https://deno.land/std@0.217.0/collections/mod.ts";
 /**
  * This is a workaround for `crypto.randomUUID` not being available in
  * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life

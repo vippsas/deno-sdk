@@ -20,6 +20,24 @@ Deno.test("create - should return the correct RequestData object", () => {
   assert(requestData.method, "POST");
 });
 
+Deno.test("create multiple - should return the correct RequestData object", () => {
+  const token = "your-auth-token";
+
+  const requestData = chargeRequestFactory.createMultiple(token, [{
+    amount: 1000,
+    transactionType: "DIRECT_CAPTURE",
+    agreementId: "your-agreement-id",
+    description: "Test charge",
+    due: "2030-12-31",
+    retryDays: 5,
+    externalId: "test-charge-123",
+    orderId: "test-order-123",
+  }]);
+
+  assert(requestData.url, `/recurring/v3/agreements/charges`);
+  assert(requestData.method, "POST");
+});
+
 Deno.test("info - should return the correct RequestData object", () => {
   const token = "your-auth-token";
   const agreementId = "your-agreement-id";

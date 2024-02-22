@@ -1,5 +1,5 @@
-import "https://deno.land/std@0.214.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.1.0/mod.ts";
+import "https://deno.land/std@0.217.0/dotenv/load.ts";
+import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -80,6 +80,7 @@ const charge = await client.recurring.charge.create(token, agreementId, {
   due: tenDaysFromToday,
   retryDays: 5,
   transactionType: "DIRECT_CAPTURE",
+  type: "RECURRING",
 });
 
 // Check if the charge was created successfully

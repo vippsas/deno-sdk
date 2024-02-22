@@ -319,7 +319,7 @@ export type CheckoutPaymentMerchantInfo = {
    */
   returnUrl: string;
   /** The token will be supplied by the callback to the merchant as a header. Example: "iOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImllX3FXQ1hoWHh0MXpJ". */
-  callbackAuthorizationToken?: string;
+  callbackAuthorizationToken: string;
   /** Complete URL to the merchant's terms and conditions. Example: "https://example.com/vipps/termsAndConditions". */
   termsAndConditionsUrl?: string | null;
 };
@@ -360,7 +360,7 @@ export type CheckoutPaymentTransaction = {
    * @maxLength 50
    * @pattern ^[-a-zA-Z0-9]*$
    */
-  reference?: string;
+  reference: string;
   /**
    * Description visible to the customer during payment. Example: "One pair of socks".
    * @minLength 3
