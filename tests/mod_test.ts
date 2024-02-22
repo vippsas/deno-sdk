@@ -35,6 +35,7 @@ Deno.test("Client - available functions", () => {
   assertEquals(typeof client.recurring.agreement.update, "function");
   assertEquals(typeof client.recurring.agreement.forceAccept, "function");
   assertEquals(typeof client.recurring.charge.create, "function");
+  assertEquals(typeof client.recurring.charge.createMultiple, "function");
   assertEquals(typeof client.recurring.charge.info, "function");
   assertEquals(typeof client.recurring.charge.infoById, "function");
   assertEquals(typeof client.recurring.charge.list, "function");
