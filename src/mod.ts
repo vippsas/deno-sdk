@@ -18,19 +18,8 @@ import {
 import { userRequestFactory } from "./apis/user.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 
-/**
- * Export all API types, for convenience. All exported types are
- * prefixed with the API name, to avoid potential naming conflicts.
- */
-export type * from "./apis/types/auth_types.ts";
-export type * from "./apis/types/checkout_types.ts";
-export type * from "./apis/types/epayment_types.ts";
-export type * from "./apis/types/login_types.ts";
-export type * from "./apis/types/ordermanagement_types.ts";
-export type * from "./apis/types/qr_types.ts";
-export type * from "./apis/types/recurring_types.ts";
-export type * from "./apis/types/user_types.ts";
-export type * from "./apis/types/webhooks_types.ts";
+// Export all API types, for convenience.
+export type * from "./apis/types/all_external_types.ts";
 
 /**
  * Creates a new SDK client.
@@ -42,7 +31,7 @@ export const Client = (options: ClientConfig) => {
   const client = baseClient(options);
 
   // Create the API client
-  const apiClient = {
+  return {
     auth: proxifyFactory(client, authRequestFactory),
     checkout: proxifyFactory(client, checkoutRequestFactory),
     login: proxifyFactory(client, loginRequestFactory),
@@ -59,6 +48,4 @@ export const Client = (options: ClientConfig) => {
     user: proxifyFactory(client, userRequestFactory),
     webhook: proxifyFactory(client, webhooksRequestFactory),
   } as const;
-
-  return apiClient;
 };
