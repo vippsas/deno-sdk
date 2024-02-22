@@ -93,7 +93,7 @@ export type RecurringCountryCode = "NO" | "DK" | "FI";
 
 //////////////// Charge types /////////////////
 
-export type CreateChargeV3Request = {
+export type RecurringCreateChargeV3 = {
   /**
    * Amount to be paid by the customer.
    *

@@ -1,12 +1,12 @@
 import { RequestData } from "../types.ts";
 import {
-  CreateChargeV3Request,
   RecurringAgreementResponseV3,
   RecurringAsyncChargeResponse,
   RecurringChargeReference,
   RecurringChargeResponseV3,
   RecurringChargeStatus,
   RecurringCreateChargeAsyncV3,
+  RecurringCreateChargeV3,
   RecurringDraftAgreementResponseV3,
   RecurringDraftAgreementV3,
   RecurringErrorResponse,
@@ -154,7 +154,7 @@ export const chargeRequestFactory = {
   create: (
     token: string,
     agreementId: string,
-    body: CreateChargeV3Request,
+    body: RecurringCreateChargeV3,
   ): RequestData<RecurringChargeReference, RecurringErrorResponse> => {
     return {
       url: `/recurring/v3/agreements/${agreementId}/charges`,
