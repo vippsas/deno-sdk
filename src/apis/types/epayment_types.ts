@@ -76,7 +76,7 @@ export type EPaymentCreatePaymentRequest = {
   /**
    * The payment will expire at the given date and time.
    * The format must adhere to RFC 3339.
-   * The value must be more than 10 minutes and less than 28 days in the future.
+   * The value must be more than 10 minutes and less than 60 days in the future.
    * Can only be combined with `userFlow: PUSH_MESSAGE` or `userFlow: QR`.
    *
    * @pattern ^((?:(\d{4}-\d{2}-\d{2})(T|t)(\d{2}:\d{2}:\d{2}(?:\.\d+)?))(Z|z|([+-](?:2[0-3]|[01][0-9]):[0-5][0-9])))$
