@@ -110,7 +110,7 @@ export type RecurringCreateChargeV3 = {
   /**
    * This field is visible to the end user in-app
    * @min 1
-   * @max 45
+   * @max 60
    * @example "Månedsabonnement"
    */
   description: string;
@@ -654,6 +654,8 @@ export type RecurringInitialChargeV3 = {
   amount: number;
   /**
    * This field is visible to the end user in-app
+   * @min 1
+   * @max 60
    * @example "Månedsabonnement"
    */
   description: string;
