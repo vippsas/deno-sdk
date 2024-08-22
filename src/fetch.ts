@@ -11,13 +11,13 @@ import { ClientResponse } from "./types.ts";
 /**
  * Executes a fetch request with optional retry logic.
  *
- * @param request - The request to be executed.
- * @param retryRequest - Whether to retry the request if it fails. Default is true.
- * @returns A promise that resolves to the response of the request.
+ * @param {Request} request - The request to be executed.
+ * @param {boolean} [retryRequest=true] - Whether to retry the request if it fails.
+ * @returns {Promise<ClientResponse<TOk, TErr>>} A promise that resolves to the response of the request.
  */
 export const fetchRetry = async <TOk, TErr>(
   request: Request,
-  retryRequest = true,
+  retryRequest: boolean = true,
 ): Promise<ClientResponse<TOk, TErr>> => {
   // Execute request without retry
   if (!retryRequest) {
@@ -39,10 +39,10 @@ export const fetchRetry = async <TOk, TErr>(
 /**
  * Fetches JSON data from the specified request.
  *
- * @param request - The request to fetch JSON data from.
- * @returns A ClientResponse object containing the fetched data.
  * @template TOk - The type of the successful response data.
  * @template TErr - The type of the error response data.
+ * @param {Request} request - The request to fetch JSON data from.
+ * @returns {Promise<ClientResponse<TOk, TErr>>} A ClientResponse object containing the fetched data.
  */
 export const fetchJSON = async <TOk, TErr>(
   request: Request,
@@ -64,12 +64,7 @@ export const fetchJSON = async <TOk, TErr>(
     throw new Error(response.statusText);
   }
 
-  /**
-   * Check if the content type is text/plain or has zero content length.
-   */
-  const json = isText(response) || isContentLengthZero(response)
-    ? { text: await response.text() }
-    : await response.json();
+  const json = await parseResponse(response);
 
   /**
    * For any other type of error, return an Error object.
@@ -81,16 +76,46 @@ export const fetchJSON = async <TOk, TErr>(
   return { ok: true, data: json as TOk };
 };
 
+/**
+ * Parses the response based on its content type.
+ *
+ * @param {Response} response - The response to parse.
+ * @returns {Promise<unknown>} The parsed response data.
+ */
+const parseResponse = async (response: Response): Promise<unknown> => {
+  if (isText(response) || isContentLengthZero(response)) {
+    return { text: await response.text() };
+  }
+  return response.json();
+};
+
+/**
+ * Checks if the response content type is text/plain.
+ *
+ * @param {Response} response - The response to check.
+ * @returns {boolean} True if the content type is text/plain, otherwise false.
+ */
 const isText = (response: Response): boolean => {
   const mediaType = getMediaType(response);
   return mediaType === "text/plain";
 };
 
+/**
+ * Checks if the response content length is zero.
+ *
+ * @param {Response} response - The response to check.
+ * @returns {boolean} True if the content length is zero, otherwise false.
+ */
 const isContentLengthZero = (response: Response): boolean => {
-  const contentLength = response.headers.get("content-length");
-  return contentLength === "0";
+  return response.headers.get("content-length") === "0";
 };
 
+/**
+ * Gets the media type from the response headers.
+ *
+ * @param {Response} response - The response to get the media type from.
+ * @returns {string | undefined} The media type, or undefined if not found.
+ */
 export const getMediaType = (response: Response): string | undefined => {
   /**
    * Check MIME type of the response, assuming headers are case insensitive
