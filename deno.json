@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "@babia/uuid-v7": "jsr:@babia/uuid-v7@^0.2.0",
+    "@c4spar/mock-fetch": "jsr:@c4spar/mock-fetch@^1.0.0",
+    "@deno/dnt": "jsr:@deno/dnt@^0.41.3",
+    "@std/assert": "jsr:@std/assert@^1.0.2",
+    "@std/async": "jsr:@std/async@^1.0.4",
+    "@std/cli": "jsr:@std/cli@^1.0.4",
+    "@std/collections": "jsr:@std/collections@^1.0.5",
+    "@std/fmt": "jsr:@std/fmt@^1.0.1",
+    "@std/http": "jsr:@std/http@^1.0.4",
+    "@std/media-types": "jsr:@std/media-types@^1.0.3",
+    "@std/semver": "jsr:@std/semver@^1.0.2",
+    "@std/uuid": "jsr:@std/uuid@^1.0.2"
+  }
+}

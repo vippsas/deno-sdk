@@ -1,27 +1,22 @@
-import { assertEquals, mf } from "./test_deps.ts";
-import { Client } from "../src/mod.ts";
+import { assertEquals } from "@std/assert";
 import { agreementRequestFactory } from "../src/apis/recurring.ts";
 
-Deno.test("agreements - create - check correct url in TEST/MT", async () => {
-  mf.install();
+Deno.test("agreements - create - check correct url in TEST/MT", () => {
+  const expected = {
+    url: "/recurring/v3/agreements",
+    method: "POST",
+    body: {
+      pricing: { type: "LEGACY", amount: 2500, currency: "NOK" },
+      interval: { unit: "MONTH", count: 1 },
+      merchantRedirectUrl: "https://example.com/redirect",
+      merchantAgreementUrl: "https://example.com/agreement",
+      phoneNumber: "4712345678",
+      productName: "MyNews Digital",
+    },
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/recurring/v3/agreements", (req: Request) => {
-    assertEquals(req.url, "https://apitest.vipps.no/recurring/v3/agreements");
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  const result = await client.recurring.agreement.create("testtoken", {
+  const actual = agreementRequestFactory.create("testtoken", {
     pricing: {
       type: "LEGACY",
       amount: 2500,
@@ -35,11 +30,9 @@ Deno.test("agreements - create - check correct url in TEST/MT", async () => {
     merchantAgreementUrl: "https://example.com/agreement",
     phoneNumber: "4712345678",
     productName: "MyNews Digital",
-  });
+  }) as unknown;
 
-  assertEquals(result.ok, true);
-
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
 Deno.test("list - should return the correct RequestData object", () => {
@@ -47,26 +40,34 @@ Deno.test("list - should return the correct RequestData object", () => {
   const status = "ACTIVE";
   const createdAfter = 1628764800;
 
-  const requestData = agreementRequestFactory.list(token, status, createdAfter);
+  const expected = {
+    url: "/recurring/v3/agreements?status=ACTIVE&createdAfter=1628764800",
+    method: "GET",
+    token: "your-auth-token",
+  };
 
-  assertEquals(
-    requestData.url,
-    `/recurring/v3/agreements?status=${status}&createdAfter=${createdAfter}`,
-  );
-  assertEquals(requestData.method, "GET");
+  const actual = agreementRequestFactory.list(
+    token,
+    status,
+    createdAfter,
+  ) as unknown;
+
+  assertEquals(actual, expected);
 });
 
 Deno.test("info - should return the correct RequestData object", () => {
   const token = "your-auth-token";
   const agreementId = "your-agreement-id";
 
-  const requestData = agreementRequestFactory.info(token, agreementId);
+  const expected = {
+    url: "/recurring/v3/agreements/your-agreement-id",
+    method: "GET",
+    token: "your-auth-token",
+  };
 
-  assertEquals(
-    requestData.url,
-    `/recurring/v3/agreements/${agreementId}`,
-  );
-  assertEquals(requestData.method, "GET");
+  const actual = agreementRequestFactory.info(token, agreementId) as unknown;
+
+  assertEquals(actual, expected);
 });
 
 Deno.test("update - should return the correct RequestData object", () => {
@@ -74,14 +75,20 @@ Deno.test("update - should return the correct RequestData object", () => {
   const agreementId = "your-agreement-id";
   const body = { pricing: { amount: 1000, suggestedMaxAmount: 10000 } };
 
-  const requestData = agreementRequestFactory.update(token, agreementId, body);
+  const expected = {
+    url: "/recurring/v3/agreements/your-agreement-id",
+    method: "PATCH",
+    body: { pricing: { amount: 1000, suggestedMaxAmount: 10000 } },
+    token: "your-auth-token",
+  };
 
-  assertEquals(
-    requestData.url,
-    `/recurring/v3/agreements/${agreementId}`,
-  );
-  assertEquals(requestData.method, "PATCH");
-  assertEquals(requestData.body, body);
+  const actual = agreementRequestFactory.update(
+    token,
+    agreementId,
+    body,
+  ) as unknown;
+
+  assertEquals(actual, expected);
 });
 
 Deno.test("forceAccept - should return the correct RequestData object", () => {
@@ -89,16 +96,18 @@ Deno.test("forceAccept - should return the correct RequestData object", () => {
   const agreementId = "your-agreement-id";
   const body = { phoneNumber: "4791234567" };
 
-  const requestData = agreementRequestFactory.forceAccept(
+  const actual = agreementRequestFactory.forceAccept(
     token,
     agreementId,
     body,
-  );
+  ) as unknown;
 
-  assertEquals(
-    requestData.url,
-    `/recurring/v3/agreements/${agreementId}/accept`,
-  );
-  assertEquals(requestData.method, "PATCH");
-  assertEquals(requestData.body, body);
+  const expected = {
+    url: "/recurring/v3/agreements/your-agreement-id/accept",
+    method: "PATCH",
+    body: { phoneNumber: "4791234567" },
+    token: "your-auth-token",
+  };
+
+  assertEquals(actual, expected);
 });

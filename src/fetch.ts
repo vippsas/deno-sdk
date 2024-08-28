@@ -1,10 +1,10 @@
 import {
   isServerErrorStatus,
   isSuccessfulStatus,
-  parseMediaType,
-  retry,
   STATUS_CODE,
-} from "./deps.ts";
+} from "@std/http";
+import { parseMediaType } from "@std/media-types";
+import { retry } from "@std/async";
 import { parseError } from "./errors.ts";
 import { ClientResponse } from "./types.ts";
 
@@ -47,6 +47,7 @@ export const fetchRetry = async <TOk, TErr>(
 export const fetchJSON = async <TOk, TErr>(
   request: Request,
 ): Promise<ClientResponse<TOk, TErr>> => {
+  
   const response = await fetch(request);
 
   /**

@@ -1,4 +1,5 @@
-import { RetryError, STATUS_CODE } from "./deps.ts";
+import { RetryError } from "@std/async";
+import { STATUS_CODE } from "@std/http";
 import { SDKError } from "./types.ts";
 
 /**
