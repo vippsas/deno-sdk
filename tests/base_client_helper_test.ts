@@ -34,6 +34,48 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
   assert(expectedRequest.body !== undefined);
 });
 
+Deno.test("buildRequest - Should set correct prod baseURL", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "your-subscription-key",
+    merchantSerialNumber: "your-merchant-serial-number",
+    useTestMode: false,
+  };
+
+  const requestData: RequestData<unknown, unknown> = {
+    method: "POST",
+    token: "your-token",
+    url: "/your-endpoint",
+    body: { key: "value" },
+  };
+
+  const expectedBaseURL = "https://api.vipps.no";
+
+  const expectedRequest = buildRequest(cfg, requestData);
+
+  assertEquals(expectedRequest.url, `${expectedBaseURL}${requestData.url}`);
+});
+
+Deno.test("buildRequest - Should set correct test baseURL", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "your-subscription-key",
+    merchantSerialNumber: "your-merchant-serial-number",
+    useTestMode: true,
+  };
+
+  const requestData: RequestData<unknown, unknown> = {
+    method: "POST",
+    token: "your-token",
+    url: "/your-endpoint",
+    body: { key: "value" },
+  };
+
+  const expectedBaseURL = "https://apitest.vipps.no";
+
+  const expectedRequest = buildRequest(cfg, requestData);
+
+  assertEquals(expectedRequest.url, `${expectedBaseURL}${requestData.url}`);
+});
+
 Deno.test("getHeaders - Should return correct with input", () => {
   const cfg: ClientConfig = {
     subscriptionKey: "testKey",

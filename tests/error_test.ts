@@ -2,7 +2,7 @@ import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { parseError } from "../src/errors.ts";
 import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
 import { assert, assertEquals, assertExists } from "@std/assert";
-import { mockFetch, resetFetch } from "@c4spar/mock-fetch";
+import { mockFetch } from "@c4spar/mock-fetch";
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
   const error = new TypeError("error trying to connect");
