@@ -36,7 +36,6 @@ Deno.test("proxifyFactory - Should return the original property if it is not a f
   // deno-lint-ignore no-explicit-any
   const api = proxifyFactory(client, factory as any);
 
-  console.log(api.bar);
   assertEquals(typeof api, "object");
   assertEquals(api.bar, "bar" as unknown);
 });
