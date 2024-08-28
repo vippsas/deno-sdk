@@ -47,7 +47,6 @@ export const fetchRetry = async <TOk, TErr>(
 export const fetchJSON = async <TOk, TErr>(
   request: Request,
 ): Promise<ClientResponse<TOk, TErr>> => {
-  
   const response = await fetch(request);
 
   /**

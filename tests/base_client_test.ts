@@ -54,7 +54,6 @@ Deno.test("makeRequest - Should error", async () => {
 });
 
 Deno.test("makeRequest - Should return validation error", async () => {
-
   mockFetch("https://api.vipps.no/epayment/v1/test/payments/123abc/approve", {
     body: JSON.stringify({ ok: false, error: "Bad Request" }),
     status: 400,
@@ -164,9 +163,8 @@ Deno.test("makeRequest - Should give up and return return error after 3 retries"
   };
 
   const client = baseClient(cfg);
-  const response = await client.makeRequest(requestData);  
+  const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
   assert("error" in response);
 });
-
