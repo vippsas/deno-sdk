@@ -15,7 +15,7 @@ import {
  * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life
  * 30 Apr 2025.
  */
-import { generate } from "@babia/uuid-v7";
+import { uuidv7 } from "uuidv7";
 
 /**
  * Factory object for creating ePayment API requests.
@@ -35,7 +35,7 @@ export const ePaymentRequestFactory = {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
-      newBody.reference = generate();
+      newBody.reference = uuidv7();
     }
     return {
       url: "/epayment/v1/payments",

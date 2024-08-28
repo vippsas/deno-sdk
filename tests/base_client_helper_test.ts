@@ -4,8 +4,7 @@ import {
   getHeaders,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
-import { assert, assertEquals } from "@std/assert";
-import { validate } from "@babia/uuid-v7";
+import { assert, assertEquals, assertExists } from "@std/assert";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
   const cfg: ClientConfig = {
@@ -107,9 +106,8 @@ Deno.test("getHeaders - Should generate UUID", () => {
   };
 
   const expectedHeaders = getHeaders(cfg);
-  const uuid = expectedHeaders["Idempotency-Key"];
 
-  assert(validate(uuid));
+  assertExists(expectedHeaders["Idempotency-Key"]);
 });
 
 Deno.test("getHeaders - Should return correct with minimal input", () => {

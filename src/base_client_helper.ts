@@ -11,7 +11,7 @@ import {
  * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life
  * 30 Apr 2025.
  */
-import { generate } from "@babia/uuid-v7";
+import { uuidv7 } from "uuidv7";
 
 /**
  * Builds a Request object based on the provided configuration and request data.
@@ -66,7 +66,7 @@ export const getHeaders = (
     "Vipps-System-Version": cfg.systemVersion || "",
     "Vipps-System-Plugin-Name": cfg.pluginName || "",
     "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-    "Idempotency-Key": generate(),
+    "Idempotency-Key": uuidv7(),
   };
 
   // Remove omitted headers
