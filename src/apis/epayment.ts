@@ -1,3 +1,4 @@
+import { uuid } from "../deps.ts";
 import { RequestData } from "../types.ts";
 import {
   EPaymentCreatePaymentOKResponse,
@@ -9,13 +10,6 @@ import {
   EPaymentModificationOKResponse,
   EPaymentModificationRequest,
 } from "./types/epayment_types.ts";
-
-/**
- * This is a workaround for `crypto.randomUUID` not being available in
- * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life
- * 30 Apr 2025.
- */
-import { generate } from "@babia/uuid-v7";
 
 /**
  * Factory object for creating ePayment API requests.
@@ -35,7 +29,7 @@ export const ePaymentRequestFactory = {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
-      newBody.reference = generate();
+      newBody.reference = uuid.generate();
     }
     return {
       url: "/epayment/v1/payments",

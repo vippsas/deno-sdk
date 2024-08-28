@@ -6,12 +6,7 @@ import {
   RequestData,
 } from "./types.ts";
 
-/**
- * This is a workaround for `crypto.randomUUID` not being available in
- * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life
- * 30 Apr 2025.
- */
-import { generate } from "@babia/uuid-v7";
+import { uuid } from "./deps.ts";
 
 /**
  * Builds a Request object based on the provided configuration and request data.
@@ -66,7 +61,7 @@ export const getHeaders = (
     "Vipps-System-Version": cfg.systemVersion || "",
     "Vipps-System-Plugin-Name": cfg.pluginName || "",
     "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-    "Idempotency-Key": generate(),
+    "Idempotency-Key": uuid.generate(),
   };
 
   // Remove omitted headers

@@ -1,6 +1,6 @@
 import { assert, assertEquals, assertExists } from "@std/assert";
-import { validate } from "@babia/uuid-v7";
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
+import { uuid } from "../src/deps.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", () => {
   const expected = {
@@ -60,7 +60,7 @@ Deno.test("ePayment - create - Should fill in missing props", () => {
   ) as any;
 
   assertExists(result.body.reference);
-  assert(validate(result.body.reference));
+  assert(uuid.validate(result.body.reference));
 });
 
 Deno.test("ePayment - info - Should have correct url and header", () => {
