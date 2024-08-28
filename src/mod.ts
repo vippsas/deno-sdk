@@ -25,6 +25,7 @@ export type * from "./apis/types/all_external_types.ts";
  * Creates a new SDK client.
  *
  * @param options - The client configuration options.
+ * @returns {object} The SDK client with proxified API request factories.
  */
 export const Client = (options: ClientConfig) => {
   // Create the base client

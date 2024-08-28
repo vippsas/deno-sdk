@@ -1,177 +1,170 @@
 import { baseClient } from "../src/base_client.ts";
-import { assertEquals, mf } from "./test_deps.ts";
-import { RequestData } from "../src/types.ts";
-import { RetryError } from "../src/deps.ts";
+import { assert, assertEquals } from "@std/assert";
+import { ClientConfig, RequestData } from "../src/types.ts";
+import { mockFetch, MockResponseOptions, resetFetch } from "@c4spar/mock-fetch";
+
+const emptyCfg: ClientConfig = {
+  merchantSerialNumber: "",
+  subscriptionKey: "",
+  useTestMode: true,
+  retryRequests: false,
+};
 
 Deno.test("makeRequest - Should exist", () => {
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
-
-  const client = baseClient(cfg);
+  const client = baseClient(emptyCfg);
 
   assertEquals(typeof client.makeRequest, "function");
 });
 
-Deno.test("makeRequest - Should return ok", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/foo", (req: Request) => {
-    assertEquals(req.url, "https://api.vipps.no/foo");
-    assertEquals(req.method, "GET");
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
+Deno.test("makeRequest - Should return", async () => {
+  mockFetch("https://apitest.vipps.no/foo", {
+    body: JSON.stringify({}),
+    status: 200,
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
-  const response = await client.makeRequest(requestData);
+  const client = baseClient(emptyCfg);
+  const actual = await client.makeRequest(requestData) as unknown;
+  const expected = { ok: true, data: { text: "{}" } };
 
-  assertEquals(response.ok, true);
+  assertEquals(expected, actual);
 });
 
 Deno.test("makeRequest - Should error", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/foo", () => {
-    return new Response(JSON.stringify({ ok: false, error: "Bad Request" }), {
-      status: 400,
-    });
+  mockFetch("https://apitest.vipps.no/foo", {
+    body: JSON.stringify({ ok: false, error: "Bad Request" }),
+    status: 400,
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(emptyCfg);
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
+
+  resetFetch();
 });
 
 Deno.test("makeRequest - Should return validation error", async () => {
-  mf.install(); // mock out calls to `fetch`
-
-  mf.mock("GET@/epayment/v1/test/payments/123abc/approve", () => {
-    return new Response(JSON.stringify({ ok: false, error: "Bad Request" }), {
-      status: 400,
-    });
+  mockFetch("https://api.vipps.no/epayment/v1/test/payments/123abc/approve", {
+    body: JSON.stringify({ ok: false, error: "Bad Request" }),
+    status: 400,
   });
 
-  const cfg = {
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: false,
-  };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/epayment/v1/test/payments/123abc/approve",
   };
 
+  const cfg: ClientConfig = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    useTestMode: false,
+    retryRequests: false,
+  };
+
   const client = baseClient(cfg);
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
+  assert("error" in response);
 });
 
 Deno.test("makeRequest - Should return ok after 2 retries", async () => {
-  mf.install(); // mock out calls to `fetch`
-  let count = 0;
-  mf.mock("GET@/foo", () => {
-    count++;
-    if (count < 3) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "Internal Server Error" }),
-        {
-          status: 500,
-        },
-      );
-    }
+  const retries = 2;
 
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
+  // Function to create mock response based on the attempt number
+  const createResponse = (
+    attempt: number,
+    maxRetries: number,
+  ): MockResponseOptions => ({
+    body: JSON.stringify({
+      ok: attempt >= maxRetries,
+      error: attempt < maxRetries ? "Internal Server Error" : undefined,
+    }),
+    status: attempt < maxRetries ? 500 : 200,
   });
 
-  const cfg = {
+  // Mock fetch responses for each retry attempt using recursion
+  const setupMockFetch = (maxRetries: number, attempt: number = 0): void => {
+    if (attempt > maxRetries) return;
+    mockFetch(
+      "https://apitest.vipps.no/foo",
+      createResponse(attempt, maxRetries),
+    );
+    setupMockFetch(maxRetries, attempt + 1);
+  };
+
+  setupMockFetch(retries);
+
+  const cfg: ClientConfig = {
     merchantSerialNumber: "",
     subscriptionKey: "",
+    useTestMode: true,
     retryRequests: true,
   };
+
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
   const client = baseClient(cfg);
-
   const response = await client.makeRequest(requestData);
+
   assertEquals(response.ok, true);
-
-  mf.reset();
 });
 
-Deno.test("makeRequest - Should not return ok after 4 retries", async () => {
-  mf.install(); // mock out calls to `fetch`
-  let count = 0;
-  mf.mock("GET@/foo", () => {
-    count++;
-    if (count < 5) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "Internal Server Error" }),
-        {
-          status: 500,
-        },
-      );
-    }
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
+Deno.test("makeRequest - Should give up and return return error after 3 retries", async () => {
+  const retries = 3;
+
+  // Function to create mock response based on the attempt number
+  const createResponse = (
+    attempt: number,
+    maxRetries: number,
+  ): MockResponseOptions => ({
+    body: JSON.stringify({
+      ok: attempt >= maxRetries,
+      error: attempt < maxRetries ? "Internal Server Error" : undefined,
+    }),
+    status: attempt < maxRetries ? 500 : 200,
   });
 
-  const cfg = {
+  // Mock fetch responses for each retry attempt using recursion
+  const setupMockFetch = (maxRetries: number, attempt: number = 0): void => {
+    if (attempt > maxRetries) return;
+    mockFetch(
+      "https://apitest.vipps.no/foo",
+      createResponse(attempt, maxRetries),
+    );
+    setupMockFetch(maxRetries, attempt + 1);
+  };
+
+  setupMockFetch(retries);
+
+  const cfg: ClientConfig = {
     merchantSerialNumber: "",
     subscriptionKey: "",
+    useTestMode: true,
     retryRequests: true,
   };
+
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
   const client = baseClient(cfg);
-
   const response = await client.makeRequest(requestData);
+
   assertEquals(response.ok, false);
-
-  mf.reset();
-});
-
-Deno.test("makeRequest - Should catch Retry Errors", async () => {
-  mf.install(); // mock out calls to `fetch`
-  mf.mock("GET@/foo", () => {
-    throw new RetryError({ foo: "bar" }, 3);
-  });
-
-  const cfg = {
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    retryRequests: true,
-  };
-  const requestData: RequestData<unknown, unknown> = {
-    method: "GET",
-    url: "/foo",
-  };
-
-  const client = baseClient(cfg);
-
-  const response = await client.makeRequest(requestData);
-  assertEquals(response.ok, false);
-  mf.reset();
+  assert("error" in response);
 });

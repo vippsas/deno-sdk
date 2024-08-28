@@ -1,4 +1,4 @@
-import { filterKeys, uuid } from "./deps.ts";
+import { filterKeys } from "@std/collections";
 import {
   ClientConfig,
   DefaultHeaders,
@@ -7,11 +7,18 @@ import {
 } from "./types.ts";
 
 /**
+ * This is a workaround for `crypto.randomUUID` not being available in
+ * Node.js 18. This will be removed after Node.js 18 reaches End-of-Life
+ * 30 Apr 2025.
+ */
+import { generate } from "@babia/uuid-v7";
+
+/**
  * Builds a Request object based on the provided configuration and request data.
  *
- * @param cfg - The client configuration.
- * @param requestData - The request data containing method, headers, token, body, and URL.
- * @returns A Request object.
+ * @param {ClientConfig} cfg - The client configuration.
+ * @param {RequestData<unknown, unknown>} requestData - The request data containing method, headers, token, body, and URL.
+ * @returns {Request} A Request object.
  */
 export const buildRequest = (
   cfg: ClientConfig,
@@ -37,12 +44,11 @@ export const buildRequest = (
 /**
  * Returns a headers object based on the provided client configuration.
  *
- * @param cfg - The client configuration.
- * @param additionalHeaders - Additional headers to include,
- * these will not override default headers.
- * @param omitHeaders - Headers to omit from the returned object.
- * @param token - The token to use in the Authorization header.
- * @returns A headers object.
+ * @param {ClientConfig} cfg - The client configuration.
+ * @param {string} [token] - The token to use in the Authorization header.
+ * @param {Record<string, string>} [additionalHeaders] - Additional headers to include, these will not override default headers.
+ * @param {OmitHeaders} [omitHeaders=[]] - Headers to omit from the returned object.
+ * @returns {Record<string, string>} A headers object.
  */
 export const getHeaders = (
   cfg: ClientConfig,
@@ -60,7 +66,7 @@ export const getHeaders = (
     "Vipps-System-Version": cfg.systemVersion || "",
     "Vipps-System-Plugin-Name": cfg.pluginName || "",
     "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-    "Idempotency-Key": uuid.generate(),
+    "Idempotency-Key": generate(),
   };
 
   // Remove omitted headers
@@ -78,7 +84,8 @@ export const getHeaders = (
 
 /**
  * Returns the user agent string for the client.
- * @returns The user agent string.
+ *
+ * @returns {string} The user agent string.
  */
 export const getUserAgent = (): string => {
   // If the sdk is loaded using require, import.meta.url will be undefined
@@ -92,8 +99,9 @@ export const getUserAgent = (): string => {
  * Creates a user agent string based on the provided meta URL.
  * The function is meant to receive import.meta.url (that will returns the URL of the current module).
  * Read more in the Deno docs in Import Meta
- * @param metaUrl - The meta URL of the module.
- * @returns The user agent string.
+ *
+ * @param {string | undefined} metaUrl - The meta URL of the module.
+ * @returns {string} The user agent string.
  */
 export const createSDKUserAgent = (metaUrl: string | undefined): string => {
   if (!metaUrl) {
@@ -113,6 +121,7 @@ export const createSDKUserAgent = (metaUrl: string | undefined): string => {
   } // Or if the module was loaded from npm
   else if (url.pathname.includes("node_modules")) {
     return `Vipps/Deno SDK/npm-module`;
-  } // Otherwise, we don't know where the module was loaded from
+  }
+  // Otherwise, we don't know where the module was loaded from
   return `Vipps/Deno SDK/unknown`;
 };

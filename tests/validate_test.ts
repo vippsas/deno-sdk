@@ -1,6 +1,6 @@
 import { ClientConfig, RequestData } from "../src/types.ts";
 import { validateRequestData } from "../src/validate.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals } from "@std/assert";
 
 Deno.test("validateRequestData - Should return undefined for valid request data", () => {
   const requestData: RequestData<unknown, unknown> = {

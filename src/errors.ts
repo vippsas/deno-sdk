@@ -1,8 +1,14 @@
-import { RetryError, STATUS_CODE } from "./deps.ts";
+import { RetryError } from "@std/async";
+import { STATUS_CODE } from "@std/http";
 import { SDKError } from "./types.ts";
 
 /**
  * Parses the error and returns an object with error details.
+ *
+ * This function handles different types of errors, including retry errors,
+ * connection errors, forbidden status codes, and generic errors. It returns
+ * a standardized error object that can be used throughout the application.
+ *
  * @template TErr - The type of the error object.
  * @param error - The error to be parsed.
  * @returns An object with error details.
@@ -11,7 +17,7 @@ export const parseError = <TErr>(
   error: unknown,
   status?: number,
 ): SDKError<TErr> => {
-  // Catch RetryError
+  // Handle RetryError
   if (error instanceof RetryError) {
     return {
       ok: false,
@@ -22,7 +28,7 @@ export const parseError = <TErr>(
     };
   }
 
-  // Catch connection errors
+  // Handle connection errors
   if (
     error instanceof TypeError &&
     error.message.includes("error trying to connect")
@@ -33,7 +39,7 @@ export const parseError = <TErr>(
     };
   }
 
-  // Catch Forbidden
+  // Handle Forbidden status code
   if (status === STATUS_CODE.Forbidden) {
     return {
       ok: false,
@@ -44,16 +50,16 @@ export const parseError = <TErr>(
     };
   }
 
-  // Catch regular errors
+  // Handle generic Error instances
   if (error instanceof Error) {
     return { ok: false, error: { message: error.message } };
   }
 
-  // If error is object, return it
-  if (typeof error === "object") {
+  // Handle object errors
+  if (typeof error === "object" && error !== null) {
     return { ok: false, error: error as TErr };
   }
 
-  // Default to error as string
+  // Default to treating error as a string
   return { ok: false, error: { message: String(error) } };
 };

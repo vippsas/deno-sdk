@@ -1,4 +1,4 @@
-import { Spinner } from "./script_deps.ts";
+import { Spinner } from "@std/cli";
 
 type CommandResult = {
   ok: true;

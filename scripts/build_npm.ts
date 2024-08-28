@@ -1,4 +1,4 @@
-import { build, emptyDir } from "./script_deps.ts";
+import { build, emptyDir } from "@deno/dnt";
 
 /**
  * This script builds the SDK for NPM.

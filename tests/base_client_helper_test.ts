@@ -4,7 +4,8 @@ import {
   getHeaders,
 } from "../src/base_client_helper.ts";
 import { ClientConfig, RequestData } from "../src/types.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
+import { validate } from "@babia/uuid-v7";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
   const cfg: ClientConfig = {
@@ -33,6 +34,48 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
   assert(expectedRequest.body !== undefined);
 });
 
+Deno.test("buildRequest - Should set correct prod baseURL", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "your-subscription-key",
+    merchantSerialNumber: "your-merchant-serial-number",
+    useTestMode: false,
+  };
+
+  const requestData: RequestData<unknown, unknown> = {
+    method: "POST",
+    token: "your-token",
+    url: "/your-endpoint",
+    body: { key: "value" },
+  };
+
+  const expectedBaseURL = "https://api.vipps.no";
+
+  const expectedRequest = buildRequest(cfg, requestData);
+
+  assertEquals(expectedRequest.url, `${expectedBaseURL}${requestData.url}`);
+});
+
+Deno.test("buildRequest - Should set correct test baseURL", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "your-subscription-key",
+    merchantSerialNumber: "your-merchant-serial-number",
+    useTestMode: true,
+  };
+
+  const requestData: RequestData<unknown, unknown> = {
+    method: "POST",
+    token: "your-token",
+    url: "/your-endpoint",
+    body: { key: "value" },
+  };
+
+  const expectedBaseURL = "https://apitest.vipps.no";
+
+  const expectedRequest = buildRequest(cfg, requestData);
+
+  assertEquals(expectedRequest.url, `${expectedBaseURL}${requestData.url}`);
+});
+
 Deno.test("getHeaders - Should return correct with input", () => {
   const cfg: ClientConfig = {
     subscriptionKey: "testKey",
@@ -55,6 +98,18 @@ Deno.test("getHeaders - Should return correct with input", () => {
   assertEquals(expectedHeaders["Vipps-System-Version"], "1.0.0");
   assertEquals(expectedHeaders["Vipps-System-Plugin-Name"], "My cool plugin");
   assertEquals(expectedHeaders["Vipps-System-Plugin-Version"], "1.0.0");
+});
+
+Deno.test("getHeaders - Should generate UUID", () => {
+  const cfg: ClientConfig = {
+    subscriptionKey: "testKey",
+    merchantSerialNumber: "123456",
+  };
+
+  const expectedHeaders = getHeaders(cfg);
+  const uuid = expectedHeaders["Idempotency-Key"];
+
+  assert(validate(uuid));
 });
 
 Deno.test("getHeaders - Should return correct with minimal input", () => {
