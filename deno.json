@@ -1,4 +1,7 @@
 {
+  "name": "@vipps-mobilepay/sdk",
+  "version": "1.0.0",
+  "exports": "./src/mod.ts",
   "imports": {
     "@c4spar/mock-fetch": "jsr:@c4spar/mock-fetch@^1.0.0",
     "@deno/dnt": "jsr:@deno/dnt@^0.41.3",

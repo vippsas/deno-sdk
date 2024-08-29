@@ -1,4 +1,4 @@
-import { Scope } from "./shared_types.ts";
+import type { Scope } from "./shared_types.ts";
 
 /**
  * ErrorResponse

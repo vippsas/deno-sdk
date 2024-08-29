@@ -1,6 +1,6 @@
 import { RetryError } from "@std/async";
 import { STATUS_CODE } from "@std/http";
-import { SDKError } from "./types.ts";
+import type { SDKError } from "./types.ts";
 
 /**
  * Parses the error and returns an object with error details.

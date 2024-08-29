@@ -1,4 +1,4 @@
-import { ClientConfig, RequestData } from "../src/types.ts";
+import type { ClientConfig, RequestData } from "../src/types.ts";
 import { validateRequestData } from "../src/validate.ts";
 import { assertEquals } from "@std/assert";
 

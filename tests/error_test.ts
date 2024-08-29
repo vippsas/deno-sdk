@@ -1,6 +1,6 @@
-import { AccessTokenError } from "../src/apis/types/auth_types.ts";
+import type { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { parseError } from "../src/errors.ts";
-import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
+import { Client, type RecurringErrorFromAzure } from "../src/mod.ts";
 import { assert, assertEquals, assertExists } from "@std/assert";
 import { mockFetch } from "@c4spar/mock-fetch";
 

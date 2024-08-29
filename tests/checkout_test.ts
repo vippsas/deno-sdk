@@ -1,5 +1,5 @@
 import { checkoutRequestFactory } from "../src/apis/checkout.ts";
-import { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
+import type { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
 import {
   assert,
   assertEquals,
