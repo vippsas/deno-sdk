@@ -1,5 +1,5 @@
-import { RequestData } from "../types.ts";
-import { AccessToken, AccessTokenError } from "./types/auth_types.ts";
+import type { RequestData } from "../types.ts";
+import type { AccessToken, AccessTokenError } from "./types/auth_types.ts";
 
 /**
  * Factory for creating authentication-related request data.

@@ -2,7 +2,7 @@ import {
   callbackQRRequestFactory,
   redirectQRRequestFactory,
 } from "../src/apis/qr.ts";
-import {
+import type {
   CallbackQrRequest,
   RedirectQrRequest,
   RedirectQrUpdateRequest,

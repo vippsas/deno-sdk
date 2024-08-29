@@ -4,7 +4,7 @@ import {
   getHeaders,
 } from "../src/base_client_helper.ts";
 import { uuid } from "../src/deps.ts";
-import { ClientConfig, RequestData } from "../src/types.ts";
+import type { ClientConfig, RequestData } from "../src/types.ts";
 import { assert, assertEquals } from "@std/assert";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {

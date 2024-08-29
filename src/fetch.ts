@@ -6,7 +6,7 @@ import {
 import { parseMediaType } from "@std/media-types";
 import { retry } from "@std/async";
 import { parseError } from "./errors.ts";
-import { ClientResponse } from "./types.ts";
+import type { ClientResponse } from "./types.ts";
 
 /**
  * Executes a fetch request with optional retry logic.

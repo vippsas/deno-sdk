@@ -1,5 +1,5 @@
 import { filterKeys } from "@std/collections";
-import {
+import type {
   ClientConfig,
   DefaultHeaders,
   OmitHeaders,

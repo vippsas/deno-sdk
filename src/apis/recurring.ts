@@ -1,5 +1,5 @@
-import { RequestData } from "../types.ts";
-import {
+import type { RequestData } from "../types.ts";
+import type {
   RecurringAgreementResponseV3,
   RecurringAsyncChargeResponse,
   RecurringChargeReference,

@@ -1,7 +1,11 @@
 import { baseClient } from "../src/base_client.ts";
 import { assert, assertEquals } from "@std/assert";
-import { ClientConfig, RequestData } from "../src/types.ts";
-import { mockFetch, MockResponseOptions, resetFetch } from "@c4spar/mock-fetch";
+import type { ClientConfig, RequestData } from "../src/types.ts";
+import {
+  mockFetch,
+  type MockResponseOptions,
+  resetFetch,
+} from "@c4spar/mock-fetch";
 
 const emptyCfg: ClientConfig = {
   merchantSerialNumber: "",
