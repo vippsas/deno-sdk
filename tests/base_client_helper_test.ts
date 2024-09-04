@@ -5,7 +5,7 @@ import {
 } from "../src/base_client_helper.ts";
 import { uuid } from "../src/deps.ts";
 import type { ClientConfig, RequestData } from "../src/types.ts";
-import { assert, assertEquals } from "./test_deps.ts"
+import { assert, assertEquals } from "./test_deps.ts";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
   const cfg: ClientConfig = {
