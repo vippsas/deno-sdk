@@ -5,7 +5,7 @@ import {
   assertEquals,
   assertExists,
   assertNotEquals,
-} from "./test_deps.ts"
+} from "./test_deps.ts";
 
 Deno.test("create - should return the correct request data", () => {
   const client_id = "your_client_id";

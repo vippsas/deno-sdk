@@ -1,5 +1,5 @@
 import { baseClient } from "../src/base_client.ts";
-import { assertEquals, mf } from "./test_deps.ts"
+import { assertEquals, mf } from "./test_deps.ts";
 import type { RequestData } from "../src/types.ts";
 import { RetryError } from "../src/deps.ts";
 
