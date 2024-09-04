@@ -1,11 +1,14 @@
-import { ClientConfig, RequestData } from "./types.ts";
+import type { ClientConfig, RequestData } from "./types.ts";
 
 /**
- * Validates the request data.
+ * Validates the request data based on the client configuration.
  *
- * @param requestData - The request data to be validated.
- * @param cfg - The client configuration.
- * @returns A string if validation fails, otherwise undefined.
+ * This function checks if certain operations are being attempted in a non-test
+ * environment and returns an appropriate error message if validation fails.
+ *
+ * @param {RequestData<unknown, unknown>} requestData - The request data to be validated.
+ * @param {ClientConfig} cfg - The client configuration.
+ * @returns {string | undefined} A string if validation fails, otherwise undefined.
  */
 export const validateRequestData = (
   requestData: RequestData<unknown, unknown>,

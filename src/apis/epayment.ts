@@ -1,6 +1,6 @@
 import { uuid } from "../deps.ts";
-import { RequestData } from "../types.ts";
-import {
+import type { RequestData } from "../types.ts";
+import type {
   EPaymentCreatePaymentOKResponse,
   EPaymentCreatePaymentRequest,
   EPaymentErrorResponse,

@@ -1,11 +1,11 @@
 import { checkoutRequestFactory } from "../src/apis/checkout.ts";
-import { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
+import type { CheckoutInitiateSessionRequest } from "../src/apis/types/checkout_types.ts";
 import {
   assert,
   assertEquals,
   assertExists,
   assertNotEquals,
-} from "./test_deps.ts";
+} from "./test_deps.ts"
 
 Deno.test("create - should return the correct request data", () => {
   const client_id = "your_client_id";

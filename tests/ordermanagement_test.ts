@@ -1,5 +1,5 @@
 import { orderManagementRequestFactory } from "../src/apis/ordermanagement.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts"
 
 Deno.test("addCategory - should return the correct RequestData object", () => {
   const body = {

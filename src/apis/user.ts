@@ -1,5 +1,5 @@
-import { RequestData } from "../types.ts";
-import { UserInfo, UserInfoError } from "./types/user_types.ts";
+import type { RequestData } from "../types.ts";
+import type { UserInfo, UserInfoError } from "./types/user_types.ts";
 
 /**
  * Factory object for creating Userinfo API requests.

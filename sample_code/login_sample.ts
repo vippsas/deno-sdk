@@ -1,7 +1,7 @@
 import "https://deno.land/std@0.217.0/dotenv/load.ts";
 import {
   Client,
-  LoginAuthQueryParams,
+  type LoginAuthQueryParams,
 } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
 import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
 

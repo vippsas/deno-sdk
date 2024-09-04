@@ -1,4 +1,4 @@
-import { ProblemJSON } from "./shared_types.ts";
+import type { ProblemJSON } from "./shared_types.ts";
 
 // Error types //
 export type WebhooksErrorResponse = ProblemJSON & {

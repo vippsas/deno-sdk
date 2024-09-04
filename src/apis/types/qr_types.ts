@@ -1,5 +1,5 @@
-import { MerchantSerialNumber } from "../../types.ts";
-import { ProblemJSON } from "./shared_types.ts";
+import type { MerchantSerialNumber } from "../../types.ts";
+import type { ProblemJSON } from "./shared_types.ts";
 
 /**
  * Represents the response for a QR error.

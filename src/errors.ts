@@ -1,9 +1,14 @@
 import { RetryError } from "./deps.ts";
 import { STATUS_CODE } from "./deps.ts";
-import { SDKError } from "./types.ts";
+import type { SDKError } from "./types.ts";
 
 /**
  * Parses the error and returns an object with error details.
+ *
+ * This function handles different types of errors, including retry errors,
+ * connection errors, forbidden status codes, and generic errors. It returns
+ * a standardized error object that can be used throughout the application.
+ *
  *
  * This function handles different types of errors, including retry errors,
  * connection errors, forbidden status codes, and generic errors. It returns

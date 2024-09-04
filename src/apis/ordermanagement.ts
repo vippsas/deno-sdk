@@ -1,4 +1,4 @@
-import {
+import type {
   OrderManagementAddImageOKResponse,
   OrderManagementErrorResponse,
   OrderManagementGetOrderOKResponse,
@@ -9,7 +9,7 @@ import {
   OrderManagementPaymentType,
   OrderManagementReceipt,
 } from "./types/ordermanagement_types.ts";
-import { RequestData } from "../types.ts";
+import type { RequestData } from "../types.ts";
 
 /**
  * Factory object for creating request data for the Order Management API.

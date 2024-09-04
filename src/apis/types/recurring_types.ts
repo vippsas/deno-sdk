@@ -1,4 +1,4 @@
-import { ProblemJSON, Scope } from "./shared_types.ts";
+import type { ProblemJSON, Scope } from "./shared_types.ts";
 
 ///////////////// Error types /////////////////
 

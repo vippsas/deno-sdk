@@ -2,12 +2,12 @@ import {
   callbackQRRequestFactory,
   redirectQRRequestFactory,
 } from "../src/apis/qr.ts";
-import {
+import type {
   CallbackQrRequest,
   RedirectQrRequest,
   RedirectQrUpdateRequest,
 } from "../src/apis/types/qr_types.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals } from "./test_deps.ts"
 
 Deno.test("redirectQR - create - should return a RequestData object with the correct properties", () => {
   const token = "my-auth-token";

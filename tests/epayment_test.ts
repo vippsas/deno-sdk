@@ -1,27 +1,24 @@
-import { assertEquals, assertExists, mf } from "./test_deps.ts";
-import { Client } from "../src/mod.ts";
+import { assert, assertEquals, assertExists } from "./test_deps.ts"
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
+import { uuid } from "../src/deps.ts";
 
-Deno.test("ePayment - create - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - create - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments",
+    method: "POST",
+    body: {
+      amount: { currency: "NOK", value: 1000 },
+      paymentMethod: { type: "WALLET" },
+      customer: { phoneNumber: "4712345678" },
+      reference: "foo",
+      returnUrl: "https://yourwebsite.come/redirect?reference=foo",
+      userFlow: "WEB_REDIRECT",
+      paymentDescription: "One pair of socks",
+    },
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/epayment/v1/payments", (req: Request) => {
-    assertEquals(req.url, "https://apitest.vipps.no/epayment/v1/payments");
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.create("testtoken", {
+  const actual = ePaymentRequestFactory.create("testtoken", {
     amount: {
       currency: "NOK",
       value: 1000,
@@ -33,16 +30,16 @@ Deno.test("ePayment - create - Should have correct url and header", async () => 
       phoneNumber: "4712345678",
     },
     reference: "foo",
-    returnUrl: "https://yourwebsite.come/redirect?reference=" + "foo",
+    returnUrl: "https://yourwebsite.come/redirect?reference=foo",
     userFlow: "WEB_REDIRECT",
     paymentDescription: "One pair of socks",
-  });
+  }) as unknown;
 
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
 Deno.test("ePayment - create - Should fill in missing props", () => {
-  const requestData = ePaymentRequestFactory.create(
+  const result = ePaymentRequestFactory.create(
     "test_token",
     {
       amount: {
@@ -59,182 +56,98 @@ Deno.test("ePayment - create - Should fill in missing props", () => {
       userFlow: "WEB_REDIRECT",
       paymentDescription: "One pair of socks",
     },
-  );
+    // deno-lint-ignore no-explicit-any
+  ) as any;
 
-  assertExists(requestData.body);
-  assertExists("reference" in requestData.body);
+  assertExists(result.body.reference);
+  assert(uuid.validate(result.body.reference));
 });
 
-Deno.test("ePayment - info - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - info - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments/foo",
+    method: "GET",
+    token: "testtoken",
+  };
 
-  mf.mock("GET@/epayment/v1/payments/foo", (req: Request) => {
-    assertEquals(req.url, "https://apitest.vipps.no/epayment/v1/payments/foo");
-    assertEquals(req.headers.has("Idempotency-Key"), true);
+  const actual = ePaymentRequestFactory.info("testtoken", "foo") as unknown;
 
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.info("testtoken", "foo");
-
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
-Deno.test("ePayment - history - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - history - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments/foo/events",
+    method: "GET",
+    token: "testtoken",
+  };
 
-  mf.mock("GET@/epayment/v1/payments/foo/events", (req: Request) => {
-    assertEquals(
-      req.url,
-      "https://apitest.vipps.no/epayment/v1/payments/foo/events",
-    );
-    assertEquals(req.headers.has("Idempotency-Key"), true);
+  const actual = ePaymentRequestFactory.history("testtoken", "foo") as unknown;
 
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.history("testtoken", "foo");
-
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
-Deno.test("ePayment - cancel - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - cancel - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments/foo/cancel",
+    method: "POST",
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/epayment/v1/payments/foo/cancel", (req: Request) => {
-    assertEquals(
-      req.url,
-      "https://apitest.vipps.no/epayment/v1/payments/foo/cancel",
-    );
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.cancel("testtoken", "foo");
-
-  mf.reset();
+  const actual = ePaymentRequestFactory.cancel("testtoken", "foo") as unknown;
+  assertEquals(actual, expected);
 });
 
-Deno.test("ePayment - capture - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - capture - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments/foo/capture",
+    method: "POST",
+    body: { modificationAmount: { currency: "NOK", value: 1000 } },
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/epayment/v1/payments/foo/capture", (req: Request) => {
-    assertEquals(
-      req.url,
-      "https://apitest.vipps.no/epayment/v1/payments/foo/capture",
-    );
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.capture("testtoken", "foo", {
+  const actual = ePaymentRequestFactory.capture("testtoken", "foo", {
     modificationAmount: {
       currency: "NOK",
       value: 1000,
     },
-  });
+  }) as unknown;
 
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
-Deno.test("ePayment - refund - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - refund - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/payments/foo/refund",
+    method: "POST",
+    body: { modificationAmount: { currency: "NOK", value: 1000 } },
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/epayment/v1/payments/foo/refund", (req: Request) => {
-    assertEquals(
-      req.url,
-      "https://apitest.vipps.no/epayment/v1/payments/foo/refund",
-    );
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.refund("testtoken", "foo", {
+  const actual = ePaymentRequestFactory.refund("testtoken", "foo", {
     modificationAmount: {
       currency: "NOK",
       value: 1000,
     },
-  });
+  }) as unknown;
 
-  mf.reset();
+  assertEquals(actual, expected);
 });
 
-Deno.test("ePayment - forceApprove - Should have correct url and header", async () => {
-  mf.install(); // mock out calls to `fetch`
+Deno.test("ePayment - forceApprove - Should have correct url and header", () => {
+  const expected = {
+    url: "/epayment/v1/test/payments/foo/approve",
+    method: "POST",
+    body: { customer: { phoneNumber: "4712345678" }, token: "foo" },
+    token: "testtoken",
+  };
 
-  mf.mock("POST@/epayment/v1/test/payments/foo/approve", (req: Request) => {
-    assertEquals(
-      req.url,
-      "https://apitest.vipps.no/epayment/v1/test/payments/foo/approve",
-    );
-    assertEquals(req.headers.has("Idempotency-Key"), true);
-
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
-
-  const client = Client({
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    useTestMode: true,
-    retryRequests: false,
-  });
-
-  await client.payment.forceApprove("testtoken", "foo", {
+  const actual = ePaymentRequestFactory.forceApprove("testtoken", "foo", {
     customer: {
       phoneNumber: "4712345678",
     },
     token: "foo",
-  });
+  }) as unknown;
 
-  mf.reset();
+  assertEquals(actual, expected);
 });
