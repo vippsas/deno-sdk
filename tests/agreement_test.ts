@@ -1,4 +1,4 @@
-import { assertEquals } from "./test_deps.ts"
+import { assertEquals } from "./test_deps.ts";
 import { agreementRequestFactory } from "../src/apis/recurring.ts";
 
 Deno.test("agreements - create - check correct url in TEST/MT", () => {

@@ -9,7 +9,6 @@ import type { SDKError } from "./types.ts";
  * connection errors, forbidden status codes, and generic errors. It returns
  * a standardized error object that can be used throughout the application.
  *
- *
  * This function handles different types of errors, including retry errors,
  * connection errors, forbidden status codes, and generic errors. It returns
  * a standardized error object that can be used throughout the application.
