@@ -1,4 +1,4 @@
-import { assert } from "@std/assert";
+import { assert } from "./test_deps.ts"
 import { chargeRequestFactory } from "../src/apis/recurring.ts";
 
 Deno.test("create - should return the correct RequestData object", () => {

@@ -10,6 +10,7 @@ export type * from "./apis/types/all_external_types.ts";
  *
  * @param options - The client configuration options.
  * @returns {SDKClient} The SDK client.
+ * @returns {SDKClient} The SDK client.
  */
 export const Client = (options: ClientConfig): SDKClient => {
   // Create the base client

@@ -1,5 +1,5 @@
 import { userRequestFactory } from "../src/apis/user.ts";
-import { assertEquals } from "@std/assert";
+import { assertEquals } from "./test_deps.ts"
 
 Deno.test("userRequestFactory.info should return the correct RequestData object", () => {
   const token = "your-token";

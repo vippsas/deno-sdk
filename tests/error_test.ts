@@ -1,8 +1,8 @@
-import type { AccessTokenError } from "../src/apis/types/auth_types.ts";
+import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { parseError } from "../src/errors.ts";
-import { Client, type RecurringErrorFromAzure } from "../src/mod.ts";
-import { assert, assertEquals, assertExists } from "@std/assert";
-import { mockFetch } from "@c4spar/mock-fetch";
+import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
+import { assert, assertExists } from "./test_deps.ts";
+import { assertEquals, mf } from "./test_deps.ts";
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
   const error = new TypeError("error trying to connect");
@@ -17,9 +17,11 @@ Deno.test("parseError - Should return correct error message for generic Error", 
 });
 
 Deno.test("parseError - should return correct error message for forbidden Error", async () => {
-  mockFetch("https://apitest.vipps.no/epayment/v1/payments/", {
-    body: JSON.stringify({ ok: false, data: {} }),
-    status: 403,
+  mf.install();
+  mf.mock("GET@/epayment/v1/payments/", () => {
+    return new Response(JSON.stringify({ ok: false, data: {} }), {
+      status: 403,
+    });
   });
 
   const client = Client({
@@ -31,6 +33,7 @@ Deno.test("parseError - should return correct error message for forbidden Error"
 
   const result = await client.payment.info("testtoken", "123456789");
   assertEquals(result.ok, false);
+  mf.reset();
 });
 
 Deno.test("parseError - Should return correct error message for AccessTokenError", () => {

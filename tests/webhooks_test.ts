@@ -1,11 +1,16 @@
-import { assertEquals } from "@std/assert";
-import { mockFetch, resetFetch } from "@c4spar/mock-fetch";
+import { assertEquals, mf } from "./test_deps.ts";
 import { Client } from "../src/mod.ts";
 
 Deno.test("webhooks - registerWebhook - check correct url in TEST/MT", async () => {
-  mockFetch("https://apitest.vipps.no/webhooks/v1/webhooks", {
-    body: JSON.stringify({}),
-    status: 201,
+  mf.install();
+
+  mf.mock("POST@/webhooks/v1/webhooks", (req: Request) => {
+    assertEquals(req.url, "https://apitest.vipps.no/webhooks/v1/webhooks");
+    assertEquals(req.headers.has("Idempotency-Key"), true);
+
+    return new Response(JSON.stringify({}), {
+      status: 201,
+    });
   });
 
   const client = Client({
@@ -22,13 +27,17 @@ Deno.test("webhooks - registerWebhook - check correct url in TEST/MT", async () 
 
   assertEquals(result.ok, true);
 
-  resetFetch();
+  mf.reset();
 });
 
 Deno.test("webhooks - registerWebhook - bad request", async () => {
-  mockFetch("https://apitest.vipps.no/webhooks/v1/webhooks", {
-    status: 400,
-    statusText: "Bad Request",
+  mf.install();
+
+  mf.mock("POST@/webhooks/v1/webhooks", () => {
+    return new Response("Bad request", {
+      status: 400,
+      statusText: "Bad Request",
+    });
   });
 
   const client = Client({
@@ -48,13 +57,17 @@ Deno.test("webhooks - registerWebhook - bad request", async () => {
 
   assertEquals(result.ok, false);
 
-  resetFetch();
+  mf.reset();
 });
 
 Deno.test("webhooks - delete webhook - OK", async () => {
+  mf.install();
+
   // Testing that 204 responses are handled correctly
-  mockFetch("https://apitest.vipps.no/webhooks/v1/webhooks/:webhookId", {
-    status: 204,
+  mf.mock("DELETE@/webhooks/v1/webhooks/:webhookId", () => {
+    return new Response(null, {
+      status: 204,
+    });
   });
 
   const client = Client({
@@ -71,12 +84,14 @@ Deno.test("webhooks - delete webhook - OK", async () => {
 
   assertEquals(deleteResponse.ok, true);
 
-  resetFetch();
+  mf.reset();
 });
 
 Deno.test("webhooks - list webhooks - OK", async () => {
-  mockFetch("https://apitest.vipps.no/webhooks/v1/webhooks", {
-    body: JSON.stringify({
+  mf.install();
+
+  mf.mock("GET@/webhooks/v1/webhooks", () => {
+    const list = {
       webhooks: [
         {
           id: "1234-1234-1234-1234-1234",
@@ -87,8 +102,10 @@ Deno.test("webhooks - list webhooks - OK", async () => {
           ],
         },
       ],
-    }),
-    status: 200,
+    };
+    return new Response(JSON.stringify(list), {
+      status: 200,
+    });
   });
 
   const client = Client({
@@ -102,5 +119,5 @@ Deno.test("webhooks - list webhooks - OK", async () => {
 
   assertEquals(listResponse.ok, true);
 
-  resetFetch();
+  mf.reset();
 });

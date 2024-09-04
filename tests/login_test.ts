@@ -1,5 +1,5 @@
 import { loginRequestFactory } from "../src/apis/login.ts";
-import { assertEquals } from "@std/assert";
+import { assertEquals } from "./test_deps.ts"
 
 Deno.test("login - discovery - should return the correct RequestData object", () => {
   const requestData = loginRequestFactory.discovery();
