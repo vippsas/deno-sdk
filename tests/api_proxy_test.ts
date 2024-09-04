@@ -19,3 +19,23 @@ Deno.test("proxifyFactory - Should return a Proxy object with method", () => {
   assertEquals(typeof api, "object");
   assertEquals(typeof api.foo, "function");
 });
+
+Deno.test("proxifyFactory - Should return the original property if it is not a function", () => {
+  const client = baseClient({ merchantSerialNumber: "", subscriptionKey: "" });
+
+  const factory = {
+    foo(): RequestData<unknown, unknown> {
+      return {
+        method: "GET",
+        url: "/foo",
+      };
+    },
+    bar: "bar",
+  };
+
+  // deno-lint-ignore no-explicit-any
+  const api = proxifyFactory(client, factory as any);
+
+  assertEquals(typeof api, "object");
+  assertEquals(api.bar, "bar" as unknown);
+});

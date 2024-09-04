@@ -28,11 +28,13 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
     async makeRequest<TOk, TErr>(
       requestData: RequestData<TOk, TErr>,
     ): Promise<ClientResponse<TOk, TErr>> {
-      const validated = validateRequestData(requestData, cfg);
-
-      if (typeof validated === "string") {
-        return { ok: false, error: { message: validated } };
+   // Validate the request data
+      const validationError = validateRequestData(requestData, cfg);
+      if (validationError) {
+        return { ok: false, error: { message: validationError } };
       }
+
+      // Build the request
       const request = buildRequest(cfg, requestData);
       try {
         const res = await fetchRetry<TOk, TErr>(request, cfg.retryRequests);

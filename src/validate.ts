@@ -11,19 +11,19 @@ export const validateRequestData = (
   requestData: RequestData<unknown, unknown>,
   cfg: ClientConfig,
 ): string | undefined => {
+  const { url } = requestData;
+  const { useTestMode } = cfg;
+
   // ePayment validation
-  if (
-    !cfg.useTestMode && requestData.url.includes("/epayment/") &&
-    requestData.url.includes("/approve")
-  ) {
+  if (!useTestMode && url.includes("/epayment/") && url.includes("/approve")) {
     return "forceApprove is only available in the test environment";
   }
 
   // Agreement validation
-  if (
-    !cfg.useTestMode && requestData.url.includes("/recurring/") &&
-    requestData.url.includes("/accept")
-  ) {
+  if (!useTestMode && url.includes("/recurring/") && url.includes("/accept")) {
     return "forceAccept is only available in the test environment";
   }
+
+  // No validation errors
+  return undefined;
 };
