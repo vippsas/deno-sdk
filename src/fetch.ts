@@ -2,9 +2,9 @@ import {
   isServerErrorStatus,
   isSuccessfulStatus,
   STATUS_CODE,
-} from "@std/http";
-import { parseMediaType } from "@std/media-types";
-import { retry } from "@std/async";
+} from "./deps.ts";
+import { parseMediaType } from "./deps.ts";
+import { retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
 import type { ClientResponse } from "./types.ts";
 

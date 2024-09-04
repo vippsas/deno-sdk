@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertExists } from "@std/assert";
+import { assert, assertEquals, assertExists } from "./test_deps.ts"
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
 import { uuid } from "../src/deps.ts";
 

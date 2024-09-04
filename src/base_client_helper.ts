@@ -1,4 +1,4 @@
-import { filterKeys } from "@std/collections";
+import { filterKeys } from "./deps.ts";
 import type {
   ClientConfig,
   DefaultHeaders,
