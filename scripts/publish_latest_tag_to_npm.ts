@@ -1,5 +1,5 @@
-import { bold, gray, green, white } from "@std/fmt/colors";
-import { greaterThan, parse } from "@std/semver";
+import { bold, gray, green, white } from "jsr:@std/fmt/colors";
+import { greaterThan, parse } from "jsr:@std/semver";
 import { run } from "./run.ts";
 
 const PACKAGE_NAME = `@vippsmobilepay/sdk`;

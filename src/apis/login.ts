@@ -1,8 +1,5 @@
 import type { RequestData } from "../types.ts";
-import type {
-  LoginErrorResponse,
-  LoginWellKnownResponse,
-} from "./types/login_types.ts";
+import type { ErrorResponse, WellKnown } from "./generated_types/login-api/types.gen.ts";
 
 /**
  * Factory object for creating Login API requests.
@@ -16,7 +13,7 @@ export const loginRequestFactory = {
    *
    * @returns A `LoginWellKnownResponse` or `LoginErrorResponse` object.
    */
-  discovery: (): RequestData<LoginWellKnownResponse, LoginErrorResponse> => {
+  discovery: (): RequestData<WellKnown, ErrorResponse> => {
     return {
       url: `/access-management-1.0/access/.well-known/openid-configuration`,
       method: "GET",

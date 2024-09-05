@@ -3,7 +3,7 @@ import { baseClient } from "./base_client.ts";
 import { proxifyClient, type SDKClient } from "./api_proxy.ts";
 
 // Export all API types, for convenience.
-export type * from "./apis/types/all_external_types.ts";
+export type * from "./apis/all_external_types.ts";
 
 /**
  * Creates a new SDK client.
