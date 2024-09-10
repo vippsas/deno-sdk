@@ -1,10 +1,10 @@
 import type { RequestData } from "../types.ts";
 import type {
-  WebhooksErrorResponse,
-  WebhooksGetRegisteredOKResponse,
-  WebhooksRegisterOKResponse,
-  WebhooksRegisterRequest,
-} from "./types/webhooks_types.ts";
+  ProblemDetails,
+  QueryResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from "./types.ts";
 
 /**
  * Factory object for creating webhooks requests.
@@ -16,12 +16,12 @@ export const webhooksRequestFactory = {
    *
    * @param token - The authentication token.
    * @param body - The request body containing the webhook details.
-   * @returns A `WebhooksRegisterOKResponse` or `WebhooksErrorResponse` object.
+   * @returns A `RegisterResponse` or `ProblemDetails` object.
    */
   register: (
     token: string,
-    body: WebhooksRegisterRequest,
-  ): RequestData<WebhooksRegisterOKResponse, WebhooksErrorResponse> => {
+    body: RegisterRequest,
+  ): RequestData<RegisterResponse, ProblemDetails> => {
     return {
       url: "/webhooks/v1/webhooks",
       method: "POST",
@@ -33,11 +33,11 @@ export const webhooksRequestFactory = {
    * Retrieves a list of registered webhooks.
    *
    * @param token - The access token for authentication.
-   * @returns A `WebhooksGetRegisteredOKResponse` or `WebhooksErrorResponse` object.
+   * @returns A `WebhooksGetRegisteredOKResponse` or `ProblemDetails` object.
    */
   list: (
     token: string,
-  ): RequestData<WebhooksGetRegisteredOKResponse, WebhooksErrorResponse> => {
+  ): RequestData<QueryResponse, ProblemDetails> => {
     return {
       url: "/webhooks/v1/webhooks",
       method: "GET",
@@ -49,12 +49,12 @@ export const webhooksRequestFactory = {
    *
    * @param token - The authentication token.
    * @param webhookId - The ID of the webhook to delete.
-   * @returns void or a `WebhooksErrorResponse` object.
+   * @returns void or a `ProblemDetails` object.
    */
   delete: (
     token: string,
-    webhookId: `${string}-${string}-${string}-${string}-${string}`,
-  ): RequestData<void, WebhooksErrorResponse> => {
+    webhookId: string,
+  ): RequestData<void, ProblemDetails> => {
     return {
       url: `/webhooks/v1/webhooks/${webhookId}`,
       method: "DELETE",
