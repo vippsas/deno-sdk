@@ -1,24 +1,26 @@
-import { createClient } from 'npm:@hey-api/openapi-ts';
+import { createClient } from "npm:@hey-api/openapi-ts";
 import { run } from "./run.ts";
 
-// Login API
+// ePayment API
 await createClient({
-  input: 'https://developer.vippsmobilepay.com/redocusaurus/login-swagger-id.yaml',
-  output: 'src/apis/generated_types/login-api',
+  input:
+    "https://developer.vippsmobilepay.com/redocusaurus/epayment-swagger-id.yaml",
+  output: "src/apis/generated_types/epayment",
   services: false,
   exportCore: false,
   schemas: false,
 });
 
-await run(`rm -rf src/apis/generated_types/login-api/index.ts`);
+await run(`rm -rf src/apis/generated_types/epayment/index.ts`);
 
-// User API
+// Webhooks API
 await createClient({
-  input: 'https://developer.vippsmobilepay.com/redocusaurus/userinfo-swagger-id.yaml',
-  output: 'src/apis/generated_types/user-api',
+  input:
+    "https://developer.vippsmobilepay.com/redocusaurus/webhooks-swagger-id.yaml",
+  output: "src/apis/generated_types/webhooks",
   services: false,
   exportCore: false,
   schemas: false,
 });
 
-await run(`rm -rf src/apis/generated_types/user-api/index.ts`);
+await run(`rm -rf src/apis/generated_types/webhooks/index.ts`);

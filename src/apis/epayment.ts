@@ -1,15 +1,19 @@
 import { uuid } from "../deps.ts";
 import type { RequestData } from "../types.ts";
 import type {
-  EPaymentCreatePaymentOKResponse,
-  EPaymentCreatePaymentRequest,
-  EPaymentErrorResponse,
-  EPaymentForceApproveRequest,
-  EPaymentGetEventLogOKResponse,
-  EPaymentGetPaymentOKResponse,
-  EPaymentModificationOKResponse,
-  EPaymentModificationRequest,
-} from "./types/epayment_types.ts";
+  CancelPaymentResponse,
+  CaptureModificationRequest,
+  CapturePaymentResponse,
+  CreatePaymentRequest,
+  CreatePaymentResponse,
+  ForceApprove,
+  ForceApproveResponse,
+  GetPaymentEventLogResponse,
+  GetPaymentResponse,
+  Problem,
+  RefundModificationRequest,
+  RefundPaymentResponse,
+} from "./generated_types/epayment/types.gen.ts";
 
 /**
  * Factory object for creating ePayment API requests.
@@ -20,12 +24,12 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param body - The request body containing the payment details.
-   * @returns A `EPaymentCreatePaymentOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `CreatePaymentResponse` or `EPaymentErrorResponse` object.
    */
   create: (
     token: string,
-    body: EPaymentCreatePaymentRequest,
-  ): RequestData<EPaymentCreatePaymentOKResponse, EPaymentErrorResponse> => {
+    body: CreatePaymentRequest,
+  ): RequestData<CreatePaymentResponse, Problem> => {
     const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
@@ -43,12 +47,12 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
-   * @returns A `EPaymentGetPaymentOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `GetPaymentResponse` or `Problem` object.
    */
   info: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentGetPaymentOKResponse, EPaymentErrorResponse> => {
+  ): RequestData<GetPaymentResponse, Problem> => {
     return {
       url: `/epayment/v1/payments/${reference}`,
       method: "GET",
@@ -60,12 +64,12 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
-   * @returns A `EPaymentGetEventLogOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `GetPaymentEventLogResponse` or `EPaymentErrorResponse` object.
    */
   history: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentGetEventLogOKResponse, EPaymentErrorResponse> => {
+  ): RequestData<GetPaymentEventLogResponse, Problem> => {
     return {
       url: `/epayment/v1/payments/${reference}/events`,
       method: "GET",
@@ -77,12 +81,12 @@ export const ePaymentRequestFactory = {
    *
    * @param token - The authentication token.
    * @param reference - The reference of the payment to cancel.
-   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `CancelPaymentResponse` or `Problem` object.
    */
   cancel: (
     token: string,
     reference: string,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
+  ): RequestData<CancelPaymentResponse, Problem> => {
     return {
       url: `/epayment/v1/payments/${reference}/cancel`,
       method: "POST",
@@ -95,13 +99,13 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The modification request body.
-   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `CapturePaymentResponse` or `Problem` object.
    */
   capture: (
     token: string,
     reference: string,
-    body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
+    body: CaptureModificationRequest,
+  ): RequestData<CapturePaymentResponse, Problem> => {
     return {
       url: `/epayment/v1/payments/${reference}/capture`,
       method: "POST",
@@ -115,13 +119,13 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment to be refunded.
    * @param body - The request body containing the modification details.
-   * @returns A `EPaymentModificationOKResponse` or `EPaymentErrorResponse` object.
+   * @returns A `RefundPaymentResponse` or `Problem` object.
    */
   refund: (
     token: string,
     reference: string,
-    body: EPaymentModificationRequest,
-  ): RequestData<EPaymentModificationOKResponse, EPaymentErrorResponse> => {
+    body: RefundModificationRequest,
+  ): RequestData<RefundPaymentResponse, Problem> => {
     return {
       url: `/epayment/v1/payments/${reference}/refund`,
       method: "POST",
@@ -135,13 +139,13 @@ export const ePaymentRequestFactory = {
    * @param token - The authentication token.
    * @param reference - The reference of the payment.
    * @param body - The request body containing additional information.
-   * @returns void or a `EPaymentErrorResponse` object.
+   * @returns ForceApproveResponse or a `Problem` object.
    */
   forceApprove: (
     token: string,
     reference: string,
-    body: EPaymentForceApproveRequest,
-  ): RequestData<void, EPaymentErrorResponse> => {
+    body: ForceApprove,
+  ): RequestData<ForceApproveResponse, Problem> => {
     return {
       url: `/epayment/v1/test/payments/${reference}/approve`,
       method: "POST",
