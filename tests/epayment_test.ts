@@ -1,6 +1,7 @@
 import { assert, assertEquals, assertExists } from "./test_deps.ts";
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
 import { uuid } from "../src/deps.ts";
+import { CreatePaymentRequest } from "../src/apis/all_external_types.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", () => {
   const expected = {
@@ -39,25 +40,23 @@ Deno.test("ePayment - create - Should have correct url and header", () => {
 });
 
 Deno.test("ePayment - create - Should fill in missing props", () => {
-  const result = ePaymentRequestFactory.create(
-    "test_token",
-    {
-      amount: {
-        currency: "NOK",
-        value: 1000,
-      },
-      paymentMethod: {
-        type: "WALLET",
-      },
-      customer: {
-        phoneNumber: "4712345678",
-      },
-      returnUrl: "https://yourwebsite.come/redirect?reference=" + "foo",
-      userFlow: "WEB_REDIRECT",
-      paymentDescription: "One pair of socks",
+  const request: CreatePaymentRequest = {
+    amount: {
+      currency: "NOK",
+      value: 1000,
     },
-    // deno-lint-ignore no-explicit-any
-  ) as any;
+    paymentMethod: {
+      type: "WALLET",
+    },
+    customer: {
+      phoneNumber: "4712345678",
+    },
+    returnUrl: "https://yourwebsite.come/redirect?reference=" + "foo",
+    userFlow: "WEB_REDIRECT",
+    paymentDescription: "One pair of socks",
+  };
+  // deno-lint-ignore no-explicit-any
+  const result = ePaymentRequestFactory.create("test_token", request) as any;
 
   assertExists(result.body.reference);
   assert(uuid.validate(result.body.reference));

@@ -108,7 +108,7 @@ export type CreatePaymentRequest = {
   industryData?: IndustryData;
   paymentMethod: PaymentMethod;
   profile?: ProfileRequest;
-  reference: Reference;
+  reference?: Reference;
   /**
    * The URL the user is returned to after the payment session.
    * The URL must use the `https://` scheme or a custom URL scheme.
