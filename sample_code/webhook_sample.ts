@@ -1,5 +1,5 @@
 import "https://deno.land/std@0.217.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
+import { Client } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -31,7 +31,7 @@ console.log("---------- Starting register webhooks ----------");
 // Register a webhook
 const registerHookResult = await client.webhook.register(token, {
   events: ["epayments.payment.created.v1", "user.checked-in.v1"],
-  url: "https://example.com/hook/epayment",
+  url: "https://mywebshop.com/hook/epayment",
 });
 console.log(registerHookResult);
 

@@ -1,6 +1,6 @@
 import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
 import "https://deno.land/std@0.217.0/dotenv/load.ts";
-import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
+import { Client } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -55,4 +55,9 @@ const reference = payment.data.reference;
 console.log("📋 Payment reference:", reference);
 
 // Open the payment redirect URL in the browser
-await open(payment.data.redirectUrl);
+if (payment.data.redirectUrl) {
+  await open(payment.data.redirectUrl);
+} else {
+  console.error("😟 Redirect URL is undefined 😟");
+  Deno.exit(1);
+}

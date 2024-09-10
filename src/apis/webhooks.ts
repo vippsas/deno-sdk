@@ -53,7 +53,7 @@ export const webhooksRequestFactory = {
    */
   delete: (
     token: string,
-    webhookId: `${string}-${string}-${string}-${string}-${string}`,
+    webhookId: string,
   ): RequestData<void, ProblemDetails> => {
     return {
       url: `/webhooks/v1/webhooks/${webhookId}`,
