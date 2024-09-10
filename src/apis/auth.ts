@@ -1,5 +1,5 @@
 import type { RequestData } from "../types.ts";
-import type { AccessToken, AccessTokenError } from "./types/auth_types.ts";
+import type { AccessTokenError, AuthorizationTokenResponse } from "./types.ts";
 
 /**
  * Factory for creating authentication-related request data.
@@ -23,7 +23,7 @@ export const authRequestFactory = {
   getToken: (
     clientId: string,
     clientSecret: string,
-  ): RequestData<AccessToken, AccessTokenError> => {
+  ): RequestData<AuthorizationTokenResponse, AccessTokenError> => {
     return {
       method: "POST",
       url: "/accesstoken/get",

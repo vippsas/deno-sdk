@@ -1,4 +1,4 @@
-import { Spinner } from "@std/cli";
+import { Spinner } from "jsr:@std/cli";
 
 type CommandResult = {
   ok: true;
