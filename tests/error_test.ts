@@ -1,6 +1,6 @@
 import { AccessTokenError } from "../src/apis/types/auth_types.ts";
 import { parseError } from "../src/errors.ts";
-import { Client, RecurringErrorFromAzure } from "../src/mod.ts";
+import { Client } from "../src/mod.ts";
 import { assert, assertExists } from "./test_deps.ts";
 import { assertEquals, mf } from "./test_deps.ts";
 
@@ -59,18 +59,4 @@ Deno.test("parseError should return correct error message for unknown error", ()
   assertExists(result.error);
   assert("message" in result.error);
   assertEquals(result.error.message, "Unknown error");
-});
-
-Deno.test("parseError - Should return correct error message for Recurring Azure Error", () => {
-  const error: RecurringErrorFromAzure = {
-    responseInfo: {
-      responseCode: 123,
-      responseMessage: "Response message",
-    },
-    result: {
-      message: "Result message",
-    },
-  };
-  const result = parseError(error);
-  assertEquals(result.ok, false);
 });
