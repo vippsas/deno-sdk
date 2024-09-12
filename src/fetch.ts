@@ -1,8 +1,3 @@
-import {
-  isServerErrorStatus,
-  isSuccessfulStatus,
-  STATUS_CODE,
-} from "./deps.ts";
 import { parseMediaType } from "./deps.ts";
 import { retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
@@ -52,7 +47,7 @@ export const fetchJSON = async <TOk, TErr>(
   /**
    * Check if the response is empty.
    */
-  if (response.status === STATUS_CODE.NoContent) {
+  if (response.status === 204) {
     return { ok: true, data: {} as TOk };
   }
 
@@ -128,3 +123,23 @@ export const getMediaType = (response: Response): string | undefined => {
 
   return mediaType[0];
 };
+
+/**
+ * Checks if the given HTTP status code indicates a server error.
+ *
+ * @param {number} status - The HTTP status code to check.
+ * @returns {boolean} - Returns true if the status code is between 500 and 599, inclusive; otherwise, false.
+ */
+export function isServerErrorStatus(status: number): boolean {
+  return status >= 500 && status < 600;
+}
+
+/**
+ * Checks if the given HTTP status code indicates a successful response.
+ *
+ * @param {number} status - The HTTP status code to check.
+ * @returns {boolean} - Returns true if the status code is between 200 and 299, inclusive; otherwise, false.
+ */
+export function isSuccessfulStatus(status: number): boolean {
+  return status >= 200 && status < 300;
+}
