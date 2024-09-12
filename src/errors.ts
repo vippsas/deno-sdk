@@ -1,5 +1,4 @@
 import { RetryError } from "./deps.ts";
-import { STATUS_CODE } from "./deps.ts";
 import type { SDKError } from "./types.ts";
 
 /**
@@ -44,7 +43,7 @@ export const parseError = <TErr>(
   }
 
   // Handle Forbidden status code
-  if (status === STATUS_CODE.Forbidden) {
+  if (status === 403) {
     return {
       ok: false,
       error: {
