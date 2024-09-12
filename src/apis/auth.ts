@@ -1,5 +1,8 @@
 import type { RequestData } from "../types.ts";
-import type { AccessTokenError, AuthorizationTokenResponse } from "./types.ts";
+import type {
+  AccessTokenError,
+  AuthorizationTokenResponse,
+} from "./external_types.ts";
 
 /**
  * Factory for creating authentication-related request data.

@@ -1,10 +1,12 @@
 import { authRequestFactory } from "./apis/auth.ts";
+import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import type { ApiProxy, BaseClient, RequestFactory } from "./types.ts";
 
 export type SDKClient = {
   auth: ReturnType<typeof proxifyFactory<typeof authRequestFactory>>;
+  checkout: ReturnType<typeof proxifyFactory<typeof checkoutRequestFactory>>;
   payment: ReturnType<typeof proxifyFactory<typeof ePaymentRequestFactory>>;
   webhook: ReturnType<typeof proxifyFactory<typeof webhooksRequestFactory>>;
 };
@@ -17,6 +19,7 @@ export type SDKClient = {
 export const proxifyClient = (client: BaseClient): SDKClient => {
   return {
     auth: proxifyFactory(client, authRequestFactory),
+    checkout: proxifyFactory(client, checkoutRequestFactory),
     payment: proxifyFactory(client, ePaymentRequestFactory),
     webhook: proxifyFactory(client, webhooksRequestFactory),
   } as const;

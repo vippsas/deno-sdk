@@ -4,7 +4,7 @@ import type {
   QueryResponse,
   RegisterRequest,
   RegisterResponse,
-} from "./types.ts";
+} from "./external_types.ts";
 
 /**
  * Factory object for creating webhooks requests.

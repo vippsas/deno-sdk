@@ -1,7 +1,7 @@
 import { assert, assertEquals, assertExists } from "./test_deps.ts";
 import { ePaymentRequestFactory } from "../src/apis/epayment.ts";
 import { uuid } from "../src/deps.ts";
-import { CreatePaymentRequest } from "../src/apis/types.ts";
+import { CreatePaymentRequest } from "../src/apis/external_types.ts";
 
 Deno.test("ePayment - create - Should have correct url and header", () => {
   const expected = {

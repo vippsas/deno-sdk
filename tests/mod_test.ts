@@ -5,6 +5,8 @@ Deno.test("Client - available functions", () => {
   const client = Client({ merchantSerialNumber: "", subscriptionKey: "" });
 
   assertEquals(typeof client.auth.getToken, "function");
+  assertEquals(typeof client.checkout.create, "function");
+  assertEquals(typeof client.checkout.info, "function");
   assertEquals(typeof client.payment.create, "function");
   assertEquals(typeof client.payment.info, "function");
   assertEquals(typeof client.payment.cancel, "function");

@@ -13,7 +13,7 @@ import type {
   Problem,
   RefundModificationRequest,
   RefundPaymentResponse,
-} from "./types.ts";
+} from "./external_types.ts";
 
 /**
  * Factory object for creating ePayment API requests.
@@ -30,15 +30,14 @@ export const ePaymentRequestFactory = {
     token: string,
     body: CreatePaymentRequest,
   ): RequestData<CreatePaymentResponse, Problem> => {
-    const newBody = { ...body };
     // Fill in missing props
     if (!body.reference) {
-      newBody.reference = uuid.generate();
+      body.reference = uuid.generate();
     }
     return {
       url: "/epayment/v1/payments",
       method: "POST",
-      body: newBody,
+      body,
       token,
     };
   },

@@ -1,6 +1,6 @@
 import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
-import { Client } from "../src/mod.ts";
+import { Client, CreatePaymentRequest } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
 // Here we assume they are stored in a .env file, see .env.example
@@ -31,7 +31,7 @@ if (!accessToken.ok) {
 const token = accessToken.data.access_token;
 
 // Create a payment
-const payment = await client.payment.create(token, {
+const request: CreatePaymentRequest = {
   amount: {
     currency: "NOK",
     value: 1000, // This value equals 10 NOK
@@ -41,7 +41,8 @@ const payment = await client.payment.create(token, {
   returnUrl: `https://yourwebsite.com/redirect`,
   userFlow: "WEB_REDIRECT",
   paymentDescription: "One pair of socks",
-});
+};
+const payment = await client.payment.create(token, request);
 
 // Check if the payment was created successfully
 if (!payment.ok) {
