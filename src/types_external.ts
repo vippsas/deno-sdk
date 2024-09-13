@@ -1,7 +1,6 @@
 /**
  * Utility Types
  */
-
 type PrettifyType<T> = { [K in keyof T]: T[K] } & unknown;
 
 type MakePropertyOptional<T, K extends keyof T> =
@@ -33,12 +32,10 @@ export type {
 /**
  * Checkout API
  */
-
-// Make the reference property optional, and set the type to "PAYMENT"
 import type {
   InitiatePaymentSessionRequest as _InitiatePaymentSessionRequest,
 } from "./generated_types/checkout/types.gen.ts";
-
+// Make the reference property optional, and set the type to "PAYMENT"
 export type InitiatePaymentSessionRequest = PrettifyType<
   & Omit<
     MakeNestedPropertyOptional<
@@ -53,11 +50,11 @@ export type InitiatePaymentSessionRequest = PrettifyType<
   }
 >;
 
-// Make the reference property optional, and set the type to "SUBSCRIPTION"
 import type {
   InitiateSubscriptionSessionRequest as _InitiateSubscriptionSessionRequest,
 } from "./generated_types/checkout/types.gen.ts";
 
+// Make the reference property optional, and set the type to "SUBSCRIPTION"
 export type InitiateSubscriptionSessionRequest = PrettifyType<
   & Omit<_InitiateSubscriptionSessionRequest, "type">
   & {
@@ -74,7 +71,6 @@ export type {
 /**
  * ePayment API
  */
-
 import type {
   CreatePaymentRequest as _CreatePaymentRequest,
 } from "./generated_types/epayment/types.gen.ts";
@@ -108,6 +104,19 @@ export type {
   RegisterRequest,
   RegisterResponse,
 } from "./generated_types/webhooks/types.gen.ts";
+
+/**
+ * Represents a response from the client.
+ *
+ * @template TOk - The type of the successful response data.
+ * @template TErr - The type of the error details.
+ */
+export type ClientResponse<TOk, TErr> =
+  | {
+    ok: true;
+    data: TOk;
+  }
+  | SDKError<TErr>;
 
 /**
  * Represents an error response from the SDK.
