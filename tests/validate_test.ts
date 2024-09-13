@@ -1,4 +1,5 @@
-import type { ClientConfig, RequestData } from "../src/types.ts";
+import type { ClientConfig } from "../src/types_external.ts";
+import type { RequestData } from "../src/types_internal.ts";
 import { validateRequestData } from "../src/validate.ts";
 import { assertEquals } from "./test_deps.ts";
 

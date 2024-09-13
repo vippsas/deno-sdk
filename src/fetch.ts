@@ -5,7 +5,7 @@ import {
   isSuccessfulStatus,
   parseResponseToJson,
 } from "./fetch_helper.ts";
-import type { ClientResponse } from "./types.ts";
+import type { ClientResponse } from "./types_internal.ts";
 
 /**
  * Executes a fetch request with optional retry logic.

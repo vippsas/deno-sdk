@@ -1,5 +1,5 @@
 import { checkoutRequestFactory } from "../src/apis/checkout.ts";
-import type { InitiatePaymentSessionRequest } from "../src/apis/external_types.ts";
+import type { InitiatePaymentSessionRequest } from "../src/types_external.ts";
 import { InitiateSubscriptionSessionRequest } from "../src/mod.ts";
 import {
   assert,

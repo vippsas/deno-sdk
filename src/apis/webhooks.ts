@@ -1,10 +1,10 @@
-import type { RequestData } from "../types.ts";
+import type { RequestData } from "../types_internal.ts";
 import type {
   ProblemDetails,
   QueryResponse,
   RegisterRequest,
   RegisterResponse,
-} from "./external_types.ts";
+} from "../types_external.ts";
 
 /**
  * Factory object for creating webhooks requests.

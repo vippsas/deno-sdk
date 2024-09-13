@@ -2,7 +2,7 @@ import { authRequestFactory } from "./apis/auth.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
-import type { ApiProxy, BaseClient, RequestFactory } from "./types.ts";
+import type { ApiProxy, BaseClient, RequestFactory } from "./types_internal.ts";
 
 export type SDKClient = {
   auth: ReturnType<typeof proxifyFactory<typeof authRequestFactory>>;

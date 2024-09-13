@@ -1,5 +1,5 @@
 import { RetryError } from "./deps.ts";
-import type { SDKError } from "./types.ts";
+import type { SDKError } from "./types_external.ts";
 
 /**
  * Parses the error and returns an object with error details.
