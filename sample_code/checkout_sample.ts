@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
+import "@std/dotenv/load";
 import { Client, InitiatePaymentSessionRequest } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
