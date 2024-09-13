@@ -1,6 +1,10 @@
-import { parseMediaType } from "./deps.ts";
 import { retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
+import {
+  isServerErrorStatus,
+  isSuccessfulStatus,
+  parseResponseToJson,
+} from "./fetch_helper.ts";
 import type { ClientResponse } from "./types.ts";
 
 /**
@@ -59,7 +63,7 @@ export const fetchJSON = async <TOk, TErr>(
     throw new Error(response.statusText);
   }
 
-  const json = await parseResponse(response);
+  const json = await parseResponseToJson(response);
 
   /**
    * For any other type of error, return an Error object.
@@ -70,76 +74,3 @@ export const fetchJSON = async <TOk, TErr>(
 
   return { ok: true, data: json as TOk };
 };
-
-/**
- * Parses the response based on its content type.
- *
- * @param {Response} response - The response to parse.
- * @returns {Promise<unknown>} The parsed response data.
- */
-const parseResponse = async (response: Response): Promise<unknown> => {
-  if (isText(response) || isContentLengthZero(response)) {
-    return { text: await response.text() };
-  }
-  return response.json();
-};
-
-/**
- * Checks if the response content type is text/plain.
- *
- * @param {Response} response - The response to check.
- * @returns {boolean} True if the content type is text/plain, otherwise false.
- */
-const isText = (response: Response): boolean => {
-  const mediaType = getMediaType(response);
-  return mediaType === "text/plain";
-};
-
-/**
- * Checks if the response content length is zero.
- *
- * @param {Response} response - The response to check.
- * @returns {boolean} True if the content length is zero, otherwise false.
- */
-const isContentLengthZero = (response: Response): boolean => {
-  return response.headers.get("content-length") === "0";
-};
-
-/**
- * Gets the media type from the response headers.
- *
- * @param {Response} response - The response to get the media type from.
- * @returns {string | undefined} The media type, or undefined if not found.
- */
-export const getMediaType = (response: Response): string | undefined => {
-  /**
-   * Check MIME type of the response, assuming headers are case insensitive
-   */
-  const contentHeader = response.headers.get("content-type");
-  if (!contentHeader) {
-    return undefined;
-  }
-  const mediaType = parseMediaType(contentHeader);
-
-  return mediaType[0];
-};
-
-/**
- * Checks if the given HTTP status code indicates a server error.
- *
- * @param {number} status - The HTTP status code to check.
- * @returns {boolean} - Returns true if the status code is between 500 and 599, inclusive; otherwise, false.
- */
-export function isServerErrorStatus(status: number): boolean {
-  return status >= 500 && status < 600;
-}
-
-/**
- * Checks if the given HTTP status code indicates a successful response.
- *
- * @param {number} status - The HTTP status code to check.
- * @returns {boolean} - Returns true if the status code is between 200 and 299, inclusive; otherwise, false.
- */
-export function isSuccessfulStatus(status: number): boolean {
-  return status >= 200 && status < 300;
-}

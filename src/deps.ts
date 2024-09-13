@@ -2,7 +2,6 @@ export {
   retry,
   RetryError,
 } from "https://deno.land/std@0.224.0/async/retry.ts";
-export { parseMediaType } from "https://deno.land/std@0.224.0/media_types/parse_media_type.ts";
 export { filterKeys } from "https://deno.land/std@0.224.0/collections/mod.ts";
 /**
  * This is a workaround for `crypto.randomUUID` not being available in

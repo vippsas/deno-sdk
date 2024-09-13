@@ -48,3 +48,6 @@ await createClient({
 });
 
 await run(`rm -rf src/apis/generated_types/webhooks/index.ts`);
+
+// Auto-format the code
+await run(`deno fmt`);

@@ -1,13 +1,13 @@
-// Utility that takes an existing type T and returns a new type that
-// is functionally identical but potentially more readable
-type Prettify<T> = { [K in keyof T]: T[K] } & unknown;
+/**
+ * Utility Types
+ */
 
-// Create a new type with a specific key made optional
+type PrettifyType<T> = { [K in keyof T]: T[K] } & unknown;
+
 type MakePropertyOptional<T, K extends keyof T> =
   & Omit<T, K>
   & { [P in K]?: T[P] };
 
-// Create a new type with a specific nested key made optional
 type MakeNestedPropertyOptional<T, K extends keyof T, N extends keyof T[K]> = {
   [P in keyof T]: P extends K ? Omit<T[K], N> & Partial<Pick<T[K], N>> : T[P];
 };
@@ -39,7 +39,7 @@ import type {
   InitiatePaymentSessionRequest as _InitiatePaymentSessionRequest,
 } from "./generated_types/checkout/types.gen.ts";
 
-export type InitiatePaymentSessionRequest = Prettify<
+export type InitiatePaymentSessionRequest = PrettifyType<
   & Omit<
     MakeNestedPropertyOptional<
       _InitiatePaymentSessionRequest,
@@ -58,7 +58,7 @@ import type {
   InitiateSubscriptionSessionRequest as _InitiateSubscriptionSessionRequest,
 } from "./generated_types/checkout/types.gen.ts";
 
-export type InitiateSubscriptionSessionRequest = Prettify<
+export type InitiateSubscriptionSessionRequest = PrettifyType<
   & Omit<_InitiateSubscriptionSessionRequest, "type">
   & {
     type: "SUBSCRIPTION";
