@@ -1,4 +1,4 @@
-import { createClient } from "npm:@hey-api/openapi-ts";
+import { createClient } from "@hey-api/openapi-ts";
 import { run } from "./run.ts";
 
 // Access Token API
@@ -50,4 +50,4 @@ await createClient({
 await run(`rm -rf src/apis/generated_types/webhooks/index.ts`);
 
 // Auto-format the code
-await run(`deno fmt`);
+await run(`deno fmt --quiet`, "Auto-formatting the code...");
