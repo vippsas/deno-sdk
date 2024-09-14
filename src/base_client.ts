@@ -1,5 +1,5 @@
-import type { BaseClient, RequestData } from "./types_internal.ts";
-import type { ClientConfig, ClientResponse } from "./types_external.ts";
+import type { BaseClient, ClientResponse, RequestData } from "./types_internal.ts";
+import type { ClientConfig } from "./types_external.ts";
 import { buildRequest } from "./base_client_helper.ts";
 import { parseError } from "./errors.ts";
 import { validateRequestData } from "./validate.ts";
