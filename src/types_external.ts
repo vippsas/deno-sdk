@@ -106,19 +106,6 @@ export type {
 } from "./generated_types/webhooks/types.gen.ts";
 
 /**
- * Represents a response from the client.
- *
- * @template TOk - The type of the successful response data.
- * @template TErr - The type of the error details.
- */
-export type ClientResponse<TOk, TErr> =
-  | {
-    ok: true;
-    data: TOk;
-  }
-  | SDKError<TErr>;
-
-/**
  * Represents an error response from the SDK.
  *
  * @template TErr - The type of the error details.

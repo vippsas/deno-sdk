@@ -1,4 +1,11 @@
-import { ClientResponse } from "./types_external.ts";
+import { SDKError } from "./types_external.ts";
+
+export type ClientResponse<TOk, TErr> =
+  | {
+    ok: true;
+    data: TOk;
+  }
+  | SDKError<TErr>;
 
 export type BaseClient = {
   readonly makeRequest: (
