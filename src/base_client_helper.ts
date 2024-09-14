@@ -1,11 +1,10 @@
 import { filterKeys } from "./deps.ts";
 import type {
-  ClientConfig,
   DefaultHeaders,
   OmitHeaders,
   RequestData,
-} from "./types.ts";
-
+} from "./types_internal.ts";
+import type { ClientConfig } from "./types_external.ts";
 import { uuid } from "./deps.ts";
 
 /**

@@ -1,6 +1,6 @@
 import { baseClient } from "../src/base_client.ts";
 import { assertEquals, mf } from "./test_deps.ts";
-import type { RequestData } from "../src/types.ts";
+import type { RequestData } from "../src/types_internal.ts";
 import { RetryError } from "../src/deps.ts";
 
 Deno.test("makeRequest - Should return ok", async () => {

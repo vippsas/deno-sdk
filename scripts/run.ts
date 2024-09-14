@@ -1,4 +1,4 @@
-import { Spinner } from "jsr:@std/cli";
+import { Spinner } from "@std/cli/unstable-spinner";
 
 type CommandResult = {
   ok: true;

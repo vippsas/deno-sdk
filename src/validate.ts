@@ -1,4 +1,5 @@
-import type { ClientConfig, RequestData } from "./types.ts";
+import type { ClientConfig } from "./types_external.ts";
+import type { RequestData } from "./types_internal.ts";
 
 /**
  * Validates the request data based on the client configuration.

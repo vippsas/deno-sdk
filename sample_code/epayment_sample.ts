@@ -1,5 +1,5 @@
-import { open } from "https://deno.land/x/open@v0.0.6/index.ts";
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
+import { systemopen } from "@lambdalisue/systemopen";
+import "@std/dotenv/load";
 import { Client, CreatePaymentRequest } from "../src/mod.ts";
 
 // First, get your API keys from https://portal.vipps.no/
@@ -57,7 +57,7 @@ console.log("📋 Payment reference:", reference);
 
 // Open the payment redirect URL in the browser
 if (payment.data.redirectUrl) {
-  await open(payment.data.redirectUrl);
+  await systemopen(payment.data.redirectUrl);
 } else {
   console.error("😟 Error: Redirect URL is undefined 😟");
 }
