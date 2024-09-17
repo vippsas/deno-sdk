@@ -1,15 +1,8 @@
-/**
- * Utility Types
- */
-type PrettifyType<T> = { [K in keyof T]: T[K] } & unknown;
-
-type MakePropertyOptional<T, K extends keyof T> =
-  & Omit<T, K>
-  & { [P in K]?: T[P] };
-
-type MakeNestedPropertyOptional<T, K extends keyof T, N extends keyof T[K]> = {
-  [P in keyof T]: P extends K ? Omit<T[K], N> & Partial<Pick<T[K], N>> : T[P];
-};
+import {
+  MakeNestedPropertyOptional,
+  MakePropertyOptional,
+  PrettifyType,
+} from "./types_internal.ts";
 
 /**
  * Access Token API
