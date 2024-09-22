@@ -5,7 +5,6 @@ import type {
 } from "./types_internal.ts";
 import type { ClientConfig } from "./types_external.ts";
 import { buildRequest } from "./base_client_helper.ts";
-import { parseError } from "./errors.ts";
 import { validateRequestData } from "./validate.ts";
 import { fetchRetry } from "./fetch.ts";
 
