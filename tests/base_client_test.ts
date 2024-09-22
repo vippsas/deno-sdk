@@ -26,6 +26,33 @@ Deno.test("makeRequest - Should return ok", async () => {
   assertEquals(response.ok, true);
 });
 
+Deno.test("makeRequest - Should return ok with retrires", async () => {
+  mf.install(); // mock out calls to `fetch`
+
+  mf.mock("GET@/foo", (req: Request) => {
+    assertEquals(req.url, "https://api.vipps.no/foo");
+    assertEquals(req.method, "GET");
+    return new Response(JSON.stringify({}), {
+      status: 200,
+    });
+  });
+
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    retryRequests: true,
+  };
+  const requestData: RequestData<unknown, unknown> = {
+    method: "GET",
+    url: "/foo",
+  };
+
+  const client = baseClient(cfg);
+  const response = await client.makeRequest(requestData);
+
+  assertEquals(response.ok, true);
+});
+
 Deno.test("makeRequest - Should error", async () => {
   mf.install(); // mock out calls to `fetch`
 

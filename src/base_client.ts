@@ -37,16 +37,11 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
       // Build the request
       const request = buildRequest(cfg, requestData);
 
-      try {
-        // Make the request with retry logic
-        const response = await fetchRetry<TOk, TErr>(
-          request,
-          cfg.retryRequests,
-        );
-        return response;
-      } catch (error: unknown) {
-        // Parse and return the error
-        return parseError<TErr>(error);
-      }
+      // Make the request with retry logic
+      const response = await fetchRetry<TOk, TErr>(
+        request,
+        cfg.retryRequests,
+      );
+      return response;
     },
   }) as const;
