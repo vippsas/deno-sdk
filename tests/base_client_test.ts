@@ -2,7 +2,6 @@ import { baseClient } from "../src/base_client.ts";
 import { assertEquals } from "@std/assert";
 import * as mf from "@hongminhee/deno-mock-fetch";
 import type { RequestData } from "../src/types_internal.ts";
-import { RetryError } from "../src/retry.ts";
 
 Deno.test("makeRequest - Should return ok", async () => {
   mf.install(); // mock out calls to `fetch`
@@ -143,28 +142,5 @@ Deno.test("makeRequest - Should not return ok after 3 retries", async () => {
   const response = await client.makeRequest(requestData);
   assertEquals(response.ok, false);
 
-  mf.reset();
-});
-
-Deno.test("makeRequest - Should catch Retry Errors", async () => {
-  mf.install(); // mock out calls to `fetch`
-  mf.mock("GET@/foo", () => {
-    throw new RetryError("Operation failed", 3);
-  });
-
-  const cfg = {
-    merchantSerialNumber: "",
-    subscriptionKey: "",
-    retryRequests: true,
-  };
-  const requestData: RequestData<unknown, unknown> = {
-    method: "GET",
-    url: "/foo",
-  };
-
-  const client = baseClient(cfg);
-
-  const response = await client.makeRequest(requestData);
-  assertEquals(response.ok, false);
   mf.reset();
 });

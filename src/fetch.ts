@@ -4,8 +4,6 @@ import {
   isSuccessfulStatus,
   parseResponseToJson,
 } from "./fetch_helper.ts";
-import { retry } from "./retry.ts";
-
 import type { ClientResponse } from "./types_internal.ts";
 
 /**
@@ -19,13 +17,27 @@ export const fetchRetry = async <TOk, TErr>(
   request: Request,
   retryRequest: boolean = true,
 ): Promise<ClientResponse<TOk, TErr>> => {
-  // Execute request without retry
-  const delays = retryRequest ? [1000, 3000] : []
+  // Delays between retries in milliseconds, if retryRequest is true.
+  // If retryRequest is false, the array will be empty.
+  const delays = retryRequest ? [1000, 3000] : [];
 
-  try {
-    return await retry(() => fetchJSON<TOk, TErr>(request), delays);
-  } catch (error) {
-    return parseError<TErr>(error);
+  let attempt = 0;
+  while (true) {
+    try {
+      return await fetchJSON<TOk, TErr>(request);
+    } catch (_error) {
+      if (attempt === delays.length) {
+        return {
+          ok: false,
+          error: {
+            message:
+              `Retry limit reached. Could not get a response from the server after ${attempt} attempts`,
+          },
+        };
+      }
+      await new Promise((r) => setTimeout(r, delays[attempt]));
+      attempt++;
+    }
   }
 };
 
@@ -36,6 +48,7 @@ export const fetchRetry = async <TOk, TErr>(
  * @template TErr - The type of the error response data.
  * @param {Request} request - The request to fetch JSON data from.
  * @returns {Promise<ClientResponse<TOk, TErr>>} A ClientResponse object containing the fetched data.
+ * @throws {Error} Throws an error if the response status is a server error.
  */
 export const fetchJSON = async <TOk, TErr>(
   request: Request,

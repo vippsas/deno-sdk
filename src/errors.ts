@@ -1,4 +1,3 @@
-import { RetryError } from "./retry.ts";
 import type { SDKError } from "./types_external.ts";
 
 /**
@@ -20,17 +19,6 @@ export const parseError = <TErr>(
   error: unknown,
   status?: number,
 ): SDKError<TErr> => {
-  // Handle RetryError
-  if (error instanceof RetryError) {
-    return {
-      ok: false,
-      error: {
-        message:
-          `Retry limit reached. Could not get a response from the server after ${error.attempts} attempts`,
-      },
-    };
-  }
-
   // Handle connection errors
   if (
     error instanceof TypeError &&
