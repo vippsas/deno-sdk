@@ -4,6 +4,20 @@ import { Client } from "../src/mod.ts";
 import { assert, assertExists } from "@std/assert";
 import { assertEquals } from "@std/assert";
 import * as mf from "@hongminhee/deno-mock-fetch";
+import { RetryError } from "../src/retry.ts";
+
+Deno.test("parseError should catch RetryError", () => {
+  const error = new RetryError("Operation failed", 3);
+  const result = parseError(error);
+
+  assertEquals(result.ok, false);
+  assertExists(result.error);
+  assert("message" in result.error);
+  assertEquals(
+    result.error.message,
+    "Retry limit reached. Could not get a response from the server after 3 attempts"
+  );
+});
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
   const error = new TypeError("error trying to connect");

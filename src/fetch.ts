@@ -1,10 +1,11 @@
-import { retry } from "./deps.ts";
 import { parseError } from "./errors.ts";
 import {
   isServerErrorStatus,
   isSuccessfulStatus,
   parseResponseToJson,
 } from "./fetch_helper.ts";
+import { retry } from "./retry.ts";
+
 import type { ClientResponse } from "./types_internal.ts";
 
 /**
@@ -19,20 +20,13 @@ export const fetchRetry = async <TOk, TErr>(
   retryRequest: boolean = true,
 ): Promise<ClientResponse<TOk, TErr>> => {
   // Execute request without retry
-  if (!retryRequest) {
-    return await fetchJSON<TOk, TErr>(request);
+  const delays = retryRequest ? [1000, 3000] : []
+
+  try {
+    return await retry(() => fetchJSON<TOk, TErr>(request), delays);
+  } catch (error) {
+    return parseError<TErr>(error);
   }
-  // Execute request using retry
-  const req = retry(async () => {
-    return await fetchJSON<TOk, TErr>(request);
-  }, {
-    multiplier: 2,
-    maxTimeout: 3000,
-    maxAttempts: 3,
-    minTimeout: 1000,
-    jitter: 0,
-  });
-  return req;
 };
 
 /**

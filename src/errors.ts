@@ -1,4 +1,4 @@
-import { RetryError } from "./deps.ts";
+import { RetryError } from "./retry.ts";
 import type { SDKError } from "./types_external.ts";
 
 /**
@@ -26,7 +26,7 @@ export const parseError = <TErr>(
       ok: false,
       error: {
         message:
-          "Retry limit reached. Could not get a response from the server",
+          `Retry limit reached. Could not get a response from the server after ${error.attempts} attempts`,
       },
     };
   }
