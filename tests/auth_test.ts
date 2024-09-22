@@ -1,4 +1,4 @@
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { authRequestFactory } from "../src/apis/auth.ts";
 
 Deno.test("getToken - Should have correct url and header", () => {

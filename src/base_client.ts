@@ -5,7 +5,6 @@ import type {
 } from "./types_internal.ts";
 import type { ClientConfig } from "./types_external.ts";
 import { buildRequest } from "./base_client_helper.ts";
-import { parseError } from "./errors.ts";
 import { validateRequestData } from "./validate.ts";
 import { fetchRetry } from "./fetch.ts";
 
@@ -37,16 +36,11 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
       // Build the request
       const request = buildRequest(cfg, requestData);
 
-      try {
-        // Make the request with retry logic
-        const response = await fetchRetry<TOk, TErr>(
-          request,
-          cfg.retryRequests,
-        );
-        return response;
-      } catch (error: unknown) {
-        // Parse and return the error
-        return parseError<TErr>(error);
-      }
+      // Make the request with retry logic
+      const response = await fetchRetry<TOk, TErr>(
+        request,
+        cfg.retryRequests,
+      );
+      return response;
     },
   }) as const;

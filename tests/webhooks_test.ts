@@ -1,5 +1,6 @@
-import { assertEquals, mf } from "./test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { Client } from "../src/mod.ts";
+import * as mf from "@hongminhee/deno-mock-fetch";
 
 Deno.test("webhooks - registerWebhook - check correct url in TEST/MT", async () => {
   mf.install();
