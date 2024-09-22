@@ -1,5 +1,6 @@
 import { fetchJSON } from "../src/fetch.ts";
-import { assert, assertEquals, mf } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
+import * as mf from "@hongminhee/deno-mock-fetch";
 
 Deno.test("fetchJSON - Returns successful response", async () => {
   mf.install(); // mock out calls to `fetch`

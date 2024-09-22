@@ -1,8 +1,9 @@
 import { AccessTokenError } from "../src/types_external.ts";
 import { parseError } from "../src/errors.ts";
 import { Client } from "../src/mod.ts";
-import { assert, assertExists } from "./test_deps.ts";
-import { assertEquals, mf } from "./test_deps.ts";
+import { assert, assertExists } from "@std/assert";
+import { assertEquals } from "@std/assert";
+import * as mf from "@hongminhee/deno-mock-fetch";
 
 Deno.test("parseError - Should return correct error message for connection error", () => {
   const error = new TypeError("error trying to connect");

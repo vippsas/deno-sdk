@@ -1,7 +1,7 @@
 import { baseClient } from "../src/base_client.ts";
-import { assertEquals, mf } from "./test_deps.ts";
+import { assertEquals } from "@std/assert";
+import * as mf from "@hongminhee/deno-mock-fetch";
 import type { RequestData } from "../src/types_internal.ts";
-import { RetryError } from "../src/deps.ts";
 
 Deno.test("makeRequest - Should return ok", async () => {
   mf.install(); // mock out calls to `fetch`

@@ -3,7 +3,7 @@ import {
   isSuccessfulStatus,
   parseResponseToJson,
 } from "../src/fetch_helper.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";;
 
 Deno.test("isServerErrorStatus should return true for server error status codes", () => {
   const serverErrorStatuses = [500, 501, 502, 503, 504, 505, 599];
