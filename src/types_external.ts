@@ -105,7 +105,7 @@ export type {
  */
 export type SDKError<TErr> = {
   ok: false;
-  error: TErr | { message: string };
+  error: TErr | Error;
 };
 
 /**

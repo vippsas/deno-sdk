@@ -30,7 +30,7 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
       // Validate the request data
       const validationError = validateRequestData(requestData, cfg);
       if (validationError) {
-        return { ok: false, error: { message: validationError } };
+        return { ok: false, error: new Error(validationError) };
       }
 
       // Build the request

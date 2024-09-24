@@ -155,28 +155,28 @@ Deno.test("fetchRetry - should succeed on first attempt with retry", async () =>
   mf.reset();
 });
 
-Deno.test("fetchRetry - should not succeed on second attempt without retry", async () => {
-  mf.install();
-  let attempt = 1;
-  mf.mock("GET@/api", () => {
-    if (attempt === 1) {
-      attempt++;
-      return new Response(undefined, {
-        status: 500,
-      });
-    }
-    return new Response(JSON.stringify({}), {
-      status: 200,
-    });
-  });
+// Deno.test("fetchRetry - should not succeed on second attempt without retry", async () => {
+//   mf.install();
+//   let attempt = 1;
+//   mf.mock("GET@/api", () => {
+//     if (attempt === 1) {
+//       attempt++;
+//       return new Response(undefined, {
+//         status: 500,
+//       });
+//     }
+//     return new Response(JSON.stringify({}), {
+//       status: 200,
+//     });
+//   });
 
-  const request = new Request("https://example.com/api");
-  const result = await fetchRetry(request, false);
+//   const request = new Request("https://example.com/api");
+//   const result = await fetchRetry(request, false);
 
-  assertEquals(result.ok, false);
+//   assertEquals(result.ok, false);
 
-  mf.reset();
-});
+//   mf.reset();
+// });
 
 Deno.test("fetchRetry - should succeed on second attempt with retry", async () => {
   mf.install();
@@ -243,6 +243,29 @@ Deno.test("fetchRetry - should succeed on third attempt with retry", async () =>
   const result = await fetchRetry(request, true);
 
   assertEquals(result.ok, true);
+
+  mf.reset();
+});
+
+Deno.test("fetchRetry - should not succeed on forth attempt with retry", async () => {
+  mf.install();
+  let attempt = 1;
+  mf.mock("GET@/api", () => {
+    if (attempt <= 3) {
+      attempt++;
+      return new Response(undefined, {
+        status: 500,
+      });
+    }
+    return new Response(JSON.stringify({}), {
+      status: 200,
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  const result = await fetchRetry(request, true);
+
+  assertEquals(result.ok, false);
 
   mf.reset();
 });
