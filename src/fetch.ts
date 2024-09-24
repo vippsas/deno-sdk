@@ -13,14 +13,14 @@ import type { ClientResponse } from "./types_internal.ts";
  * @template TErr - The type of the error response data.
  * @param {Request} request - The request to fetch.
  * @param {boolean} [retryRequest=true] - Whether to retry the request on failure.
+ * @param {number[]} [delays=[1000, 3000]] - The delays between retries in milliseconds.
  * @returns {Promise<ClientResponse<TOk, TErr>>} A promise that resolves to a ClientResponse object.
  */
 export const fetchRetry = <TOk, TErr>(
   request: Request,
   retryRequest: boolean = true,
+  delays: number[] = [1000, 3000],
 ): Promise<ClientResponse<TOk, TErr>> => {
-  const delays = [1000, 3000];
-
   /**
    * Attempts to fetch the request recursively with retry logic.
    *
