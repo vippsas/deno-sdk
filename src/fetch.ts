@@ -38,7 +38,7 @@ export const fetchRetry = <TOk, TErr>(
       return {
         ok: false,
         error: new Error(
-          `Retry limit reached. Could not get a response from the server after ${attempt} attempts`,
+          `Retry limit reached. Could not get a response from the server after ${attempt} attempts, the last error was: ${result.error}`,
         ),
       };
     }
@@ -77,9 +77,7 @@ export const fetchJSON = async <TOk, TErr>(
   if (isServerErrorStatus(response.status)) {
     return {
       ok: false,
-      error: new Error(
-        `Server error: ${response.status} ${response.statusText}`,
-      ),
+      error: new Error(`${response.status} - ${response.statusText}`),
       retry: true,
     };
   }
