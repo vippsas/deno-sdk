@@ -1,4 +1,4 @@
-import { SDKError } from "./types_external.ts";
+import type { SDKError } from "./types_external.ts";
 
 /**
  * Represents a response from the client.
@@ -11,7 +11,7 @@ export type ClientResponse<TOk, TErr> =
     ok: true;
     data: TOk;
   }
-  | SDKError<TErr>;
+  | (SDKError<TErr> & { retry?: boolean });
 
 /**
  * Represents the base client with a method to make requests.

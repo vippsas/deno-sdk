@@ -3,7 +3,7 @@ import { assert, assertEquals } from "@std/assert";
 import * as mf from "@hongminhee/deno-mock-fetch";
 
 Deno.test("fetchJSON - Returns successful response", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({ message: "Success" }), {
@@ -21,7 +21,7 @@ Deno.test("fetchJSON - Returns successful response", async () => {
 });
 
 Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({ error: "Bad Request" }), {
@@ -37,7 +37,7 @@ Deno.test("fetchJSON - Returns parseError on Bad Request", async () => {
 });
 
 Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
@@ -53,7 +53,7 @@ Deno.test("fetchJSON - Returns parseError on Forbidden", async () => {
 });
 
 Deno.test("fetchJSON - Returns parseError on Internal Server Error", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
@@ -74,7 +74,7 @@ Deno.test("fetchJSON - Returns parseError on Internal Server Error", async () =>
 });
 
 Deno.test("fetchJSON - Catch JSON", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({}), {
@@ -91,7 +91,7 @@ Deno.test("fetchJSON - Catch JSON", async () => {
 });
 
 Deno.test("fetchJSON - Catch text/plain", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(JSON.stringify({}), {
@@ -108,7 +108,7 @@ Deno.test("fetchJSON - Catch text/plain", async () => {
 });
 
 Deno.test("fetchJSON - Catch Empty Response", async () => {
-  mf.install(); // mock out calls to `fetch`
+  mf.install();
 
   mf.mock("GET@/api", () => {
     return new Response(undefined, {
@@ -243,6 +243,29 @@ Deno.test("fetchRetry - should succeed on third attempt with retry", async () =>
   const result = await fetchRetry(request, true);
 
   assertEquals(result.ok, true);
+
+  mf.reset();
+});
+
+Deno.test("fetchRetry - should not succeed on forth attempt with retry", async () => {
+  mf.install();
+  let attempt = 1;
+  mf.mock("GET@/api", () => {
+    if (attempt <= 3) {
+      attempt++;
+      return new Response(undefined, {
+        status: 500,
+      });
+    }
+    return new Response(JSON.stringify({}), {
+      status: 200,
+    });
+  });
+
+  const request = new Request("https://example.com/api");
+  const result = await fetchRetry(request, true);
+
+  assertEquals(result.ok, false);
 
   mf.reset();
 });

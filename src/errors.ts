@@ -26,7 +26,7 @@ export const parseError = <TErr>(
   ) {
     return {
       ok: false,
-      error: { message: "Could not connect to Vipps MobilePay API" },
+      error: new Error("Could not connect to Vipps MobilePay API"),
     };
   }
 
@@ -34,16 +34,15 @@ export const parseError = <TErr>(
   if (status === 403) {
     return {
       ok: false,
-      error: {
-        message:
-          "Your credentials are not authorized for this product, please visit portal.vipps.no",
-      },
+      error: new Error(
+        "Your credentials are not authorized for this product, please visit portal.vipps.no",
+      ),
     };
   }
 
   // Handle generic Error instances
   if (error instanceof Error) {
-    return { ok: false, error: { message: error.message } };
+    return { ok: false, error };
   }
 
   // Handle object errors
@@ -52,5 +51,5 @@ export const parseError = <TErr>(
   }
 
   // Default to treating error as a string
-  return { ok: false, error: { message: String(error) } };
+  return { ok: false, error: new Error(String(error)) };
 };

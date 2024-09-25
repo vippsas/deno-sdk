@@ -19,7 +19,7 @@ Deno.test("parseError - Should return correct error message for generic Error", 
 
 Deno.test("parseError - should return correct error message for forbidden Error", async () => {
   mf.install();
-  mf.mock("GET@/epayment/v1/payments/", () => {
+  mf.mock("GET@/epayment/v1/payments/123456789", () => {
     return new Response(JSON.stringify({ ok: false, data: {} }), {
       status: 403,
     });
