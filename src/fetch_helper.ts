@@ -5,7 +5,7 @@
  * @returns {boolean} - Returns true if the status code is between 500 and 599, inclusive; otherwise, false.
  */
 export function isServerErrorStatus(status: number): boolean {
-	return status >= 500 && status < 600;
+  return status >= 500 && status < 600;
 }
 
 /**
@@ -15,7 +15,7 @@ export function isServerErrorStatus(status: number): boolean {
  * @returns {boolean} - Returns true if the status code is between 200 and 299, inclusive; otherwise, false.
  */
 export function isSuccessfulStatus(status: number): boolean {
-	return status >= 200 && status < 300;
+  return status >= 200 && status < 300;
 }
 
 /**
@@ -26,12 +26,12 @@ export function isSuccessfulStatus(status: number): boolean {
  * @returns {Promise<unknown>} The parsed response data.
  */
 export const parseResponseToJson = async (
-	response: Response,
+  response: Response,
 ): Promise<unknown> => {
-	const text = await response.text();
-	try {
-		return JSON.parse(text);
-	} catch {
-		return { text: text || '' };
-	}
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { text: text || "" };
+  }
 };

@@ -1,4 +1,4 @@
-import type { SDKError } from './types_external.ts';
+import type { SDKError } from "./types_external.ts";
 
 /**
  * Represents a response from the client.
@@ -7,27 +7,27 @@ import type { SDKError } from './types_external.ts';
  * @template TErr - The type of the error details.
  */
 export type ClientResponse<TOk, TErr> =
-	| {
-		ok: true;
-		data: TOk;
-	}
-	| (SDKError<TErr> & { retry?: boolean });
+  | {
+    ok: true;
+    data: TOk;
+  }
+  | (SDKError<TErr> & { retry?: boolean });
 
 /**
  * Represents the base client with a method to make requests.
  */
 export type BaseClient = {
-	readonly makeRequest: (
-		requestData: RequestData<unknown, unknown>,
-	) => Promise<ClientResponse<unknown, unknown>>;
+  readonly makeRequest: (
+    requestData: RequestData<unknown, unknown>,
+  ) => Promise<ClientResponse<unknown, unknown>>;
 };
 
 /**
  * Represents a factory for creating request data.
  */
 export type RequestFactory = {
-	// deno-lint-ignore no-explicit-any
-	[key: string]: (...args: any[]) => RequestData<unknown, unknown>;
+  // deno-lint-ignore no-explicit-any
+  [key: string]: (...args: any[]) => RequestData<unknown, unknown>;
 };
 
 /**
@@ -39,10 +39,11 @@ export type RequestFactory = {
  * @template TFac - The type of the request factory.
  */
 export type ApiProxy<TFac extends RequestFactory> = {
-	[key in keyof TFac]: TFac[key] extends (
-		...args: infer TArgs
-	) => RequestData<infer TOk, infer TErr> ? (...args: TArgs) => Promise<ClientResponse<TOk, TErr>>
-		: never;
+  [key in keyof TFac]: TFac[key] extends (
+    ...args: infer TArgs
+  ) => RequestData<infer TOk, infer TErr>
+    ? (...args: TArgs) => Promise<ClientResponse<TOk, TErr>>
+    : never;
 };
 
 /**
@@ -52,28 +53,28 @@ export type ApiProxy<TFac extends RequestFactory> = {
  * @template TErr - The type of the error details.
  */
 export type RequestData<TOk, TErr> = {
-	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-	url: string;
-	additionalHeaders?: Record<string, string>;
-	omitHeaders?: OmitHeaders;
-	body?: unknown;
-	token?: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  url: string;
+  additionalHeaders?: Record<string, string>;
+  omitHeaders?: OmitHeaders;
+  body?: unknown;
+  token?: string;
 };
 
 /**
  * Represents the default headers used in requests.
  */
 export type DefaultHeaders = {
-	'Content-Type': 'application/json';
-	'Authorization': string;
-	'User-Agent': string;
-	'Ocp-Apim-Subscription-Key': string;
-	'Merchant-Serial-Number': string;
-	'Vipps-System-Name': string;
-	'Vipps-System-Version': string;
-	'Vipps-System-Plugin-Name': string;
-	'Vipps-System-Plugin-Version': string;
-	'Idempotency-Key': string;
+  "Content-Type": "application/json";
+  "Authorization": string;
+  "User-Agent": string;
+  "Ocp-Apim-Subscription-Key": string;
+  "Merchant-Serial-Number": string;
+  "Vipps-System-Name": string;
+  "Vipps-System-Version": string;
+  "Vipps-System-Plugin-Name": string;
+  "Vipps-System-Plugin-Version": string;
+  "Idempotency-Key": string;
 };
 
 /**
@@ -98,8 +99,8 @@ export type PrettifyType<T> = { [K in keyof T]: T[K] } & unknown;
  * @template K - The key of the property to make optional.
  */
 export type MakePropertyOptional<T, K extends keyof T> =
-	& Omit<T, K>
-	& { [P in K]?: T[P] };
+  & Omit<T, K>
+  & { [P in K]?: T[P] };
 
 /**
  * A utility type that makes the specified nested property `N` of type `T[K]` optional.
@@ -109,9 +110,9 @@ export type MakePropertyOptional<T, K extends keyof T> =
  * @template N - The key of the nested property to make optional.
  */
 export type MakeNestedPropertyOptional<
-	T,
-	K extends keyof T,
-	N extends keyof T[K],
+  T,
+  K extends keyof T,
+  N extends keyof T[K],
 > = {
-	[P in keyof T]: P extends K ? Omit<T[K], N> & Partial<Pick<T[K], N>> : T[P];
+  [P in keyof T]: P extends K ? Omit<T[K], N> & Partial<Pick<T[K], N>> : T[P];
 };

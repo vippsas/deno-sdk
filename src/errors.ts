@@ -1,4 +1,4 @@
-import type { SDKError } from './types_external.ts';
+import type { SDKError } from "./types_external.ts";
 
 /**
  * Parses the error and returns an object with error details.
@@ -16,40 +16,40 @@ import type { SDKError } from './types_external.ts';
  * @returns An object with error details.
  */
 export const parseError = <TErr>(
-	error: unknown,
-	status?: number,
+  error: unknown,
+  status?: number,
 ): SDKError<TErr> => {
-	// Handle connection errors
-	if (
-		error instanceof TypeError &&
-		error.message.includes('error trying to connect')
-	) {
-		return {
-			ok: false,
-			error: new Error('Could not connect to Vipps MobilePay API'),
-		};
-	}
+  // Handle connection errors
+  if (
+    error instanceof TypeError &&
+    error.message.includes("error trying to connect")
+  ) {
+    return {
+      ok: false,
+      error: new Error("Could not connect to Vipps MobilePay API"),
+    };
+  }
 
-	// Handle Forbidden status code
-	if (status === 403) {
-		return {
-			ok: false,
-			error: new Error(
-				'Your credentials are not authorized for this product, please visit portal.vipps.no',
-			),
-		};
-	}
+  // Handle Forbidden status code
+  if (status === 403) {
+    return {
+      ok: false,
+      error: new Error(
+        "Your credentials are not authorized for this product, please visit portal.vipps.no",
+      ),
+    };
+  }
 
-	// Handle generic Error instances
-	if (error instanceof Error) {
-		return { ok: false, error };
-	}
+  // Handle generic Error instances
+  if (error instanceof Error) {
+    return { ok: false, error };
+  }
 
-	// Handle object errors
-	if (typeof error === 'object' && error !== null) {
-		return { ok: false, error: error as TErr };
-	}
+  // Handle object errors
+  if (typeof error === "object" && error !== null) {
+    return { ok: false, error: error as TErr };
+  }
 
-	// Default to treating error as a string
-	return { ok: false, error: new Error(String(error)) };
+  // Default to treating error as a string
+  return { ok: false, error: new Error(String(error)) };
 };
