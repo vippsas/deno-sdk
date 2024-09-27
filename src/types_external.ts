@@ -1,4 +1,4 @@
-import {
+import type {
   MakeNestedPropertyOptional,
   MakePropertyOptional,
   PrettifyType,
@@ -18,9 +18,7 @@ export type AccessTokenError = {
   correlation_id: string;
   error_uri: string;
 };
-export type {
-  AuthorizationTokenResponse,
-} from "./generated_types/access_token/types.gen.ts";
+export type { AuthorizationTokenResponse } from "./generated_types/access_token/types.gen.ts";
 
 /**
  * Checkout API
@@ -64,9 +62,7 @@ export type {
 /**
  * ePayment API
  */
-import type {
-  CreatePaymentRequest as _CreatePaymentRequest,
-} from "./generated_types/epayment/types.gen.ts";
+import type { CreatePaymentRequest as _CreatePaymentRequest } from "./generated_types/epayment/types.gen.ts";
 
 // Make the reference property optional
 export type CreatePaymentRequest = MakePropertyOptional<

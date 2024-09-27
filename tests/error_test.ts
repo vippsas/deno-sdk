@@ -1,4 +1,4 @@
-import { AccessTokenError } from "../src/types_external.ts";
+import type { AccessTokenError } from "../src/types_external.ts";
 import { parseError } from "../src/errors.ts";
 import { Client } from "../src/mod.ts";
 import { assert, assertExists } from "@std/assert";

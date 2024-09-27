@@ -1,4 +1,3 @@
-import { filterKeys } from "./deps.ts";
 import type {
   DefaultHeaders,
   OmitHeaders,
@@ -63,17 +62,55 @@ export const getHeaders = (
     "Idempotency-Key": uuid.generate(),
   };
 
-  // Remove omitted headers
-  const trimmedHeaders = filterKeys(
-    defaultHeaders,
-    (header) => !omitHeaders.includes(header as OmitHeaders[number]),
-  );
+  return createHeaders(defaultHeaders, omitHeaders, additionalHeaders);
+};
 
-  // Add additional headers
-  return {
-    ...additionalHeaders,
-    ...trimmedHeaders,
-  };
+/**
+ * Filters out specified headers from the default headers.
+ *
+ * @param {Record<string, string>} headers - The headers object to filter.
+ * @param {string[]} omitHeaders - The list of headers to omit.
+ * @returns {Record<string, string>} The filtered headers object.
+ */
+export const filterHeaders = (
+  headers: Record<string, string>,
+  omitHeaders: string[],
+): Record<string, string> => {
+  return Object.fromEntries(
+    Object.entries(headers).filter(([key]) => !omitHeaders.includes(key)),
+  );
+};
+
+/**
+ * Adds additional headers to the default headers without overwriting existing headers.
+ *
+ * @param {Record<string, string>} defaultHeaders - The default headers object.
+ * @param {Record<string, string>} additionalHeaders - The additional headers to add.
+ * @returns {Record<string, string>} The combined headers object.
+ */
+export const addHeaders = (
+  defaultHeaders: Record<string, string>,
+  additionalHeaders: Record<string, string>,
+): Record<string, string> => {
+  return { ...additionalHeaders, ...defaultHeaders };
+};
+
+/**
+ * Creates a new headers object by omitting specified headers from the default headers
+ * and adding additional headers.
+ *
+ * @param {Record<string, string>} defaultHeaders - The default headers object.
+ * @param {string[]} omitHeaders - The list of headers to omit.
+ * @param {Record<string, string>} [additionalHeaders={}] - The additional headers to add.
+ * @returns {Record<string, string>} The new headers object.
+ */
+export const createHeaders = (
+  defaultHeaders: Record<string, string>,
+  omitHeaders: string[],
+  additionalHeaders: Record<string, string> = {},
+): Record<string, string> => {
+  const combinedHeaders = addHeaders(defaultHeaders, additionalHeaders);
+  return filterHeaders(combinedHeaders, omitHeaders);
 };
 
 /**
