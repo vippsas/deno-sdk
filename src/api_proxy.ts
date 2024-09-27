@@ -1,14 +1,14 @@
-import { authRequestFactory } from "./apis/auth.ts";
-import { checkoutRequestFactory } from "./apis/checkout.ts";
-import { ePaymentRequestFactory } from "./apis/epayment.ts";
-import { webhooksRequestFactory } from "./apis/webhooks.ts";
-import type { ApiProxy, BaseClient, RequestFactory } from "./types_internal.ts";
+import { authRequestFactory } from './apis/auth.ts';
+import { checkoutRequestFactory } from './apis/checkout.ts';
+import { ePaymentRequestFactory } from './apis/epayment.ts';
+import { webhooksRequestFactory } from './apis/webhooks.ts';
+import type { ApiProxy, BaseClient, RequestFactory } from './types_internal.ts';
 
 export type SDKClient = {
-  auth: ReturnType<typeof proxifyFactory<typeof authRequestFactory>>;
-  checkout: ReturnType<typeof proxifyFactory<typeof checkoutRequestFactory>>;
-  payment: ReturnType<typeof proxifyFactory<typeof ePaymentRequestFactory>>;
-  webhook: ReturnType<typeof proxifyFactory<typeof webhooksRequestFactory>>;
+	auth: ReturnType<typeof proxifyFactory<typeof authRequestFactory>>;
+	checkout: ReturnType<typeof proxifyFactory<typeof checkoutRequestFactory>>;
+	payment: ReturnType<typeof proxifyFactory<typeof ePaymentRequestFactory>>;
+	webhook: ReturnType<typeof proxifyFactory<typeof webhooksRequestFactory>>;
 };
 
 /**
@@ -17,12 +17,12 @@ export type SDKClient = {
  * @param {BaseClient} client - The base client to proxify.
  */
 export const proxifyClient = (client: BaseClient): SDKClient => {
-  return {
-    auth: proxifyFactory(client, authRequestFactory),
-    checkout: proxifyFactory(client, checkoutRequestFactory),
-    payment: proxifyFactory(client, ePaymentRequestFactory),
-    webhook: proxifyFactory(client, webhooksRequestFactory),
-  } as const;
+	return {
+		auth: proxifyFactory(client, authRequestFactory),
+		checkout: proxifyFactory(client, checkoutRequestFactory),
+		payment: proxifyFactory(client, ePaymentRequestFactory),
+		webhook: proxifyFactory(client, webhooksRequestFactory),
+	} as const;
 };
 
 /**
@@ -35,20 +35,20 @@ export const proxifyClient = (client: BaseClient): SDKClient => {
  * @returns {ApiProxy<TFac>} The proxified API object.
  */
 export const proxifyFactory = <TFac extends RequestFactory>(
-  client: BaseClient,
-  factory: TFac,
+	client: BaseClient,
+	factory: TFac,
 ): ApiProxy<TFac> => {
-  return new Proxy(factory, {
-    get(fac, prop) {
-      const originalMethod = Reflect.get(fac, prop);
-      if (typeof originalMethod !== "function") {
-        return originalMethod; // Fallback to the original object
-      }
-      return new Proxy(originalMethod, {
-        apply(facFn, _this, args) {
-          return client.makeRequest(facFn(...args));
-        },
-      });
-    },
-  }) as unknown as ApiProxy<TFac>;
+	return new Proxy(factory, {
+		get(fac, prop) {
+			const originalMethod = Reflect.get(fac, prop);
+			if (typeof originalMethod !== 'function') {
+				return originalMethod; // Fallback to the original object
+			}
+			return new Proxy(originalMethod, {
+				apply(facFn, _this, args) {
+					return client.makeRequest(facFn(...args));
+				},
+			});
+		},
+	}) as unknown as ApiProxy<TFac>;
 };

@@ -1,5 +1,5 @@
-import type { ClientConfig } from "./types_external.ts";
-import type { RequestData } from "./types_internal.ts";
+import type { ClientConfig } from './types_external.ts';
+import type { RequestData } from './types_internal.ts';
 
 /**
  * Validates the request data based on the client configuration.
@@ -12,22 +12,22 @@ import type { RequestData } from "./types_internal.ts";
  * @returns {string | undefined} A string if validation fails, otherwise undefined.
  */
 export const validateRequestData = (
-  requestData: RequestData<unknown, unknown>,
-  cfg: ClientConfig,
+	requestData: RequestData<unknown, unknown>,
+	cfg: ClientConfig,
 ): string | undefined => {
-  const { url } = requestData;
-  const { useTestMode } = cfg;
+	const { url } = requestData;
+	const { useTestMode } = cfg;
 
-  // ePayment validation
-  if (!useTestMode && url.includes("/epayment/") && url.includes("/approve")) {
-    return "forceApprove is only available in the test environment";
-  }
+	// ePayment validation
+	if (!useTestMode && url.includes('/epayment/') && url.includes('/approve')) {
+		return 'forceApprove is only available in the test environment';
+	}
 
-  // Agreement validation
-  if (!useTestMode && url.includes("/recurring/") && url.includes("/accept")) {
-    return "forceAccept is only available in the test environment";
-  }
+	// Agreement validation
+	if (!useTestMode && url.includes('/recurring/') && url.includes('/accept')) {
+		return 'forceAccept is only available in the test environment';
+	}
 
-  // No validation errors
-  return undefined;
+	// No validation errors
+	return undefined;
 };

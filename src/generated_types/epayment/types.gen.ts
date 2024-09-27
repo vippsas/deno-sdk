@@ -22,13 +22,13 @@ export type Customer = CustomerPhoneNumber | PersonalQrCode | CustomerToken;
  * See also [Landing page](https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/).
  */
 export type CustomerPhoneNumber = {
-  /**
-   * The phone number of the user paying the transaction with Vipps MobilePay.
-   * The format is MSISDN: Digits only: Country code and subscriber number, but no prefix.
-   * If the phone number is a Norwegian phone number `(+47) 91 23 45 67`, the MSISDN representation is `4712345678`.
-   * See: https://en.wikipedia.org/wiki/MSISDN
-   */
-  phoneNumber?: string;
+	/**
+	 * The phone number of the user paying the transaction with Vipps MobilePay.
+	 * The format is MSISDN: Digits only: Country code and subscriber number, but no prefix.
+	 * If the phone number is a Norwegian phone number `(+47) 91 23 45 67`, the MSISDN representation is `4712345678`.
+	 * See: https://en.wikipedia.org/wiki/MSISDN
+	 */
+	phoneNumber?: string;
 };
 
 /**
@@ -44,39 +44,39 @@ export type CustomerPhoneNumber = {
  * such as phone number, email address, etc.
  */
 export type PersonalQrCode = {
-  /**
-   * The full content of the user's personal QR code in the app.
-   */
-  personalQr?: string;
+	/**
+	 * The full content of the user's personal QR code in the app.
+	 */
+	personalQr?: string;
 };
 
 /**
  * The customer's token, if it is available. This token will be sent as part of the user.checked-in.v1 webhook event when a user scans a merchant callback QR
  */
 export type CustomerToken = {
-  /**
-   * A distinct token per customer.
-   */
-  customerToken?: string;
+	/**
+	 * A distinct token per customer.
+	 */
+	customerToken?: string;
 };
 
 /**
  * Amount object, containing a `value` and a `currency`.
  */
 export type Amount = {
-  currency: Currency;
-  /**
-   * Amounts are specified in minor units (i.e., integers with two trailing zeros).
-   * For example: 10.00 NOK should be written as 1000.
-   * The minimum amounts allowed are NOK 100 øre, DKK 1 øre, EUR 1 cent.
-   */
-  value: number;
+	currency: Currency;
+	/**
+	 * Amounts are specified in minor units (i.e., integers with two trailing zeros).
+	 * For example: 10.00 NOK should be written as 1000.
+	 * The minimum amounts allowed are NOK 100 øre, DKK 1 øre, EUR 1 cent.
+	 */
+	value: number;
 };
 
 /**
  * Available types of currency are NOK, DKK, and EUR.
  */
-export type Currency = "NOK" | "DKK" | "EUR";
+export type Currency = 'NOK' | 'DKK' | 'EUR';
 
 /**
  * Metadata is a key-value map that can be used to store additional
@@ -86,84 +86,84 @@ export type Currency = "NOK" | "DKK" | "EUR";
  * Max capacity is 5 key-value pairs.
  */
 export type Metadata = {
-  [key: string]: string;
+	[key: string]: string;
 } | null;
 
 /**
  * The `CreatePaymentRequest` object.
  */
 export type CreatePaymentRequest = {
-  amount: Amount;
-  customer?: Customer;
-  /**
-   * Minimum age in years required for the customer to make the purchase.
-   */
-  minimumUserAge?: (number) | null;
-  /**
-   * The type of customer interaction that triggers the purchase.
-   * `CUSTOMER_PRESENT` means that the customer is physically present at the
-   * point of sale when the payment is made, typically in a store.
-   */
-  customerInteraction?: "CUSTOMER_PRESENT" | "CUSTOMER_NOT_PRESENT";
-  industryData?: IndustryData;
-  paymentMethod: PaymentMethod;
-  profile?: ProfileRequest;
-  reference: Reference;
-  /**
-   * The URL the user is returned to after the payment session.
-   * The URL must use the `https://` scheme or a custom URL scheme.
-   */
-  returnUrl?: string;
-  /**
-   * The flow for bringing the user to the Vipps or MobilePay app's payment confirmation screen.
-   * If `userFlow` is `PUSH_MESSAGE`, a valid value for `customer` is required.
-   * If `userFlow` is `WEB_REDIRECT`, a valid value for `returnUrl` is required.
-   * `WEB_REDIRECT` is the normal flow for browser-based payment flows.
-   * If on a mobile device, the Vipps or MobilePay app will open. A valid value for `returnUrl` is required.
-   * Otherwise, the [landing page](https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/) will open.
-   * `NATIVE_REDIRECT` is for automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
-   * `PUSH_MESSAGE` is to skip the landing page for payments initiated on a device other than the user's phone.
-   * The user gets a push message that opens the payment in the app. This requires a valid `customer` field.
-   * `QR` returns a QR code that can be scanned to complete the payment.
-   */
-  userFlow: "PUSH_MESSAGE" | "NATIVE_REDIRECT" | "WEB_REDIRECT" | "QR";
-  /**
-   * The payment will expire at the given date and time.
-   * The format must adhere to RFC 3339.
-   * The value must be more than 10 minutes and less than 60 days in the future.
-   * Can only be combined with `userFlow: PUSH_MESSAGE` or `userFlow: QR`.
-   *
-   * If `ExpiresAt` is set, `receipt` also must be set.
-   */
-  expiresAt?: (string) | null;
-  /**
-   * Optional setting that is only applicable when `userFlow` is set to `QR`.
-   * This is used to set the format for the QR code.
-   */
-  qrFormat?: {
-    /**
-     * If `userFlow` is `QR` and `qrFormat` is not set, the QR code image will be returned as `SVG+XML`, by default.
-     */
-    format: "TEXT/TARGETURL" | "IMAGE/SVG+XML" | "IMAGE/PNG";
-    /**
-     * For example, if the value is 200, then 200x200 px is set as the dimension for the QR code.
-     * This is only applicable when the format is set to `PNG`. If not set, the default is 1024.
-     */
-    size?: (number) | null;
-  } | null;
-  /**
-   * The payment description summary that will be provided to the user
-   * through the app, the merchant portal, and the settlement files.
-   * See the [recommendations](/docs/knowledge-base/transactiontext/).
-   */
-  paymentDescription?: string;
-  receipt?: Receipt;
-  metadata?: Metadata;
-  /**
-   * The URL where a receipt can be viewed or downloaded.
-   * The URL must use the `https://` scheme or a custom URL scheme.
-   */
-  receiptUrl?: (string) | null;
+	amount: Amount;
+	customer?: Customer;
+	/**
+	 * Minimum age in years required for the customer to make the purchase.
+	 */
+	minimumUserAge?: (number) | null;
+	/**
+	 * The type of customer interaction that triggers the purchase.
+	 * `CUSTOMER_PRESENT` means that the customer is physically present at the
+	 * point of sale when the payment is made, typically in a store.
+	 */
+	customerInteraction?: 'CUSTOMER_PRESENT' | 'CUSTOMER_NOT_PRESENT';
+	industryData?: IndustryData;
+	paymentMethod: PaymentMethod;
+	profile?: ProfileRequest;
+	reference: Reference;
+	/**
+	 * The URL the user is returned to after the payment session.
+	 * The URL must use the `https://` scheme or a custom URL scheme.
+	 */
+	returnUrl?: string;
+	/**
+	 * The flow for bringing the user to the Vipps or MobilePay app's payment confirmation screen.
+	 * If `userFlow` is `PUSH_MESSAGE`, a valid value for `customer` is required.
+	 * If `userFlow` is `WEB_REDIRECT`, a valid value for `returnUrl` is required.
+	 * `WEB_REDIRECT` is the normal flow for browser-based payment flows.
+	 * If on a mobile device, the Vipps or MobilePay app will open. A valid value for `returnUrl` is required.
+	 * Otherwise, the [landing page](https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/) will open.
+	 * `NATIVE_REDIRECT` is for automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
+	 * `PUSH_MESSAGE` is to skip the landing page for payments initiated on a device other than the user's phone.
+	 * The user gets a push message that opens the payment in the app. This requires a valid `customer` field.
+	 * `QR` returns a QR code that can be scanned to complete the payment.
+	 */
+	userFlow: 'PUSH_MESSAGE' | 'NATIVE_REDIRECT' | 'WEB_REDIRECT' | 'QR';
+	/**
+	 * The payment will expire at the given date and time.
+	 * The format must adhere to RFC 3339.
+	 * The value must be more than 10 minutes and less than 60 days in the future.
+	 * Can only be combined with `userFlow: PUSH_MESSAGE` or `userFlow: QR`.
+	 *
+	 * If `ExpiresAt` is set, `receipt` also must be set.
+	 */
+	expiresAt?: (string) | null;
+	/**
+	 * Optional setting that is only applicable when `userFlow` is set to `QR`.
+	 * This is used to set the format for the QR code.
+	 */
+	qrFormat?: {
+		/**
+		 * If `userFlow` is `QR` and `qrFormat` is not set, the QR code image will be returned as `SVG+XML`, by default.
+		 */
+		format: 'TEXT/TARGETURL' | 'IMAGE/SVG+XML' | 'IMAGE/PNG';
+		/**
+		 * For example, if the value is 200, then 200x200 px is set as the dimension for the QR code.
+		 * This is only applicable when the format is set to `PNG`. If not set, the default is 1024.
+		 */
+		size?: (number) | null;
+	} | null;
+	/**
+	 * The payment description summary that will be provided to the user
+	 * through the app, the merchant portal, and the settlement files.
+	 * See the [recommendations](/docs/knowledge-base/transactiontext/).
+	 */
+	paymentDescription?: string;
+	receipt?: Receipt;
+	metadata?: Metadata;
+	/**
+	 * The URL where a receipt can be viewed or downloaded.
+	 * The URL must use the `https://` scheme or a custom URL scheme.
+	 */
+	receiptUrl?: (string) | null;
 };
 
 /**
@@ -171,7 +171,7 @@ export type CreatePaymentRequest = {
  * `CUSTOMER_PRESENT` means that the customer is physically present at the
  * point of sale when the payment is made, typically in a store.
  */
-export type customerInteraction = "CUSTOMER_PRESENT" | "CUSTOMER_NOT_PRESENT";
+export type customerInteraction = 'CUSTOMER_PRESENT' | 'CUSTOMER_NOT_PRESENT';
 
 /**
  * The flow for bringing the user to the Vipps or MobilePay app's payment confirmation screen.
@@ -186,55 +186,55 @@ export type customerInteraction = "CUSTOMER_PRESENT" | "CUSTOMER_NOT_PRESENT";
  * `QR` returns a QR code that can be scanned to complete the payment.
  */
 export type userFlow =
-  | "PUSH_MESSAGE"
-  | "NATIVE_REDIRECT"
-  | "WEB_REDIRECT"
-  | "QR";
+	| 'PUSH_MESSAGE'
+	| 'NATIVE_REDIRECT'
+	| 'WEB_REDIRECT'
+	| 'QR';
 
 /**
  * If `userFlow` is `QR` and `qrFormat` is not set, the QR code image will be returned as `SVG+XML`, by default.
  */
-export type format = "TEXT/TARGETURL" | "IMAGE/SVG+XML" | "IMAGE/PNG";
+export type format = 'TEXT/TARGETURL' | 'IMAGE/SVG+XML' | 'IMAGE/PNG';
 
 /**
  * The `CreatePaymentResponse` object.
  */
 export type CreatePaymentResponse = {
-  /**
-   * The URL to which the user is redirected when continuing the payment
-   * for `NATIVE_REDIRECT` and `WEB_REDIRECT`. When `userFlow` is `QR`,
-   * a link to the QR image (or the target URL) will be returned.
-   * Nothing will be returned when `userFlow` is `PUSH_MESSAGE`.
-   */
-  redirectUrl?: string;
-  reference: Reference;
+	/**
+	 * The URL to which the user is redirected when continuing the payment
+	 * for `NATIVE_REDIRECT` and `WEB_REDIRECT`. When `userFlow` is `QR`,
+	 * a link to the QR image (or the target URL) will be returned.
+	 * Nothing will be returned when `userFlow` is `PUSH_MESSAGE`.
+	 */
+	redirectUrl?: string;
+	reference: Reference;
 };
 
 /**
  * The `GetPaymentResponse` object.
  */
 export type GetPaymentResponse = {
-  aggregate: Aggregate;
-  amount: Amount;
-  state: State;
-  paymentMethod: PaymentMethodResponse;
-  profile: ProfileResponse;
-  pspReference: PspReference;
-  /**
-   * The URL you should redirect the user to to continue with the payment.
-   * This is the URL to the Vipps MobilePay landing page.
-   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/
-   */
-  redirectUrl?: string;
-  reference: Reference;
-  metadata?: Metadata;
+	aggregate: Aggregate;
+	amount: Amount;
+	state: State;
+	paymentMethod: PaymentMethodResponse;
+	profile: ProfileResponse;
+	pspReference: PspReference;
+	/**
+	 * The URL you should redirect the user to to continue with the payment.
+	 * This is the URL to the Vipps MobilePay landing page.
+	 * See: https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/
+	 */
+	redirectUrl?: string;
+	reference: Reference;
+	metadata?: Metadata;
 };
 
 /**
  * Additional compliance data related to the transaction.
  */
 export type IndustryData = {
-  airlineData?: AirlineData;
+	airlineData?: AirlineData;
 };
 
 /**
@@ -243,59 +243,59 @@ export type IndustryData = {
  * and `agencyInvoiceNumber` are all required.
  */
 export type AirlineData = {
-  /**
-   * Reference number for the invoice, issued by the agency.
-   */
-  agencyInvoiceNumber: string;
-  /**
-   * IATA 3-digit accounting code (PAX); numeric.
-   * It identifies the carrier. eg KLM = 074.
-   */
-  airlineCode: string;
-  /**
-   * IATA 2-letter accounting code (PAX); alphabetical.
-   * It identifies the carrier. Eg KLM = KL.
-   */
-  airlineDesignatorCode: string;
-  /**
-   * Passenger name, initials, and a title.
-   */
-  passengerName: string;
-  /**
-   * The ticket's unique identifier.
-   */
-  ticketNumber?: string;
+	/**
+	 * Reference number for the invoice, issued by the agency.
+	 */
+	agencyInvoiceNumber: string;
+	/**
+	 * IATA 3-digit accounting code (PAX); numeric.
+	 * It identifies the carrier. eg KLM = 074.
+	 */
+	airlineCode: string;
+	/**
+	 * IATA 2-letter accounting code (PAX); alphabetical.
+	 * It identifies the carrier. Eg KLM = KL.
+	 */
+	airlineDesignatorCode: string;
+	/**
+	 * Passenger name, initials, and a title.
+	 */
+	passengerName: string;
+	/**
+	 * The ticket's unique identifier.
+	 */
+	ticketNumber?: string;
 };
 
 export type Aggregate = {
-  authorizedAmount: Amount;
-  cancelledAmount: Amount;
-  capturedAmount: Amount;
-  refundedAmount: Amount;
+	authorizedAmount: Amount;
+	cancelledAmount: Amount;
+	capturedAmount: Amount;
+	refundedAmount: Amount;
 };
 
 export type CancelModificationRequest = {
-  /**
-   * Only cancel transaction if it has not been authorized.
-   * If this flag is set and the transaction has been authorized, the reserved amount will not be canceled.
-   */
-  cancelTransactionOnly?: boolean;
+	/**
+	 * Only cancel transaction if it has not been authorized.
+	 * If this flag is set and the transaction has been authorized, the reserved amount will not be canceled.
+	 */
+	cancelTransactionOnly?: boolean;
 };
 
 export type CaptureModificationRequest = {
-  modificationAmount: Amount;
+	modificationAmount: Amount;
 };
 
 export type RefundModificationRequest = {
-  modificationAmount: Amount;
+	modificationAmount: Amount;
 };
 
 export type ModificationResponse = {
-  amount: Amount;
-  state: State;
-  aggregate: Aggregate;
-  pspReference: PspReference;
-  reference: Reference;
+	amount: Amount;
+	state: State;
+	aggregate: Aggregate;
+	pspReference: PspReference;
+	reference: Reference;
 };
 
 /**
@@ -309,14 +309,14 @@ export type MSN = string;
 export type Reference = string;
 
 export type PaymentEventName =
-  | "CREATED"
-  | "ABORTED"
-  | "EXPIRED"
-  | "CANCELLED"
-  | "CAPTURED"
-  | "REFUNDED"
-  | "AUTHORIZED"
-  | "TERMINATED";
+	| 'CREATED'
+	| 'ABORTED'
+	| 'EXPIRED'
+	| 'CANCELLED'
+	| 'CAPTURED'
+	| 'REFUNDED'
+	| 'AUTHORIZED'
+	| 'TERMINATED';
 
 /**
  * Reference value for a payment, defined by Vipps MobilePay.
@@ -324,64 +324,64 @@ export type PaymentEventName =
 export type PspReference = string;
 
 export type Address = {
-  city: string;
-  /**
-   * Country code according to ISO 3166-2 (two capital letters).
-   */
-  country: string;
-  /**
-   * Unique ID of the address, always provided in response from Vipps MobilePay.
-   */
-  id?: string;
-  /**
-   * Array of addressLines, for example street name, number, etc.
-   */
-  lines: Array<(string)>;
-  /**
-   * Postcode of the address in local country format.
-   */
-  postCode: string;
+	city: string;
+	/**
+	 * Country code according to ISO 3166-2 (two capital letters).
+	 */
+	country: string;
+	/**
+	 * Unique ID of the address, always provided in response from Vipps MobilePay.
+	 */
+	id?: string;
+	/**
+	 * Array of addressLines, for example street name, number, etc.
+	 */
+	lines: Array<(string)>;
+	/**
+	 * Postcode of the address in local country format.
+	 */
+	postCode: string;
 };
 
 export type ProfileRequest = {
-  /**
-   * A space-separated string list of the required user information (e.g., "name phoneNumber") for the payment, in
-   * accordance with the OpenID Connect specification.
-   * See the
-   * [Userinfo user guide](https://developer.vippsmobilepay.com/docs/APIs/userinfo-api/userinfo-api-guide#scope)
-   * for details.
-   * Possible values are:
-   * - name
-   * - address
-   * - email
-   * - phoneNumber
-   * - birthDate
-   * - nin
-   */
-  scope?: string;
+	/**
+	 * A space-separated string list of the required user information (e.g., "name phoneNumber") for the payment, in
+	 * accordance with the OpenID Connect specification.
+	 * See the
+	 * [Userinfo user guide](https://developer.vippsmobilepay.com/docs/APIs/userinfo-api/userinfo-api-guide#scope)
+	 * for details.
+	 * Possible values are:
+	 * - name
+	 * - address
+	 * - email
+	 * - phoneNumber
+	 * - birthDate
+	 * - nin
+	 */
+	scope?: string;
 };
 
 export type ProfileResponse = {
-  /**
-   * If `profile.scope` was requested in `createPayment`, this value will be populated once
-   * `state` is `AUTHORIZED`. This can be used towards the
-   * [Userinfo endpoint](https://developer.vippsmobilepay.com/api/userinfo#operation/getUserinfo)
-   * to fetch required user data.
-   */
-  sub?: string;
+	/**
+	 * If `profile.scope` was requested in `createPayment`, this value will be populated once
+	 * `state` is `AUTHORIZED`. This can be used towards the
+	 * [Userinfo endpoint](https://developer.vippsmobilepay.com/api/userinfo#operation/getUserinfo)
+	 * to fetch required user data.
+	 */
+	sub?: string;
 };
 
 export type PaymentMethod = {
-  type: PaymentMethodType;
+	type: PaymentMethodType;
 };
 
 export type PaymentMethodResponse = {
-  type: PaymentMethodType;
-  /**
-   * The payment card's Bank Identification Number (BIN), that
-   * identifies which bank has issued the card.
-   */
-  cardBin?: string;
+	type: PaymentMethodType;
+	/**
+	 * The payment card's Bank Identification Number (BIN), that
+	 * identifies which bank has issued the card.
+	 */
+	cardBin?: string;
 };
 
 /**
@@ -391,45 +391,45 @@ export type PaymentMethodResponse = {
  * `CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`,
  * as the card payment can not be completed in the Vipps or MobilePay app.
  */
-export type PaymentMethodType = "WALLET" | "CARD";
+export type PaymentMethodType = 'WALLET' | 'CARD';
 
 export type PaymentAdjustment = {
-  modificationAmount: Amount;
-  modificationReference: Reference;
+	modificationAmount: Amount;
+	modificationReference: Reference;
 };
 
 export type WebhookEvent = {
-  msn: MSN;
-  reference: Reference;
-  pspReference: PspReference;
-  name: PaymentEventName;
-  amount: Amount;
-  timestamp: string;
-  /**
-   * The Idempotency key of the request.
-   */
-  idempotencyKey?: (string) | null;
-  /**
-   * The outcome of the event
-   */
-  success: boolean;
+	msn: MSN;
+	reference: Reference;
+	pspReference: PspReference;
+	name: PaymentEventName;
+	amount: Amount;
+	timestamp: string;
+	/**
+	 * The Idempotency key of the request.
+	 */
+	idempotencyKey?: (string) | null;
+	/**
+	 * The outcome of the event
+	 */
+	success: boolean;
 };
 
 export type PaymentEvent = {
-  reference: Reference;
-  pspReference: PspReference;
-  name?: PaymentEventName;
-  amount: Amount;
-  timestamp: string;
-  /**
-   * The idempotency key of the request.
-   * Specified by the merchant/partner making the API request.
-   */
-  idempotencyKey?: (string) | null;
-  /**
-   * The outcome of the event
-   */
-  success: boolean;
+	reference: Reference;
+	pspReference: PspReference;
+	name?: PaymentEventName;
+	amount: Amount;
+	timestamp: string;
+	/**
+	 * The idempotency key of the request.
+	 * Specified by the merchant/partner making the API request.
+	 */
+	idempotencyKey?: (string) | null;
+	/**
+	 * The outcome of the event
+	 */
+	success: boolean;
 };
 
 /**
@@ -437,27 +437,27 @@ export type PaymentEvent = {
  * See https://developer.vippsmobilepay.com/docs/knowledge-base/errors
  */
 export type Problem = {
-  /**
-   * A URI reference that identifies the problem type.
-   */
-  type: string;
-  /**
-   * A short, human-readable summary of the problem type. It will not change from occurrence to occurrence of the problem.
-   */
-  title: string;
-  /**
-   * A human-readable explanation specific to this occurrence of the problem.
-   */
-  detail?: string;
-  /**
-   * The HTTP response code.
-   */
-  status: number;
-  /**
-   * An id that can be used to facilitate in tracing the error.
-   */
-  traceId: string;
-  extraDetails?: Array<ExtraDetail> | null;
+	/**
+	 * A URI reference that identifies the problem type.
+	 */
+	type: string;
+	/**
+	 * A short, human-readable summary of the problem type. It will not change from occurrence to occurrence of the problem.
+	 */
+	title: string;
+	/**
+	 * A human-readable explanation specific to this occurrence of the problem.
+	 */
+	detail?: string;
+	/**
+	 * The HTTP response code.
+	 */
+	status: number;
+	/**
+	 * An id that can be used to facilitate in tracing the error.
+	 */
+	traceId: string;
+	extraDetails?: Array<ExtraDetail> | null;
 };
 
 /**
@@ -475,194 +475,194 @@ export type Problem = {
  * Example: The merchant was not able to provide the product or service, and has cancelled the payment.
  */
 export type State =
-  | "CREATED"
-  | "ABORTED"
-  | "EXPIRED"
-  | "AUTHORIZED"
-  | "TERMINATED";
+	| 'CREATED'
+	| 'ABORTED'
+	| 'EXPIRED'
+	| 'AUTHORIZED'
+	| 'TERMINATED';
 
 export type ExtraDetail = {
-  name: string;
-  reason: string;
+	name: string;
+	reason: string;
 };
 
 export type ForceApprove = {
-  customer?: Customer;
-  /**
-   * The token value received in the `redirectUrl` property in the Create payment response
-   */
-  token?: string;
+	customer?: Customer;
+	/**
+	 * The token value received in the `redirectUrl` property in the Create payment response
+	 */
+	token?: string;
 };
 
 /**
  * Available units for quantity. Will default to PCS if not set
  */
-export type QuantityUnitEnum = "PCS" | "KG" | "KM" | "MINUTE" | "LITRE" | "KWH";
+export type QuantityUnitEnum = 'PCS' | 'KG' | 'KM' | 'MINUTE' | 'LITRE' | 'KWH';
 
 /**
  * Optional. If no quantity info is provided the order line will default to 1 pcs
  */
 export type UnitInfo = {
-  /**
-   * Total price per unit, including tax and excluding discount
-   */
-  unitPrice: (number) | null;
-  /**
-   * Quantity given as a integer or fraction (only for cosmetics)
-   */
-  quantity: string;
-  quantityUnit?: QuantityUnitEnum;
+	/**
+	 * Total price per unit, including tax and excluding discount
+	 */
+	unitPrice: (number) | null;
+	/**
+	 * Quantity given as a integer or fraction (only for cosmetics)
+	 */
+	quantity: string;
+	quantityUnit?: QuantityUnitEnum;
 };
 
 /**
  * Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
  */
 export type OrderLine = {
-  /**
-   * Name of the product in the order line.
-   */
-  name: string;
-  /**
-   * The product ID
-   */
-  id: string;
-  /**
-   * Total amount of the order line, including tax and discount. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
-   */
-  totalAmount: number;
-  /**
-   * Total amount of order line with discount excluding tax. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
-   */
-  totalAmountExcludingTax: number;
-  /**
-   * Total tax amount paid for the order line. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
-   */
-  totalTaxAmount: number;
-  /**
-   * Tax percentage for the order line. Between 0-100. Either this or taxRate must be set.
-   * @deprecated
-   */
-  taxPercentage?: (number) | null;
-  /**
-   * Tax percentage for the order line, represented with 0.01 decimal points. 5000 equals 50% . Between 0-10000. Either this or taxPercentage must be set.
-   */
-  taxRate?: (number) | null;
-  unitInfo?: UnitInfo;
-  /**
-   * Total discount for the order line. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 1.00 EUR/NOK/DKK should be written as 100.
-   */
-  discount?: (number) | null;
-  /**
-   * Optional URL linking back to the product at the merchant.
-   */
-  productUrl?: (string) | null;
-  /**
-   * Flag for marking the order line as returned. This will make it count negative towards all the sums in bottomLine.
-   */
-  isReturn?: (boolean) | null;
-  /**
-   * Flag for marking the order line as a shipping line. This will be shown differently in the app.
-   */
-  isShipping?: (boolean) | null;
+	/**
+	 * Name of the product in the order line.
+	 */
+	name: string;
+	/**
+	 * The product ID
+	 */
+	id: string;
+	/**
+	 * Total amount of the order line, including tax and discount. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
+	 */
+	totalAmount: number;
+	/**
+	 * Total amount of order line with discount excluding tax. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
+	 */
+	totalAmountExcludingTax: number;
+	/**
+	 * Total tax amount paid for the order line. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
+	 */
+	totalTaxAmount: number;
+	/**
+	 * Tax percentage for the order line. Between 0-100. Either this or taxRate must be set.
+	 * @deprecated
+	 */
+	taxPercentage?: (number) | null;
+	/**
+	 * Tax percentage for the order line, represented with 0.01 decimal points. 5000 equals 50% . Between 0-10000. Either this or taxPercentage must be set.
+	 */
+	taxRate?: (number) | null;
+	unitInfo?: UnitInfo;
+	/**
+	 * Total discount for the order line. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 1.00 EUR/NOK/DKK should be written as 100.
+	 */
+	discount?: (number) | null;
+	/**
+	 * Optional URL linking back to the product at the merchant.
+	 */
+	productUrl?: (string) | null;
+	/**
+	 * Flag for marking the order line as returned. This will make it count negative towards all the sums in bottomLine.
+	 */
+	isReturn?: (boolean) | null;
+	/**
+	 * Flag for marking the order line as a shipping line. This will be shown differently in the app.
+	 */
+	isShipping?: (boolean) | null;
 };
 
 /**
  * Currency information
  */
-export type CurrencyEnum = "NOK" | "DKK" | "EUR";
+export type CurrencyEnum = 'NOK' | 'DKK' | 'EUR';
 
 /**
  * Deprecated, use a regular orderLine with "isShipping" flag. Using this will result in faulty calculation of sum and tax.
  * @deprecated
  */
 export type ShippingInfo = {
-  /**
-   * Total amount for the shipping, including tax and discount
-   */
-  amount: (number) | null;
-  /**
-   * Total amount for shipping excluding tax
-   */
-  amountExcludingTax: (number) | null;
-  /**
-   * Total tax amount paid for the shipping
-   */
-  taxAmount: (number) | null;
-  /**
-   * Tax-percentage for the Shipping
-   */
-  taxPercentage: (number) | null;
+	/**
+	 * Total amount for the shipping, including tax and discount
+	 */
+	amount: (number) | null;
+	/**
+	 * Total amount for shipping excluding tax
+	 */
+	amountExcludingTax: (number) | null;
+	/**
+	 * Total tax amount paid for the shipping
+	 */
+	taxAmount: (number) | null;
+	/**
+	 * Tax-percentage for the Shipping
+	 */
+	taxPercentage: (number) | null;
 };
 
 export type PaymentSources = {
-  giftCard?: (number) | null;
-  card?: (number) | null;
-  voucher?: (number) | null;
-  cash?: (number) | null;
+	giftCard?: (number) | null;
+	card?: (number) | null;
+	voucher?: (number) | null;
+	cash?: (number) | null;
 };
 
-export type BarcodeFormatEnum = "EAN-13" | "CODE 39" | "CODE 128";
+export type BarcodeFormatEnum = 'EAN-13' | 'CODE 39' | 'CODE 128';
 
 export type Barcode = {
-  format: BarcodeFormatEnum;
-  data: (string) | null;
+	format: BarcodeFormatEnum;
+	data: (string) | null;
 };
 
 /**
  * Summary of the order. Total amount and total. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
  */
 export type BottomLine = {
-  currency: CurrencyEnum;
-  /**
-   * Tip amount for the order. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
-   */
-  tipAmount?: (number) | null;
-  /**
-   * Amount paid by gift card or coupon.
-   * @deprecated
-   */
-  giftCardAmount?: (number) | null;
-  /**
-   * POS ID is the device number of the POS terminal
-   */
-  posId?: (string) | null;
-  /**
-   * Deprecated, sum will be calculated based on the sum of the orderLines
-   * @deprecated
-   */
-  totalAmount?: (number) | null;
-  /**
-   * Deprecated, tax will be calculated based on the sum of the totalTaxAmount field on each orderLine
-   * @deprecated
-   */
-  totalTax?: (number) | null;
-  /**
-   * Deprecated, discount will be calculated based on the sum of the discount field on each orderLine
-   * @deprecated
-   */
-  totalDiscount?: (number) | null;
-  /**
-   * Deprecated, use a regular orderLine with "isShipping" flag. Using this will result in faulty calculation of sum and tax.
-   * @deprecated
-   */
-  shippingAmount?: (number) | null;
-  shippingInfo?: ShippingInfo;
-  paymentSources?: PaymentSources;
-  barcode?: Barcode;
-  receiptNumber?: (string) | null;
-  /**
-   * Deprecated, use "posId" instead.
-   * @deprecated
-   */
-  terminalId?: (string) | null;
+	currency: CurrencyEnum;
+	/**
+	 * Tip amount for the order. Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
+	 */
+	tipAmount?: (number) | null;
+	/**
+	 * Amount paid by gift card or coupon.
+	 * @deprecated
+	 */
+	giftCardAmount?: (number) | null;
+	/**
+	 * POS ID is the device number of the POS terminal
+	 */
+	posId?: (string) | null;
+	/**
+	 * Deprecated, sum will be calculated based on the sum of the orderLines
+	 * @deprecated
+	 */
+	totalAmount?: (number) | null;
+	/**
+	 * Deprecated, tax will be calculated based on the sum of the totalTaxAmount field on each orderLine
+	 * @deprecated
+	 */
+	totalTax?: (number) | null;
+	/**
+	 * Deprecated, discount will be calculated based on the sum of the discount field on each orderLine
+	 * @deprecated
+	 */
+	totalDiscount?: (number) | null;
+	/**
+	 * Deprecated, use a regular orderLine with "isShipping" flag. Using this will result in faulty calculation of sum and tax.
+	 * @deprecated
+	 */
+	shippingAmount?: (number) | null;
+	shippingInfo?: ShippingInfo;
+	paymentSources?: PaymentSources;
+	barcode?: Barcode;
+	receiptNumber?: (string) | null;
+	/**
+	 * Deprecated, use "posId" instead.
+	 * @deprecated
+	 */
+	terminalId?: (string) | null;
 };
 
 export type Receipt = {
-  /**
-   * Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
-   */
-  orderLines: Array<OrderLine>;
-  bottomLine: BottomLine;
+	/**
+	 * Amounts are specified in minor units (i.e., integers with two trailing zeros). For example: 10.00 EUR/NOK/DKK should be written as 1000.
+	 */
+	orderLines: Array<OrderLine>;
+	bottomLine: BottomLine;
 };
 
 export type ParameterMerchant_Serial_Number = MSN;
@@ -708,340 +708,340 @@ export type ParameterPayment_Reference_ID = Reference;
 export type ParameterIdempotency_Key = string;
 
 export type CreatePaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * New `CreatePaymentRequest` body.
-   */
-  requestBody: CreatePaymentRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+	/**
+	 * Idempotency key for the request, ensures idempotent actions.
+	 * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+	 */
+	idempotencyKey: string;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	/**
+	 * New `CreatePaymentRequest` body.
+	 */
+	requestBody: CreatePaymentRequest;
+	/**
+	 * The name of the ecommerce solution.
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemName?: string;
+	/**
+	 * The name of the ecommerce plugin (if applicable).
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginName?: string;
+	/**
+	 * The version number of the ecommerce plugin (if applicable).
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginVersion?: string;
+	/**
+	 * The version number of the ecommerce solution.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemVersion?: string;
 };
 
 export type CreatePaymentResponse2 = CreatePaymentResponse;
 
 export type GetPaymentData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
 };
 
 export type GetPaymentResponse2 = GetPaymentResponse;
 
 export type GetPaymentEventLogData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
 };
 
 export type GetPaymentEventLogResponse = Array<PaymentEvent>;
 
 export type CancelPaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
-  /**
-   * New `CancelModificationRequest` body.
-   */
-  requestBody?: CancelModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+	/**
+	 * Idempotency key for the request, ensures idempotent actions.
+	 * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+	 */
+	idempotencyKey: string;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
+	/**
+	 * New `CancelModificationRequest` body.
+	 */
+	requestBody?: CancelModificationRequest;
+	/**
+	 * The name of the ecommerce solution.
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemName?: string;
+	/**
+	 * The name of the ecommerce plugin (if applicable).
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginName?: string;
+	/**
+	 * The version number of the ecommerce plugin (if applicable).
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginVersion?: string;
+	/**
+	 * The version number of the ecommerce solution.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemVersion?: string;
 };
 
 export type CancelPaymentResponse = ModificationResponse;
 
 export type CapturePaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
-  /**
-   * Requested capture modification
-   */
-  requestBody?: CaptureModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+	/**
+	 * Idempotency key for the request, ensures idempotent actions.
+	 * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+	 */
+	idempotencyKey: string;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
+	/**
+	 * Requested capture modification
+	 */
+	requestBody?: CaptureModificationRequest;
+	/**
+	 * The name of the ecommerce solution.
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemName?: string;
+	/**
+	 * The name of the ecommerce plugin (if applicable).
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginName?: string;
+	/**
+	 * The version number of the ecommerce plugin (if applicable).
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginVersion?: string;
+	/**
+	 * The version number of the ecommerce solution.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemVersion?: string;
 };
 
 export type CapturePaymentResponse = ModificationResponse;
 
 export type RefundPaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
-  /**
-   * Requested refund modification
-   */
-  requestBody?: RefundModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+	/**
+	 * Idempotency key for the request, ensures idempotent actions.
+	 * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+	 */
+	idempotencyKey: string;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
+	/**
+	 * Requested refund modification
+	 */
+	requestBody?: RefundModificationRequest;
+	/**
+	 * The name of the ecommerce solution.
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemName?: string;
+	/**
+	 * The name of the ecommerce plugin (if applicable).
+	 * One word in lowercase letters is good.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginName?: string;
+	/**
+	 * The version number of the ecommerce plugin (if applicable).
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemPluginVersion?: string;
+	/**
+	 * The version number of the ecommerce solution.
+	 * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+	 */
+	vippsSystemVersion?: string;
 };
 
 export type RefundPaymentResponse = ModificationResponse;
 
 export type ForceApproveData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
-  /**
-   * Force approve request body
-   */
-  requestBody?: ForceApprove;
+	merchantSerialNumber: MSN;
+	/**
+	 * The subscription key for a sales unit.
+	 * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+	 */
+	ocpApimSubscriptionKey: string;
+	reference: Reference;
+	/**
+	 * Force approve request body
+	 */
+	requestBody?: ForceApprove;
 };
 
 export type ForceApproveResponse = unknown;
 
 export type $OpenApiTs = {
-  "/v1/payments": {
-    post: {
-      req: CreatePaymentData;
-      res: {
-        /**
-         * Create Payment response
-         */
-        201: CreatePaymentResponse;
-        /**
-         * Standard problem response.
-         */
-        400: Problem;
-        /**
-         * Standard problem response.
-         */
-        403: Problem;
-        /**
-         * Standard problem response.
-         */
-        409: Problem;
-      };
-    };
-  };
-  "/v1/payments/{Reference}": {
-    get: {
-      req: GetPaymentData;
-      res: {
-        /**
-         * Get Payment response
-         */
-        200: GetPaymentResponse;
-      };
-    };
-  };
-  "/v1/payments/{Reference}/events": {
-    get: {
-      req: GetPaymentEventLogData;
-      res: {
-        /**
-         * OK
-         */
-        200: Array<PaymentEvent>;
-      };
-    };
-  };
-  "/v1/payments/{Reference}/cancel": {
-    post: {
-      req: CancelPaymentData;
-      res: {
-        /**
-         * Adjustment response
-         */
-        200: ModificationResponse;
-        /**
-         * Standard problem response.
-         */
-        400: Problem;
-        /**
-         * Standard problem response.
-         */
-        404: Problem;
-        /**
-         * Standard problem response.
-         */
-        409: Problem;
-      };
-    };
-  };
-  "/v1/payments/{Reference}/capture": {
-    post: {
-      req: CapturePaymentData;
-      res: {
-        /**
-         * Adjustment response
-         */
-        200: ModificationResponse;
-        /**
-         * Standard problem response.
-         */
-        400: Problem;
-        /**
-         * Standard problem response.
-         */
-        404: Problem;
-        /**
-         * Standard problem response.
-         */
-        409: Problem;
-      };
-    };
-  };
-  "/v1/payments/{Reference}/refund": {
-    post: {
-      req: RefundPaymentData;
-      res: {
-        /**
-         * Adjustment response
-         */
-        200: ModificationResponse;
-        /**
-         * Standard problem response.
-         */
-        400: Problem;
-        /**
-         * Standard problem response.
-         */
-        404: Problem;
-        /**
-         * Standard problem response.
-         */
-        409: Problem;
-      };
-    };
-  };
-  "/v1/test/payments/{Reference}/approve": {
-    post: {
-      req: ForceApproveData;
-      res: {
-        /**
-         * OK
-         */
-        200: unknown;
-      };
-    };
-  };
+	'/v1/payments': {
+		post: {
+			req: CreatePaymentData;
+			res: {
+				/**
+				 * Create Payment response
+				 */
+				201: CreatePaymentResponse;
+				/**
+				 * Standard problem response.
+				 */
+				400: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				403: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				409: Problem;
+			};
+		};
+	};
+	'/v1/payments/{Reference}': {
+		get: {
+			req: GetPaymentData;
+			res: {
+				/**
+				 * Get Payment response
+				 */
+				200: GetPaymentResponse;
+			};
+		};
+	};
+	'/v1/payments/{Reference}/events': {
+		get: {
+			req: GetPaymentEventLogData;
+			res: {
+				/**
+				 * OK
+				 */
+				200: Array<PaymentEvent>;
+			};
+		};
+	};
+	'/v1/payments/{Reference}/cancel': {
+		post: {
+			req: CancelPaymentData;
+			res: {
+				/**
+				 * Adjustment response
+				 */
+				200: ModificationResponse;
+				/**
+				 * Standard problem response.
+				 */
+				400: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				404: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				409: Problem;
+			};
+		};
+	};
+	'/v1/payments/{Reference}/capture': {
+		post: {
+			req: CapturePaymentData;
+			res: {
+				/**
+				 * Adjustment response
+				 */
+				200: ModificationResponse;
+				/**
+				 * Standard problem response.
+				 */
+				400: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				404: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				409: Problem;
+			};
+		};
+	};
+	'/v1/payments/{Reference}/refund': {
+		post: {
+			req: RefundPaymentData;
+			res: {
+				/**
+				 * Adjustment response
+				 */
+				200: ModificationResponse;
+				/**
+				 * Standard problem response.
+				 */
+				400: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				404: Problem;
+				/**
+				 * Standard problem response.
+				 */
+				409: Problem;
+			};
+		};
+	};
+	'/v1/test/payments/{Reference}/approve': {
+		post: {
+			req: ForceApproveData;
+			res: {
+				/**
+				 * OK
+				 */
+				200: unknown;
+			};
+		};
+	};
 };

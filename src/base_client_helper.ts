@@ -1,11 +1,7 @@
-import { filterKeys } from "./deps.ts";
-import type {
-  DefaultHeaders,
-  OmitHeaders,
-  RequestData,
-} from "./types_internal.ts";
-import type { ClientConfig } from "./types_external.ts";
-import { uuid } from "./deps.ts";
+import { filterKeys } from './deps.ts';
+import type { DefaultHeaders, OmitHeaders, RequestData } from './types_internal.ts';
+import type { ClientConfig } from './types_external.ts';
+import { uuid } from './deps.ts';
 
 /**
  * Builds a Request object based on the provided configuration and request data.
@@ -15,24 +11,22 @@ import { uuid } from "./deps.ts";
  * @returns {Request} A Request object.
  */
 export const buildRequest = (
-  cfg: ClientConfig,
-  requestData: RequestData<unknown, unknown>,
+	cfg: ClientConfig,
+	requestData: RequestData<unknown, unknown>,
 ): Request => {
-  const baseURL = cfg.useTestMode
-    ? "https://apitest.vipps.no"
-    : "https://api.vipps.no";
+	const baseURL = cfg.useTestMode ? 'https://apitest.vipps.no' : 'https://api.vipps.no';
 
-  const reqInit: RequestInit = {
-    method: requestData.method,
-    headers: getHeaders(
-      cfg,
-      requestData.token,
-      requestData.additionalHeaders,
-      requestData.omitHeaders,
-    ),
-    body: requestData.body ? JSON.stringify(requestData.body) : undefined,
-  };
-  return new Request(`${baseURL}${requestData.url}`, reqInit);
+	const reqInit: RequestInit = {
+		method: requestData.method,
+		headers: getHeaders(
+			cfg,
+			requestData.token,
+			requestData.additionalHeaders,
+			requestData.omitHeaders,
+		),
+		body: requestData.body ? JSON.stringify(requestData.body) : undefined,
+	};
+	return new Request(`${baseURL}${requestData.url}`, reqInit);
 };
 
 /**
@@ -45,35 +39,35 @@ export const buildRequest = (
  * @returns {Record<string, string>} A headers object.
  */
 export const getHeaders = (
-  cfg: ClientConfig,
-  token?: string,
-  additionalHeaders?: Record<string, string>,
-  omitHeaders: OmitHeaders = [],
+	cfg: ClientConfig,
+	token?: string,
+	additionalHeaders?: Record<string, string>,
+	omitHeaders: OmitHeaders = [],
 ): Record<string, string> => {
-  const defaultHeaders: DefaultHeaders = {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token || ""}`,
-    "User-Agent": getUserAgent(),
-    "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
-    "Merchant-Serial-Number": cfg.merchantSerialNumber,
-    "Vipps-System-Name": cfg.systemName || "",
-    "Vipps-System-Version": cfg.systemVersion || "",
-    "Vipps-System-Plugin-Name": cfg.pluginName || "",
-    "Vipps-System-Plugin-Version": cfg.pluginVersion || "",
-    "Idempotency-Key": uuid.generate(),
-  };
+	const defaultHeaders: DefaultHeaders = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${token || ''}`,
+		'User-Agent': getUserAgent(),
+		'Ocp-Apim-Subscription-Key': cfg.subscriptionKey,
+		'Merchant-Serial-Number': cfg.merchantSerialNumber,
+		'Vipps-System-Name': cfg.systemName || '',
+		'Vipps-System-Version': cfg.systemVersion || '',
+		'Vipps-System-Plugin-Name': cfg.pluginName || '',
+		'Vipps-System-Plugin-Version': cfg.pluginVersion || '',
+		'Idempotency-Key': uuid.generate(),
+	};
 
-  // Remove omitted headers
-  const trimmedHeaders = filterKeys(
-    defaultHeaders,
-    (header) => !omitHeaders.includes(header as OmitHeaders[number]),
-  );
+	// Remove omitted headers
+	const trimmedHeaders = filterKeys(
+		defaultHeaders,
+		(header) => !omitHeaders.includes(header as OmitHeaders[number]),
+	);
 
-  // Add additional headers
-  return {
-    ...additionalHeaders,
-    ...trimmedHeaders,
-  };
+	// Add additional headers
+	return {
+		...additionalHeaders,
+		...trimmedHeaders,
+	};
 };
 
 /**
@@ -82,11 +76,11 @@ export const getHeaders = (
  * @returns {string} The user agent string.
  */
 export const getUserAgent = (): string => {
-  // If the sdk is loaded using require, import.meta.url will be undefined
-  const metaUrl: string | undefined = import.meta.url;
+	// If the sdk is loaded using require, import.meta.url will be undefined
+	const metaUrl: string | undefined = import.meta.url;
 
-  const userAgent = createSDKUserAgent(metaUrl);
-  return userAgent;
+	const userAgent = createSDKUserAgent(metaUrl);
+	return userAgent;
 };
 
 /**
@@ -98,24 +92,24 @@ export const getUserAgent = (): string => {
  * @returns {string} The user agent string.
  */
 export const createSDKUserAgent = (metaUrl: string | undefined): string => {
-  if (!metaUrl) {
-    return "Vipps/Deno SDK/npm-require";
-  }
+	if (!metaUrl) {
+		return 'Vipps/Deno SDK/npm-require';
+	}
 
-  const url = new URL(metaUrl);
+	const url = new URL(metaUrl);
 
-  // Check if the module was loaded from deno.land
-  if (
-    url.host === "deno.land" &&
-    url.pathname.includes("vipps_mobilepay_sdk")
-  ) {
-    // Extract the module version from the URL
-    const sdkVersion = url.pathname.split("@")[1].split("/")[0];
-    return `Vipps/Deno SDK/${sdkVersion}`;
-  } // Or if the module was loaded from npm
-  else if (url.pathname.includes("node_modules")) {
-    return `Vipps/Deno SDK/npm-module`;
-  }
-  // Otherwise, we don't know where the module was loaded from
-  return `Vipps/Deno SDK/unknown`;
+	// Check if the module was loaded from deno.land
+	if (
+		url.host === 'deno.land' &&
+		url.pathname.includes('vipps_mobilepay_sdk')
+	) {
+		// Extract the module version from the URL
+		const sdkVersion = url.pathname.split('@')[1].split('/')[0];
+		return `Vipps/Deno SDK/${sdkVersion}`;
+	} // Or if the module was loaded from npm
+	else if (url.pathname.includes('node_modules')) {
+		return `Vipps/Deno SDK/npm-module`;
+	}
+	// Otherwise, we don't know where the module was loaded from
+	return `Vipps/Deno SDK/unknown`;
 };
