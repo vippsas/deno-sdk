@@ -15,8 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        run: curl -fsSL https://deno.land/install.sh | sh \
-             export deno=$deno:/home/runner/.deno/bin/deno
+        run: curl -fsSL https://deno.land/install.sh | sh | export deno=$deno:/home/runner/.deno/bin/deno
 
       - name: Format check
         run: deno fmt --check 
