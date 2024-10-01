@@ -10,7 +10,16 @@ export type * from "./types_external.ts";
  *
  * @param options - The client configuration options.
  * @returns {SDKClient} The SDK client.
- * @returns {SDKClient} The SDK client.
+ *
+ * @example Usage
+ * ```ts
+ * const client = Client({
+ *   merchantSerialNumber = "123456",
+ *   subscriptionKey = "94g4f68f3ddb20a0b1j23319b854381m",
+ *   useTestMode: true,
+ *   retryRequests: true,
+ * });
+ * ```
  */
 export const Client = (options: ClientConfig): SDKClient => {
   // Create the base client
