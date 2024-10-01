@@ -18,7 +18,10 @@ jobs:
         run: curl -fsSL https://deno.land/install.sh | sh
 
       - name: Run tests
-        run: /home/runner/.deno/bin/deno fmt --check && /home/runner/.deno/bin/deno lint && /home/runner/.deno/bin/deno test --allow-net --parallel --doc tests/
+        run: 
+          /home/runner/.deno/bin/deno fmt --check && \
+          /home/runner/.deno/bin/deno lint && \
+          /home/runner/.deno/bin/deno test --allow-net --parallel --doc tests/
         
       - name: Check coverage
         run: /home/runner/.deno/bin/deno run -A scripts/coverage.ts
