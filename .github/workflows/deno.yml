@@ -17,11 +17,14 @@ jobs:
       - name: Setup Deno
         run: curl -fsSL https://deno.land/install.sh | sh
 
+      - name: Format check
+        run: /home/runner/.deno/bin/deno fmt --check 
+      
+      - name: Lint check
+        run: /home/runner/.deno/bin/deno lint 
+
       - name: Run tests
-        run: 
-          /home/runner/.deno/bin/deno fmt --check && \
-          /home/runner/.deno/bin/deno lint && \
-          /home/runner/.deno/bin/deno test --allow-net --parallel --doc tests/
+        run: /home/runner/.deno/bin/deno test --allow-net --parallel --doc
         
       - name: Check coverage
         run: /home/runner/.deno/bin/deno run -A scripts/coverage.ts
