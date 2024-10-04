@@ -1,6 +1,10 @@
 import { authRequestFactory } from "./apis/auth.ts";
 import { checkoutRequestFactory } from "./apis/checkout.ts";
 import { ePaymentRequestFactory } from "./apis/epayment.ts";
+import {
+  agreementRequestFactory,
+  chargeRequestFactory,
+} from "./apis/recurring.ts";
 import { webhooksRequestFactory } from "./apis/webhooks.ts";
 import type { ApiProxy, BaseClient, RequestFactory } from "./types_internal.ts";
 
@@ -8,6 +12,12 @@ export type SDKClient = {
   auth: ReturnType<typeof proxifyFactory<typeof authRequestFactory>>;
   checkout: ReturnType<typeof proxifyFactory<typeof checkoutRequestFactory>>;
   payment: ReturnType<typeof proxifyFactory<typeof ePaymentRequestFactory>>;
+  recurring: {
+    charge: ReturnType<typeof proxifyFactory<typeof chargeRequestFactory>>;
+    agreement: ReturnType<
+      typeof proxifyFactory<typeof agreementRequestFactory>
+    >;
+  };
   webhook: ReturnType<typeof proxifyFactory<typeof webhooksRequestFactory>>;
 };
 
@@ -21,6 +31,10 @@ export const proxifyClient = (client: BaseClient): SDKClient => {
     auth: proxifyFactory(client, authRequestFactory),
     checkout: proxifyFactory(client, checkoutRequestFactory),
     payment: proxifyFactory(client, ePaymentRequestFactory),
+    recurring: {
+      charge: proxifyFactory(client, chargeRequestFactory),
+      agreement: proxifyFactory(client, agreementRequestFactory),
+    },
     webhook: proxifyFactory(client, webhooksRequestFactory),
   } as const;
 };
