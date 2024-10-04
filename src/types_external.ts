@@ -85,6 +85,27 @@ export type {
 } from "./generated_types/epayment/types.gen.ts";
 
 /**
+ * Recurring API
+ */
+export type {
+  AgreementResponseV3,
+  AgreementStatus,
+  CaptureRequestV3,
+  ChargeReference,
+  ChargeResponseV3,
+  ChargeStatus,
+  CreateChargeAsyncV3,
+  CreateChargeAsyncV3Response,
+  CreateChargeV3,
+  DraftAgreementResponseV3,
+  DraftAgreementV3,
+  ErrorV3,
+  ForceAcceptAgreementV3,
+  PatchAgreementV3,
+  RefundRequest,
+} from "./generated_types/recurring/types.gen.ts";
+
+/**
  * Webhooks API
  */
 export type {
