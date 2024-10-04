@@ -13,10 +13,10 @@ export type SDKClient = {
   checkout: ReturnType<typeof proxifyFactory<typeof checkoutRequestFactory>>;
   payment: ReturnType<typeof proxifyFactory<typeof ePaymentRequestFactory>>;
   recurring: {
-    charge: ReturnType<typeof proxifyFactory<typeof chargeRequestFactory>>;
     agreement: ReturnType<
       typeof proxifyFactory<typeof agreementRequestFactory>
     >;
+    charge: ReturnType<typeof proxifyFactory<typeof chargeRequestFactory>>;
   };
   webhook: ReturnType<typeof proxifyFactory<typeof webhooksRequestFactory>>;
 };
