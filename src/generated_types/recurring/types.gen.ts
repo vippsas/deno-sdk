@@ -1543,7 +1543,7 @@ export type ParameterChargeStatusQuery = ChargeStatus;
 export type ParameterChargeStatusQueryV3 = ChargeStatus;
 
 /**
- * Page number for paginating.
+ * Page number for paginating (should be used in combination with pageSize).
  */
 export type ParameterPageNumberQuery = number;
 
@@ -1948,7 +1948,7 @@ export type ListAgreementsV3Data = {
    */
   ocpApimSubscriptionKey: string;
   /**
-   * Page number for paginating.
+   * Page number for paginating (should be used in combination with pageSize).
    */
   pageNumber?: number;
   /**
@@ -3412,7 +3412,7 @@ export type $OpenApiTs = {
         /**
          * None, some or all charges passed API level validation.
          */
-        202: Array<CreateChargeAsyncV3>;
+        202: AsyncChargeResponse;
       };
     };
   };
