@@ -16,6 +16,10 @@ import { fetchRetry } from "./fetch.ts";
  */
 export const baseClient = (cfg: ClientConfig, sdkVersion: string): BaseClient =>
   ({
+    /**
+     * The version of the SDK.
+     * @type {string}
+     */
     sdkVersion,
     /**
      * Makes a request to the server.

@@ -6,13 +6,6 @@ import type {
 import type { ClientConfig } from "./types_external.ts";
 import { uuid } from "./deps.ts";
 
-/**
- * Builds a Request object based on the provided configuration and request data.
- *
- * @param {ClientConfig} cfg - The client configuration.
- * @param {RequestData<unknown, unknown>} requestData - The request data containing method, headers, token, body, and URL.
- * @returns {Request} A Request object.
- */
 export const buildRequest = (
   cfg: ClientConfig,
   requestData: RequestData<unknown, unknown>,
@@ -38,15 +31,6 @@ export const buildRequest = (
   return new Request(`${baseURL}${requestData.url}`, reqInit);
 };
 
-/**
- * Returns a headers object based on the provided client configuration.
- *
- * @param {ClientConfig} cfg - The client configuration.
- * @param {string} [token] - The token to use in the Authorization header.
- * @param {Record<string, string>} [additionalHeaders] - Additional headers to include, these will not override default headers.
- * @param {OmitHeaders} [omitHeaders=[]] - Headers to omit from the returned object.
- * @returns {Record<string, string>} A headers object.
- */
 export const buildHeaders = (
   cfg: ClientConfig,
   token?: string,
@@ -72,47 +56,45 @@ export const buildHeaders = (
     ...defaultHeaders,
   };
 
+  if (omitHeaders.length === 0) {
+    return combinedHeaders;
+  }
+  return filterHeaders(combinedHeaders, omitHeaders);
+};
+
+export const filterHeaders = (
+  headers: Record<string, string>,
+  omitHeaders: string[],
+): Record<string, string> => {
   return Object.fromEntries(
-    Object.entries(combinedHeaders).filter(([key]) =>
-      !omitHeaders.includes(key as keyof DefaultHeaders)
-    ),
+    Object.entries(headers).filter(([key]) => !omitHeaders.includes(key)),
   );
 };
 
-/**
- * Generates a User-Agent string for the SDK.
- *
- * @param {string} version - The version of the SDK.
- * @param {string | undefined} moduleURL - The URL of the module. If the SDK is loaded using require, this will be undefined.
- * @returns {string} The generated User-Agent string.
- */
 export const getUserAgent = (
   version: string,
   moduleURL: string | undefined,
 ): string => {
-  // If the sdk is loaded using require, import.meta.url will be undefined
   if (!moduleURL) {
     return `Vipps/Deno-SDK/npm-require/${version}`;
   }
 
-  const userAgent = `Vipps/Deno-SDK/${getModuleSource(moduleURL)}/${version}`;
-  return userAgent;
+  return `Vipps/Deno-SDK/${getModuleSource(moduleURL)}/${version}`;
 };
 
 export const getModuleSource = (moduleUrl: string): string => {
   const url = new URL(moduleUrl);
 
-  if (url.pathname.includes("node_modules")) {
-    return "npm-module";
+  switch (true) {
+    case url.pathname.includes("node_modules"):
+      return "npm-module";
+    case url.host === "npm.jsr.io":
+      return "jsr-npm";
+    case url.host === "jsr.io":
+      return "jsr";
+    case url.host === "deno.land":
+      return "deno-land";
+    default:
+      return "unknown";
   }
-  if (url.host === "npm.jsr.io") {
-    return "jsr-npm";
-  }
-  if (url.host === "jsr.io") {
-    return "jsr";
-  }
-  if (url.host === "deno.land") {
-    return "deno-land";
-  }
-  return "unknown";
 };
