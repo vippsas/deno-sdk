@@ -17,7 +17,7 @@ export type ClientResponse<TOk, TErr> =
  * Represents the base client with a method to make requests.
  */
 export type BaseClient = {
-  sdkVersion: string;
+  readonly sdkVersion: string;
   readonly makeRequest: (
     requestData: RequestData<unknown, unknown>,
   ) => Promise<ClientResponse<unknown, unknown>>;
