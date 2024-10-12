@@ -114,6 +114,13 @@ export const createHeaders = (
   return filterHeaders(combinedHeaders, omitHeaders);
 };
 
+/**
+ * Generates a User-Agent string for the SDK.
+ *
+ * @param {string} version - The version of the SDK.
+ * @param {string | undefined} moduleURL - The URL of the module. If the SDK is loaded using require, this will be undefined.
+ * @returns {string} The generated User-Agent string.
+ */
 export const getUserAgent = (version: string, moduleURL: string | undefined): string => {
   // If the sdk is loaded using require, import.meta.url will be undefined
   if (!moduleURL) {
