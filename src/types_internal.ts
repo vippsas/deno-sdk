@@ -14,7 +14,7 @@ export type ClientResponse<TOk, TErr> =
   | (SDKError<TErr> & { retry?: boolean });
 
 /**
- * Represents the base client with a method to make requests.
+ * Represents a base client for making requests.
  */
 export type BaseClient = {
   readonly sdkVersion: string;
