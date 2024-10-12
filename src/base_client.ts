@@ -1,9 +1,9 @@
 import type {
   BaseClient,
   ClientResponse,
-  InternalConfig,
   RequestData,
 } from "./types_internal.ts";
+import type { ClientConfig } from "./types_external.ts";
 import { buildRequest } from "./base_client_helper.ts";
 import { validateRequestData } from "./validate.ts";
 import { fetchRetry } from "./fetch.ts";
@@ -14,8 +14,9 @@ import { fetchRetry } from "./fetch.ts";
  * @param {ClientConfig} cfg - The client configuration.
  * @returns {BaseClient} The base client.
  */
-export const baseClient = (cfg: InternalConfig): BaseClient =>
+export const baseClient = (cfg: ClientConfig, sdkVersion: string): BaseClient =>
   ({
+    sdkVersion,
     /**
      * Makes a request to the server.
      *
@@ -34,7 +35,7 @@ export const baseClient = (cfg: InternalConfig): BaseClient =>
       }
 
       // Build the request
-      const request = buildRequest(cfg, requestData);
+      const request = buildRequest(cfg, requestData, this.sdkVersion);
 
       // Make the request with retry logic
       const response = await fetchRetry<TOk, TErr>(

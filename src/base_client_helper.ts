@@ -1,6 +1,5 @@
 import type {
   DefaultHeaders,
-  InternalConfig,
   OmitHeaders,
   RequestData,
 } from "./types_internal.ts";
@@ -15,18 +14,22 @@ import { uuid } from "./deps.ts";
  * @returns {Request} A Request object.
  */
 export const buildRequest = (
-  cfg: InternalConfig,
+  cfg: ClientConfig,
   requestData: RequestData<unknown, unknown>,
+  sdkVersion: string = "unknown",
 ): Request => {
   const baseURL = cfg.useTestMode
     ? "https://apitest.vipps.no"
     : "https://api.vipps.no";
 
+  const userAgent = getUserAgent(sdkVersion, import.meta.url);
+
   const reqInit: RequestInit = {
     method: requestData.method,
-    headers: getHeaders(
+    headers: buildHeaders(
       cfg,
       requestData.token,
+      userAgent,
       requestData.additionalHeaders,
       requestData.omitHeaders,
     ),
@@ -44,16 +47,17 @@ export const buildRequest = (
  * @param {OmitHeaders} [omitHeaders=[]] - Headers to omit from the returned object.
  * @returns {Record<string, string>} A headers object.
  */
-export const getHeaders = (
-  cfg: InternalConfig,
+export const buildHeaders = (
+  cfg: ClientConfig,
   token?: string,
+  userAgent: string = "unknown",
   additionalHeaders?: Record<string, string>,
   omitHeaders: OmitHeaders = [],
 ): Record<string, string> => {
   const defaultHeaders: DefaultHeaders = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token || ""}`,
-    "User-Agent": getUserAgent(cfg.version, import.meta.url),
+    "User-Agent": userAgent,
     "Ocp-Apim-Subscription-Key": cfg.subscriptionKey,
     "Merchant-Serial-Number": cfg.merchantSerialNumber,
     "Vipps-System-Name": cfg.systemName || "",
@@ -121,7 +125,10 @@ export const createHeaders = (
  * @param {string | undefined} moduleURL - The URL of the module. If the SDK is loaded using require, this will be undefined.
  * @returns {string} The generated User-Agent string.
  */
-export const getUserAgent = (version: string, moduleURL: string | undefined): string => {
+export const getUserAgent = (
+  version: string,
+  moduleURL: string | undefined,
+): string => {
   // If the sdk is loaded using require, import.meta.url will be undefined
   if (!moduleURL) {
     return `Vipps/Deno-SDK/npm-require/${version}`;

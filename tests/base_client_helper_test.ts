@@ -1,19 +1,18 @@
 import {
+  buildHeaders,
   buildRequest,
-  getHeaders,
-  getModuleSource,
   getUserAgent,
 } from "../src/base_client_helper.ts";
 import { uuid } from "../src/deps.ts";
-import type { InternalConfig, RequestData } from "../src/types_internal.ts";
+import type { ClientConfig } from "../src/types_external.ts";
+import type { RequestData } from "../src/types_internal.ts";
 import { assert, assertEquals } from "@std/assert";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: true,
-    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -37,11 +36,10 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
 });
 
 Deno.test("buildRequest - Should set correct prod baseURL", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: false,
-    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -59,11 +57,10 @@ Deno.test("buildRequest - Should set correct prod baseURL", () => {
 });
 
 Deno.test("buildRequest - Should set correct test baseURL", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: true,
-    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -81,7 +78,7 @@ Deno.test("buildRequest - Should set correct test baseURL", () => {
 });
 
 Deno.test("getHeaders - Should return correct with input", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
     systemName: "My Ecommerce System",
@@ -90,10 +87,9 @@ Deno.test("getHeaders - Should return correct with input", () => {
     pluginVersion: "1.0.0",
     retryRequests: false,
     useTestMode: true,
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg, "testToken");
+  const expectedHeaders = buildHeaders(cfg, "testToken");
 
   assertEquals(expectedHeaders["Content-Type"], "application/json");
   assertEquals(expectedHeaders["Authorization"], "Bearer testToken");
@@ -106,26 +102,24 @@ Deno.test("getHeaders - Should return correct with input", () => {
 });
 
 Deno.test("getHeaders - Should generate UUID", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg);
+  const expectedHeaders = buildHeaders(cfg);
   const key = expectedHeaders["Idempotency-Key"];
 
   assert(uuid.validate(key));
 });
 
 Deno.test("getHeaders - Should return correct with minimal input", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg);
+  const expectedHeaders = buildHeaders(cfg);
 
   assertEquals(expectedHeaders["Content-Type"], "application/json");
   assertEquals(expectedHeaders["Authorization"], "Bearer ");
@@ -140,25 +134,25 @@ Deno.test("getHeaders - Should return correct with minimal input", () => {
 });
 
 Deno.test("getHeaders - Should return correct with additional headers", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg, "testToken", { "foo": "bar" });
+  const expectedHeaders = buildHeaders(cfg, "testToken", "1.0.0", {
+    "foo": "bar",
+  });
 
   assert(expectedHeaders["foo"] === "bar");
 });
 
 Deno.test("getHeaders - Additional headers should not overwrite default headers", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg, "testToken", {
+  const expectedHeaders = buildHeaders(cfg, "testToken", "1.0.0", {
     "Merchant-Serial-Number": "foobar",
   });
 
@@ -166,13 +160,12 @@ Deno.test("getHeaders - Additional headers should not overwrite default headers"
 });
 
 Deno.test("getHeaders - Should omit headers", () => {
-  const cfg: InternalConfig = {
+  const cfg: ClientConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
-    version: "1.0.0",
   };
 
-  const expectedHeaders = getHeaders(cfg, "testToken", {}, [
+  const expectedHeaders = buildHeaders(cfg, "testToken", "1.0.0", {}, [
     "Merchant-Serial-Number",
   ]);
 

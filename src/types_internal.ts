@@ -1,4 +1,4 @@
-import type { ClientConfig, SDKError } from "./types_external.ts";
+import type { SDKError } from "./types_external.ts";
 
 /**
  * Represents a response from the client.
@@ -17,12 +17,11 @@ export type ClientResponse<TOk, TErr> =
  * Represents the base client with a method to make requests.
  */
 export type BaseClient = {
+  sdkVersion: string;
   readonly makeRequest: (
     requestData: RequestData<unknown, unknown>,
   ) => Promise<ClientResponse<unknown, unknown>>;
 };
-
-export type InternalConfig = ClientConfig & { version: string };
 
 /**
  * Represents a factory for creating request data.

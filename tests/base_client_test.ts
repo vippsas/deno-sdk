@@ -24,7 +24,7 @@ Deno.test("makeRequest - Should return ok", async () => {
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, true);
@@ -52,7 +52,7 @@ Deno.test("makeRequest - Should return ok with retrires", async () => {
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, true);
@@ -77,7 +77,7 @@ Deno.test("makeRequest - Should error", async () => {
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
@@ -103,7 +103,7 @@ Deno.test("makeRequest - Should return validation error", async () => {
     url: "/epayment/v1/test/payments/123abc/approve",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
@@ -139,7 +139,7 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
 
   const response = await client.makeRequest(requestData);
   assertEquals(response.ok, true);
@@ -176,7 +176,7 @@ Deno.test("makeRequest - Should not return ok after 3 retries", async () => {
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
 
   const response = await client.makeRequest(requestData);
   assertEquals(response.ok, false);

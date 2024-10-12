@@ -26,7 +26,7 @@ export const Client = (options: ClientConfig): SDKClient => {
   const version = "1.0.0";
 
   // Create the base client
-  const client = baseClient({ ...options, version });
+  const client = baseClient(options, version);
 
   // Proxify the base client with the API request factories
   return proxifyClient(client);
