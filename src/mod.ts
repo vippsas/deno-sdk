@@ -22,8 +22,11 @@ export type * from "./types_external.ts";
  * ```
  */
 export const Client = (options: ClientConfig): SDKClient => {
+  // Add the SDK version to the client configuration
+  const version = "1.0.0";
+
   // Create the base client
-  const client = baseClient(options);
+  const client = baseClient({ ...options, version }); // Add version information to the client configuration
 
   // Proxify the base client with the API request factories
   return proxifyClient(client);

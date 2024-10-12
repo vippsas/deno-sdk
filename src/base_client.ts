@@ -1,9 +1,9 @@
 import type {
   BaseClient,
   ClientResponse,
+  InternalConfig,
   RequestData,
 } from "./types_internal.ts";
-import type { ClientConfig } from "./types_external.ts";
 import { buildRequest } from "./base_client_helper.ts";
 import { validateRequestData } from "./validate.ts";
 import { fetchRetry } from "./fetch.ts";
@@ -14,7 +14,7 @@ import { fetchRetry } from "./fetch.ts";
  * @param {ClientConfig} cfg - The client configuration.
  * @returns {BaseClient} The base client.
  */
-export const baseClient = (cfg: ClientConfig): BaseClient =>
+export const baseClient = (cfg: InternalConfig): BaseClient =>
   ({
     /**
      * Makes a request to the server.

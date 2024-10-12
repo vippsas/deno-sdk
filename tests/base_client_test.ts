@@ -14,7 +14,11 @@ Deno.test("makeRequest - Should return ok", async () => {
     });
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    version: "1.0.0",
+  };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
@@ -41,6 +45,7 @@ Deno.test("makeRequest - Should return ok with retrires", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
@@ -62,7 +67,11 @@ Deno.test("makeRequest - Should error", async () => {
     });
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    version: "1.0.0",
+  };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
@@ -87,6 +96,7 @@ Deno.test("makeRequest - Should return validation error", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     useTestMode: false,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
@@ -122,6 +132,7 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
@@ -158,6 +169,7 @@ Deno.test("makeRequest - Should not return ok after 3 retries", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",

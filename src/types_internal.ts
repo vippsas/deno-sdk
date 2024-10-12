@@ -1,4 +1,4 @@
-import type { SDKError } from "./types_external.ts";
+import type { ClientConfig, SDKError } from "./types_external.ts";
 
 /**
  * Represents a response from the client.
@@ -21,6 +21,8 @@ export type BaseClient = {
     requestData: RequestData<unknown, unknown>,
   ) => Promise<ClientResponse<unknown, unknown>>;
 };
+
+export type InternalConfig = ClientConfig & { version: string };
 
 /**
  * Represents a factory for creating request data.

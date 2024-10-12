@@ -36,17 +36,6 @@ await createClient({
 
 await run(`rm -rf src/generated_types/epayment/index.ts`);
 
-// Login API
-await createClient({
-  input: "https://developer.vippsmobilepay.com/redocusaurus/login-swagger-id.yaml",
-  output: "src/generated_types/login",
-  services: false,
-  exportCore: false,
-  schemas: false,
-});
-
-await run(`rm -rf src/generated_types/login/index.ts`);
-
 // Recurring API
 await createClient({
   input: "https://developer.vippsmobilepay.com/redocusaurus/recurring-swagger-id.yaml",

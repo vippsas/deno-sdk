@@ -1,18 +1,19 @@
 import {
   buildRequest,
-  createSDKUserAgent,
   getHeaders,
+  getModuleSource,
+  getUserAgent,
 } from "../src/base_client_helper.ts";
 import { uuid } from "../src/deps.ts";
-import type { ClientConfig } from "../src/types_external.ts";
-import type { RequestData } from "../src/types_internal.ts";
+import type { InternalConfig, RequestData } from "../src/types_internal.ts";
 import { assert, assertEquals } from "@std/assert";
 
 Deno.test("buildRequest - Should return a Request object with the correct properties", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: true,
+    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -36,10 +37,11 @@ Deno.test("buildRequest - Should return a Request object with the correct proper
 });
 
 Deno.test("buildRequest - Should set correct prod baseURL", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: false,
+    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -57,10 +59,11 @@ Deno.test("buildRequest - Should set correct prod baseURL", () => {
 });
 
 Deno.test("buildRequest - Should set correct test baseURL", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "your-subscription-key",
     merchantSerialNumber: "your-merchant-serial-number",
     useTestMode: true,
+    version: "1.0.0",
   };
 
   const requestData: RequestData<unknown, unknown> = {
@@ -78,7 +81,7 @@ Deno.test("buildRequest - Should set correct test baseURL", () => {
 });
 
 Deno.test("getHeaders - Should return correct with input", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
     systemName: "My Ecommerce System",
@@ -87,6 +90,7 @@ Deno.test("getHeaders - Should return correct with input", () => {
     pluginVersion: "1.0.0",
     retryRequests: false,
     useTestMode: true,
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg, "testToken");
@@ -102,9 +106,10 @@ Deno.test("getHeaders - Should return correct with input", () => {
 });
 
 Deno.test("getHeaders - Should generate UUID", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg);
@@ -114,9 +119,10 @@ Deno.test("getHeaders - Should generate UUID", () => {
 });
 
 Deno.test("getHeaders - Should return correct with minimal input", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg);
@@ -134,9 +140,10 @@ Deno.test("getHeaders - Should return correct with minimal input", () => {
 });
 
 Deno.test("getHeaders - Should return correct with additional headers", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg, "testToken", { "foo": "bar" });
@@ -145,9 +152,10 @@ Deno.test("getHeaders - Should return correct with additional headers", () => {
 });
 
 Deno.test("getHeaders - Additional headers should not overwrite default headers", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg, "testToken", {
@@ -158,9 +166,10 @@ Deno.test("getHeaders - Additional headers should not overwrite default headers"
 });
 
 Deno.test("getHeaders - Should omit headers", () => {
-  const cfg: ClientConfig = {
+  const cfg: InternalConfig = {
     subscriptionKey: "testKey",
     merchantSerialNumber: "123456",
+    version: "1.0.0",
   };
 
   const expectedHeaders = getHeaders(cfg, "testToken", {}, [
@@ -170,36 +179,50 @@ Deno.test("getHeaders - Should omit headers", () => {
   assert(expectedHeaders["Merchant-Serial-Number"] === undefined);
 });
 
-Deno.test("createUserAgent - Should return the correct user agent for require", () => {
-  const expectedUserAgent = "Vipps/Deno SDK/npm-require";
-  const actualUserAgent = createSDKUserAgent(undefined);
-
-  assertEquals(actualUserAgent, expectedUserAgent);
+Deno.test("getUserAgent - with npm-require", () => {
+  const version = "1.0.0";
+  const moduleUrl = undefined;
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/npm-require/${version}`;
+  assertEquals(result, expected);
 });
 
-Deno.test("createUserAgent - Should return the correct user agent string when loaded from deno.land/x", () => {
-  const expectedUserAgent = "Vipps/Deno SDK/1.2.0";
-  const actualUserAgent = createSDKUserAgent(
-    "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts",
-  );
-
-  assertEquals(actualUserAgent, expectedUserAgent);
+Deno.test("getUserAgent - with npm-module", () => {
+  const version = "1.0.0";
+  const moduleUrl = "file:///path/to/node_modules/some_module";
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/npm-module/${version}`;
+  assertEquals(result, expected);
 });
 
-Deno.test("createUserAgent - Should return the correct user agent string when loaded from node_modules", () => {
-  const expectedUserAgent = "Vipps/Deno SDK/npm-module";
-  const actualUserAgent = createSDKUserAgent(
-    "file:///Users/foo/bar/node_modules/mod.ts",
-  );
-
-  assertEquals(actualUserAgent, expectedUserAgent);
+Deno.test("getUserAgent - with jsr-npm", () => {
+  const version = "1.0.0";
+  const moduleUrl = "https://npm.jsr.io/some/path";
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/jsr-npm/${version}`;
+  assertEquals(result, expected);
 });
 
-Deno.test("createSDKUserAgent - Should return the correct user agent when loaded from an unknown source", () => {
-  const metaUrl = "https://example.com/some/other/path/mod.ts";
-  const expectedUserAgent = "Vipps/Deno SDK/unknown";
+Deno.test("getUserAgent - with jsr", () => {
+  const version = "1.0.0";
+  const moduleUrl = "https://jsr.io/some/path";
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/jsr/${version}`;
+  assertEquals(result, expected);
+});
 
-  const userAgent = createSDKUserAgent(metaUrl);
+Deno.test("getUserAgent - with deno-land", () => {
+  const version = "1.0.0";
+  const moduleUrl = "https://deno.land/x/some_module";
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/deno-land/${version}`;
+  assertEquals(result, expected);
+});
 
-  assertEquals(userAgent, expectedUserAgent);
+Deno.test("getUserAgent - with unknown", () => {
+  const version = "1.0.0";
+  const moduleUrl = "https://unknown.host/some/path";
+  const result = getUserAgent(version, moduleUrl);
+  const expected = `Vipps/Deno-SDK/unknown/${version}`;
+  assertEquals(result, expected);
 });
