@@ -4,7 +4,10 @@ import { assertEquals } from "@std/assert";
 import type { RequestData } from "../src/types_internal.ts";
 
 Deno.test("proxifyFactory - Should return a Proxy object with method", () => {
-  const client = baseClient({ merchantSerialNumber: "", subscriptionKey: "" });
+  const client = baseClient({
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+  }, "1.0.0");
 
   const factory = {
     foo(): RequestData<unknown, unknown> {
@@ -21,7 +24,10 @@ Deno.test("proxifyFactory - Should return a Proxy object with method", () => {
 });
 
 Deno.test("proxifyFactory - Should return the original property if it is not a function", () => {
-  const client = baseClient({ merchantSerialNumber: "", subscriptionKey: "" });
+  const client = baseClient({
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+  }, "1.0.0");
 
   const factory = {
     foo(): RequestData<unknown, unknown> {

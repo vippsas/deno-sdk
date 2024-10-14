@@ -14,8 +14,13 @@ import { fetchRetry } from "./fetch.ts";
  * @param {ClientConfig} cfg - The client configuration.
  * @returns {BaseClient} The base client.
  */
-export const baseClient = (cfg: ClientConfig): BaseClient =>
+export const baseClient = (cfg: ClientConfig, sdkVersion: string): BaseClient =>
   ({
+    /**
+     * The version of the SDK.
+     * @type {string}
+     */
+    sdkVersion,
     /**
      * Makes a request to the server.
      *
@@ -34,7 +39,7 @@ export const baseClient = (cfg: ClientConfig): BaseClient =>
       }
 
       // Build the request
-      const request = buildRequest(cfg, requestData);
+      const request = buildRequest(cfg, requestData, this.sdkVersion);
 
       // Make the request with retry logic
       const response = await fetchRetry<TOk, TErr>(

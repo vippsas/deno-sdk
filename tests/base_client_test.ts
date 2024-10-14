@@ -14,13 +14,17 @@ Deno.test("makeRequest - Should return ok", async () => {
     });
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    version: "1.0.0",
+  };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, true);
@@ -41,13 +45,14 @@ Deno.test("makeRequest - Should return ok with retrires", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, true);
@@ -62,13 +67,17 @@ Deno.test("makeRequest - Should error", async () => {
     });
   });
 
-  const cfg = { merchantSerialNumber: "", subscriptionKey: "" };
+  const cfg = {
+    merchantSerialNumber: "",
+    subscriptionKey: "",
+    version: "1.0.0",
+  };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
@@ -87,13 +96,14 @@ Deno.test("makeRequest - Should return validation error", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     useTestMode: false,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/epayment/v1/test/payments/123abc/approve",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
   const response = await client.makeRequest(requestData);
 
   assertEquals(response.ok, false);
@@ -122,13 +132,14 @@ Deno.test("makeRequest - Should return ok after 2 retries", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
 
   const response = await client.makeRequest(requestData);
   assertEquals(response.ok, true);
@@ -158,13 +169,14 @@ Deno.test("makeRequest - Should not return ok after 3 retries", async () => {
     merchantSerialNumber: "",
     subscriptionKey: "",
     retryRequests: true,
+    version: "1.0.0",
   };
   const requestData: RequestData<unknown, unknown> = {
     method: "GET",
     url: "/foo",
   };
 
-  const client = baseClient(cfg);
+  const client = baseClient(cfg, "1.0.0");
 
   const response = await client.makeRequest(requestData);
   assertEquals(response.ok, false);
