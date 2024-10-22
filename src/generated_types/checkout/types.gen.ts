@@ -1009,39 +1009,47 @@ export type ParameterMerchant_Serial_Number = string;
 export type ParameterIdempotency_Key = string;
 
 export type PostCheckoutV3SessionData = {
-  clientId?: string;
-  clientSecret?: string;
-  idempotencyKey?: string;
-  merchantSerialNumber?: string;
-  ocpApimSubscriptionKey?: string;
-  requestBody?:
-    | InitiatePaymentSessionRequest
-    | InitiateSubscriptionSessionRequest;
-  vippsSystemName?: string;
-  vippsSystemPluginName?: string;
-  vippsSystemPluginVersion?: string;
-  vippsSystemVersion?: string;
+  body?: InitiatePaymentSessionRequest | InitiateSubscriptionSessionRequest;
+  headers?: {
+    client_id?: string;
+    client_secret?: string;
+    "Idempotency-Key"?: string;
+    "Merchant-Serial-Number"?: string;
+    "Ocp-Apim-Subscription-Key"?: string;
+    "Vipps-System-Name"?: string;
+    "Vipps-System-Plugin-Name"?: string;
+    "Vipps-System-Plugin-Version"?: string;
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type PostCheckoutV3SessionResponse = InitiateSessionResponse;
 
+export type PostCheckoutV3SessionError = CheckoutProblemDetails;
+
 export type GetCheckoutV3SessionByReferenceData = {
-  clientId?: string;
-  clientSecret?: string;
-  idempotencyKey?: string;
-  merchantSerialNumber?: string;
-  ocpApimSubscriptionKey?: string;
-  /**
-   * The reference of the session. Example: "123123".
-   */
-  reference: string;
-  vippsSystemName?: string;
-  vippsSystemPluginName?: string;
-  vippsSystemPluginVersion?: string;
-  vippsSystemVersion?: string;
+  headers?: {
+    client_id?: string;
+    client_secret?: string;
+    "Idempotency-Key"?: string;
+    "Merchant-Serial-Number"?: string;
+    "Ocp-Apim-Subscription-Key"?: string;
+    "Vipps-System-Name"?: string;
+    "Vipps-System-Plugin-Name"?: string;
+    "Vipps-System-Plugin-Version"?: string;
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The reference of the session. Example: "123123".
+     */
+    reference: string;
+  };
 };
 
 export type GetCheckoutV3SessionByReferenceResponse = SessionResponse;
+
+export type GetCheckoutV3SessionByReferenceError = CheckoutProblemDetails;
 
 export type $OpenApiTs = {
   "/checkout/v3/session": {
@@ -1051,31 +1059,31 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: InitiateSessionResponse;
+        "200": InitiateSessionResponse;
         /**
          * BadRequest: Validation errors
          */
-        400: CheckoutProblemDetails;
+        "400": CheckoutProblemDetails;
         /**
          * Unauthorized: Invalid credentials
          */
-        401: CheckoutProblemDetails;
+        "401": CheckoutProblemDetails;
         /**
          * Forbidden: Invalid subscription or configuration
          */
-        403: CheckoutProblemDetails;
+        "403": CheckoutProblemDetails;
         /**
          * Conflict. Duplicate reference
          */
-        409: CheckoutProblemDetails;
+        "409": CheckoutProblemDetails;
         /**
          * InternalServerError: Unexpected errors
          */
-        500: CheckoutProblemDetails;
+        "500": CheckoutProblemDetails;
         /**
          * BadGateway: Unexpected errors in integrations
          */
-        502: CheckoutProblemDetails;
+        "502": CheckoutProblemDetails;
       };
     };
   };
@@ -1086,31 +1094,31 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: SessionResponse;
+        "200": SessionResponse;
         /**
          * BadRequest: Validation errors
          */
-        400: CheckoutProblemDetails;
+        "400": CheckoutProblemDetails;
         /**
          * Unauthorized: Invalid credentials
          */
-        401: CheckoutProblemDetails;
+        "401": CheckoutProblemDetails;
         /**
          * Forbidden: Invalid subscription or configuration
          */
-        403: CheckoutProblemDetails;
+        "403": CheckoutProblemDetails;
         /**
          * NotFound: The specified session id is unknown.
          */
-        404: CheckoutProblemDetails;
+        "404": CheckoutProblemDetails;
         /**
          * InternalServerError: Unexpected errors
          */
-        500: CheckoutProblemDetails;
+        "500": CheckoutProblemDetails;
         /**
          * BadGateway: Unexpected errors in integrations
          */
-        502: CheckoutProblemDetails;
+        "502": CheckoutProblemDetails;
       };
     };
   };

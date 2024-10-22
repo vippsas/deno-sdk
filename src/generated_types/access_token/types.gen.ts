@@ -103,66 +103,74 @@ export type ParameterVipps_System_Plugin_Name = string;
 export type ParameterVipps_System_Plugin_Version = string;
 
 export type FetchAuthorizationTokenUsingPostData = {
-  /**
-   * The `client_id` is available on portal.vippsmobilepay.com, under the *Developer* section.
-   * Think of it as the "username".
-   */
-  clientId: string;
-  /**
-   * The `client_secret` is available on portal.vippsmobilepay.com, under the *Developer* section.
-   * Think of it as the "password".
-   * Keep it secret.
-   * We will never ask for it, and we don't need it for anything.
-   */
-  clientSecret: string;
-  /**
-   * The merchant serial number (MSN) for the sales unit. The Merchant-Serial-Number header
-   * can be used with all API keys, and can speed up any trouble-shooting of API
-   * problems quite a bit.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for a sales unit. See [API keys](/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The `client_id` is available on portal.vippsmobilepay.com, under the *Developer* section.
+     * Think of it as the "username".
+     */
+    client_id: string;
+    /**
+     * The `client_secret` is available on portal.vippsmobilepay.com, under the *Developer* section.
+     * Think of it as the "password".
+     * Keep it secret.
+     * We will never ask for it, and we don't need it for anything.
+     */
+    client_secret: string;
+    /**
+     * The merchant serial number (MSN) for the sales unit. The Merchant-Serial-Number header
+     * can be used with all API keys, and can speed up any trouble-shooting of API
+     * problems quite a bit.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for a sales unit. See [API keys](/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [http-headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [http-headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [http-headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [http-headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type FetchAuthorizationTokenUsingPostResponse =
   AuthorizationTokenResponse;
 
+export type FetchAuthorizationTokenUsingPostError = unknown;
+
 export type FetchTokenData = {
-  /**
-   * The string 'client_id:client_secret' encoded to Base64 with Basic in front
-   */
-  authorization: string;
-  requestBody: {
+  body: {
     grant_type?: "client_credentials";
+  };
+  headers: {
+    /**
+     * The string 'client_id:client_secret' encoded to Base64 with Basic in front
+     */
+    Authorization: string;
   };
 };
 
 export type FetchTokenResponse = TokenResponse;
+
+export type FetchTokenError = unknown;
 
 export type $OpenApiTs = {
   "/accesstoken/get": {
@@ -172,19 +180,19 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: AuthorizationTokenResponse;
+        "200": AuthorizationTokenResponse;
         /**
          * Bad request
          */
-        400: unknown;
+        "400": unknown;
         /**
          * Unauthorized
          */
-        401: unknown;
+        "401": unknown;
         /**
          * Server error.
          */
-        500: unknown;
+        "500": unknown;
       };
     };
   };
@@ -195,19 +203,19 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: TokenResponse;
+        "200": TokenResponse;
         /**
          * Bad request
          */
-        400: unknown;
+        "400": unknown;
         /**
          * Unauthorized
          */
-        401: unknown;
+        "401": unknown;
         /**
          * Server error.
          */
-        500: unknown;
+        "500": unknown;
       };
     };
   };

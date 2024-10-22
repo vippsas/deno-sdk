@@ -58,121 +58,135 @@ export type Webhook = {
 };
 
 export type GetV1WebhooksData = {
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
-   * This is a required parameter if you are a partner making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
+     * This is a required parameter if you are a partner making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type GetV1WebhooksResponse = QueryResponse;
 
+export type GetV1WebhooksError = ProblemDetails;
+
 export type PostV1WebhooksData = {
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
-   * This is a required parameter if you are a partner making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key.
-   * See [API keys](/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: RegisterRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemVersion?: string;
+  body: RegisterRequest;
+  headers: {
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
+     * This is a required parameter if you are a partner making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key.
+     * See [API keys](/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type PostV1WebhooksResponse = RegisterResponse;
 
+export type PostV1WebhooksError = ProblemDetails;
+
 export type DeleteV1WebhooksByIdData = {
-  id: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
-   * This is a required parameter if you are a partner making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers/).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sale unit that this payment is made for.
+     * This is a required parameter if you are a partner making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers/).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    id: string;
+  };
 };
 
 export type DeleteV1WebhooksByIdResponse = void;
+
+export type DeleteV1WebhooksByIdError = ProblemDetails;
 
 export type $OpenApiTs = {
   "/v1/webhooks": {
@@ -182,11 +196,11 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: QueryResponse;
+        "200": QueryResponse;
         /**
          * Bad Request
          */
-        400: ProblemDetails;
+        "400": ProblemDetails;
       };
     };
     post: {
@@ -195,11 +209,11 @@ export type $OpenApiTs = {
         /**
          * Created
          */
-        201: RegisterResponse;
+        "201": RegisterResponse;
         /**
          * Bad Request
          */
-        400: ProblemDetails;
+        "400": ProblemDetails;
       };
     };
   };
@@ -210,11 +224,11 @@ export type $OpenApiTs = {
         /**
          * No Content
          */
-        204: void;
+        "204": void;
         /**
          * Bad Request
          */
-        400: ProblemDetails;
+        "400": ProblemDetails;
       };
     };
   };
