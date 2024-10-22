@@ -141,7 +141,7 @@ export type DraftAgreementV2 = {
    * redirect URL for Vipps MobilePay landing page or deeplink URL to connect vipps
    * App. When isApp is set to true, URLs passed to us will not be
    * validated as regular URLs.
-   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/user-flow
+   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/app-flow
    */
   isApp?: boolean;
   /**
@@ -219,7 +219,7 @@ export type DraftAgreementV3 = {
    * redirect URL for Vipps MobilePay landing page or deeplink URL to connect vipps
    * App. When isApp is set to true, URLs passed to us will not be
    * validated as regular URLs.
-   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/user-flow
+   * See: https://developer.vippsmobilepay.com/docs/knowledge-base/app-flow
    */
   isApp?: boolean;
   /**
@@ -1582,1502 +1582,1650 @@ export type ParameterVipps_System_Plugin_Version = string;
 export type ParameterContent_Type = string;
 
 export type ListAgreementsData = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * Filter by createdAfter timestamp (in milliseconds) for paginating.
-   */
-  createdAfter?: number;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * Filter by the `status` of the agreement.
-   */
-  status?: AgreementStatus;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  query?: {
+    /**
+     * Filter by createdAfter timestamp (in milliseconds) for paginating.
+     */
+    createdAfter?: number;
+    /**
+     * Filter by the `status` of the agreement.
+     */
+    status?: AgreementStatus;
+  };
 };
 
 export type ListAgreementsResponse = Array<AgreementResponseV2>;
 
+export type ListAgreementsError = ErrorArray | ErrorFromAzure;
+
 export type DraftAgreementData = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: DraftAgreementV2;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: DraftAgreementV2;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type DraftAgreementResponse = DraftAgreementResponseV2;
 
+export type DraftAgreementError = ErrorArray | ErrorFromAzure;
+
 export type FetchAgreementData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type FetchAgreementResponse = AgreementResponseV2;
 
+export type FetchAgreementError = ErrorArray | ErrorFromAzure;
+
 export type UpdateAgreementPutData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
   /**
    * agreement
    */
-  requestBody: PatchAgreementV2;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: PatchAgreementV2;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type UpdateAgreementPutResponse = AgreementReference;
 
+export type UpdateAgreementPutError = ErrorArray | ErrorFromAzure;
+
 export type UpdateAgreementPatchData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
   /**
    * agreement
    */
-  requestBody: PatchAgreementV2;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: PatchAgreementV2;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type UpdateAgreementPatchResponse = AgreementReference;
 
+export type UpdateAgreementPatchError = ErrorArray | ErrorFromAzure;
+
 export type AcceptUsingPatchData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: ForceAcceptAgreement;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: ForceAcceptAgreement;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type AcceptUsingPatchResponse = {
   [key: string]: unknown;
 };
 
+export type AcceptUsingPatchError = ErrorArray | ErrorFromAzure;
+
 export type ListAgreementsV3Data = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * Filter by createdAfter timestamp (in milliseconds) for paginating.
-   */
-  createdAfter?: number;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * Page number for paginating (should be used in combination with pageSize).
-   */
-  pageNumber?: number;
-  /**
-   * Page size for paginating (must be used in combination with pageNumber).
-   */
-  pageSize?: number;
-  /**
-   * Filter by the `status` of the agreement.
-   */
-  status?: AgreementStatus;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  query?: {
+    /**
+     * Filter by createdAfter timestamp (in milliseconds) for paginating.
+     */
+    createdAfter?: number;
+    /**
+     * Page number for paginating (should be used in combination with pageSize).
+     */
+    pageNumber?: number;
+    /**
+     * Page size for paginating (must be used in combination with pageNumber).
+     */
+    pageSize?: number;
+    /**
+     * Filter by the `status` of the agreement.
+     */
+    status?: AgreementStatus;
+  };
 };
 
 export type ListAgreementsV3Response = Array<AgreementResponseV3>;
 
+export type ListAgreementsV3Error = unknown;
+
 export type DraftAgreementV3Data = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: DraftAgreementV3;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: DraftAgreementV3;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type DraftAgreementV3Response = DraftAgreementResponseV3;
 
+export type DraftAgreementV3Error = ErrorV3;
+
 export type FetchAgreementV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type FetchAgreementV3Response = AgreementResponseV3;
 
+export type FetchAgreementV3Error = ErrorV3;
+
 export type UpdateAgreementPatchV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
   /**
    * agreement
    */
-  requestBody: PatchAgreementV3;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: PatchAgreementV3;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type UpdateAgreementPatchV3Response = unknown | void;
 
+export type UpdateAgreementPatchV3Error = ErrorV3;
+
 export type AcceptUsingPatchv3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: ForceAcceptAgreementV3;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: ForceAcceptAgreementV3;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type AcceptUsingPatchv3Response = {
   [key: string]: unknown;
 };
 
+export type AcceptUsingPatchv3Error = ErrorV3;
+
 export type ListChargesData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * Filter by status of the charge.
-   */
-  chargeStatus?: ChargeStatus;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
+  query?: {
+    /**
+     * Filter by status of the charge.
+     */
+    chargeStatus?: ChargeStatus;
+  };
 };
 
 export type ListChargesResponse = Array<ChargeResponseV2>;
 
+export type ListChargesError = ErrorArray | ErrorFromAzure;
+
 export type CreateChargeData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: CreateChargeV2;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: CreateChargeV2;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type CreateChargeResponse = ChargeReference;
 
+export type CreateChargeError = ErrorArray | ErrorFromAzure;
+
 export type FetchChargeData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type FetchChargeResponse = ChargeResponseV2;
 
+export type FetchChargeError = ErrorArray | ErrorFromAzure;
+
 export type CancelChargeData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type CancelChargeResponse = ChargeResponseV2;
 
+export type CancelChargeError = ErrorArray | ErrorFromAzure;
+
 export type CaptureChargeData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type CaptureChargeResponse = {
   [key: string]: unknown;
 };
 
+export type CaptureChargeError = ErrorArray | ErrorFromAzure;
+
 export type RefundChargeData = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: RefundRequest;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: RefundRequest;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type RefundChargeResponse = {
   [key: string]: unknown;
 };
 
+export type RefundChargeError = ErrorArray | ErrorFromAzure;
+
 export type ListChargesV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * When returned from an endpoint, this indicates that there is more data than can be returned in one response.
-   * Repeating the request with the received token in the Continuation-Token header will return the next page of data.
-   * When not returned, the end of the data has been reached.
-   *
-   * Continuation-Tokens are short-lived, so they cannot be used several minutes/hours after received.
-   */
-  continuationToken?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * Filter by status of the charge.
-   */
-  status?: ChargeStatus;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * When returned from an endpoint, this indicates that there is more data than can be returned in one response.
+     * Repeating the request with the received token in the Continuation-Token header will return the next page of data.
+     * When not returned, the end of the data has been reached.
+     *
+     * Continuation-Tokens are short-lived, so they cannot be used several minutes/hours after received.
+     */
+    "Continuation-Token"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
+  query?: {
+    /**
+     * Filter by status of the charge.
+     */
+    status?: ChargeStatus;
+  };
 };
 
 export type ListChargesV3Response = Array<ChargeResponseV3>;
 
+export type ListChargesV3Error = ErrorV3;
+
 export type CreateChargeV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: CreateChargeV3;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: CreateChargeV3;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+  };
 };
 
 export type CreateChargeV3Response = ChargeReference;
 
+export type CreateChargeV3Error = ErrorV3;
+
 export type CreateChargeAsyncV3Data = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: Array<CreateChargeAsyncV3>;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: Array<CreateChargeAsyncV3>;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type CreateChargeAsyncV3Response = AsyncChargeResponse;
 
+export type CreateChargeAsyncV3Error = unknown;
+
 export type FetchChargeV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type FetchChargeV3Response = ChargeResponseV3;
 
+export type FetchChargeV3Error = ErrorV3;
+
 export type CancelChargeV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type CancelChargeV3Response = unknown | void;
 
+export type CancelChargeV3Error = ErrorV3;
+
 export type FetchChargeByIdV3Data = {
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type FetchChargeByIdV3Response = ChargeResponseV3;
 
+export type FetchChargeByIdV3Error = ErrorV3;
+
 export type CaptureChargeV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: CaptureRequestV3;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: CaptureRequestV3;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type CaptureChargeV3Response = unknown | void;
 
+export type CaptureChargeV3Error = ErrorV3;
+
 export type RefundChargeV3Data = {
-  /**
-   * The agreement identifier (ID)
-   */
-  agreementId: string;
-  /**
-   * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
-   * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
-   * endpoint.
-   * It is valid for 1 hour in the test environment and 24 hours in the production environment.
-   */
-  authorization: string;
-  /**
-   * The charge identifier (ID)
-   */
-  chargeId: string;
-  /**
-   * The content type must be `application/json`
-   */
-  contentType?: string;
-  /**
-   * An Idempotency key must be provided to ensure idempotent requests.
-   * Key size can be between 1 to 40 characters.
-   * Key must not contain '#', '?', '/' or '\\'
-   */
-  idempotencyKey: string;
-  /**
-   * The Merchant Serial Number (MSN) is a unique ID for the sales unit
-   * for which this payment is made.
-   * This is a required parameter if you are a Recurring partner
-   * making payments on behalf of a merchant.
-   * The partner must use the merchant's MSN (not the partner's MSN).
-   * This parameter is optional, and recommended, for regular Vipps MobilePay
-   * merchants making payments for themselves.
-   */
-  merchantSerialNumber?: string;
-  /**
-   * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
-   */
-  ocpApimSubscriptionKey: string;
-  requestBody: RefundRequest;
-  /**
-   * The name of the ecommerce solution. One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [HTTP headers](/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: RefundRequest;
+  headers: {
+    /**
+     * The access token is a base64-encoded string that is required for all API requests. It is a JWT (JSON Web Token). The access token is fetched from the
+     * [`POST:/accesstoken/get`](/api/access-token#tag/Authorization-Service/operation/fetchAuthorizationTokenUsingPost)
+     * endpoint.
+     * It is valid for 1 hour in the test environment and 24 hours in the production environment.
+     */
+    Authorization: string;
+    /**
+     * The content type must be `application/json`
+     */
+    "Content-Type"?: string;
+    /**
+     * An Idempotency key must be provided to ensure idempotent requests.
+     * Key size can be between 1 to 40 characters.
+     * Key must not contain '#', '?', '/' or '\\'
+     */
+    "Idempotency-Key": string;
+    /**
+     * The Merchant Serial Number (MSN) is a unique ID for the sales unit
+     * for which this payment is made.
+     * This is a required parameter if you are a Recurring partner
+     * making payments on behalf of a merchant.
+     * The partner must use the merchant's MSN (not the partner's MSN).
+     * This parameter is optional, and recommended, for regular Vipps MobilePay
+     * merchants making payments for themselves.
+     */
+    "Merchant-Serial-Number"?: string;
+    /**
+     * The subscription key for your sales unit. See [API keys](/docs/knowledge-base/api-keys/). Keep it secret.
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution. One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable). One word in lowercase letters is good.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [HTTP headers](/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    /**
+     * The agreement identifier (ID)
+     */
+    agreementId: string;
+    /**
+     * The charge identifier (ID)
+     */
+    chargeId: string;
+  };
 };
 
 export type RefundChargeV3Response = void;
+
+export type RefundChargeV3Error = unknown | ErrorV3;
 
 export type $OpenApiTs = {
   "/recurring/v2/agreements": {
@@ -3087,7 +3235,7 @@ export type $OpenApiTs = {
         /**
          * OK'
          */
-        200: Array<AgreementResponseV2>;
+        "200": Array<AgreementResponseV2>;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3102,7 +3250,7 @@ export type $OpenApiTs = {
         /**
          * Created
          */
-        201: DraftAgreementResponseV2;
+        "201": DraftAgreementResponseV2;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3119,7 +3267,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: AgreementResponseV2;
+        "200": AgreementResponseV2;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3134,7 +3282,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: AgreementReference;
+        "200": AgreementReference;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3149,7 +3297,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: AgreementReference;
+        "200": AgreementReference;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3166,7 +3314,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: {
+        "200": {
           [key: string]: unknown;
         };
         /**
@@ -3185,7 +3333,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: Array<AgreementResponseV3>;
+        "200": Array<AgreementResponseV3>;
       };
     };
     post: {
@@ -3194,19 +3342,19 @@ export type $OpenApiTs = {
         /**
          * Created
          */
-        201: DraftAgreementResponseV3;
+        "201": DraftAgreementResponseV3;
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        403: ErrorV3;
+        "403": ErrorV3;
         /**
          * Standard problem response.
          */
-        409: ErrorV3;
+        "409": ErrorV3;
       };
     };
   };
@@ -3217,11 +3365,11 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: AgreementResponseV3;
+        "200": AgreementResponseV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
     patch: {
@@ -3230,19 +3378,19 @@ export type $OpenApiTs = {
         /**
          * Accepted. Request accepted, the action will likely succeed but has not yet been enacted.
          */
-        202: unknown;
+        "202": unknown;
         /**
          * No content
          */
-        204: void;
+        "204": void;
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
   };
@@ -3253,17 +3401,17 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        204: {
+        "204": {
           [key: string]: unknown;
         };
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
   };
@@ -3274,7 +3422,7 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: Array<ChargeResponseV2>;
+        "200": Array<ChargeResponseV2>;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3289,7 +3437,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        201: ChargeReference;
+        "201": ChargeReference;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3306,7 +3454,7 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: ChargeResponseV2;
+        "200": ChargeResponseV2;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3321,7 +3469,7 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: ChargeResponseV2;
+        "200": ChargeResponseV2;
         /**
          * Possible error responses.
          * Errors can be from both our own code (where we have full control) and
@@ -3338,7 +3486,7 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: {
+        "200": {
           [key: string]: unknown;
         };
         /**
@@ -3357,7 +3505,7 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: {
+        "200": {
           [key: string]: unknown;
         };
         /**
@@ -3376,11 +3524,11 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: Array<ChargeResponseV3>;
+        "200": Array<ChargeResponseV3>;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
     post: {
@@ -3389,19 +3537,19 @@ export type $OpenApiTs = {
         /**
          * Created
          */
-        201: ChargeReference;
+        "201": ChargeReference;
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
         /**
          * Standard problem response.
          */
-        409: ErrorV3;
+        "409": ErrorV3;
       };
     };
   };
@@ -3412,7 +3560,7 @@ export type $OpenApiTs = {
         /**
          * None, some or all charges passed API level validation.
          */
-        202: AsyncChargeResponse;
+        "202": AsyncChargeResponse;
       };
     };
   };
@@ -3423,11 +3571,11 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: ChargeResponseV3;
+        "200": ChargeResponseV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
     delete: {
@@ -3436,23 +3584,23 @@ export type $OpenApiTs = {
         /**
          * Accepted. Request accepted, the action will likely succeed but has not yet been enacted.
          */
-        202: unknown;
+        "202": unknown;
         /**
          * No content
          */
-        204: void;
+        "204": void;
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
         /**
          * Standard problem response.
          */
-        409: ErrorV3;
+        "409": ErrorV3;
       };
     };
   };
@@ -3463,11 +3611,11 @@ export type $OpenApiTs = {
         /**
          * Success
          */
-        200: ChargeResponseV3;
+        "200": ChargeResponseV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
       };
     };
   };
@@ -3478,23 +3626,23 @@ export type $OpenApiTs = {
         /**
          * Accepted. Request accepted, the action will likely succeed but has not yet been enacted.
          */
-        202: unknown;
+        "202": unknown;
         /**
          * No content
          */
-        204: void;
+        "204": void;
         /**
          * Standard problem response.
          */
-        400: ErrorV3;
+        "400": ErrorV3;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
         /**
          * Standard problem response.
          */
-        409: ErrorV3;
+        "409": ErrorV3;
       };
     };
   };
@@ -3505,19 +3653,19 @@ export type $OpenApiTs = {
         /**
          * No content
          */
-        204: void;
+        "204": void;
         /**
          * The standard error object, based on RFC 7807. See https://developer.vippsmobilepay.com/docs/APIs/recurring-api/recurring-api-problems/
          */
-        400: unknown;
+        "400": unknown;
         /**
          * Standard problem response.
          */
-        404: ErrorV3;
+        "404": ErrorV3;
         /**
          * Standard problem response.
          */
-        409: ErrorV3;
+        "409": ErrorV3;
       };
     };
   };

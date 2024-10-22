@@ -709,214 +709,254 @@ export type ParameterIdempotency_Key = string;
 
 export type CreatePaymentData = {
   /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  /**
    * New `CreatePaymentRequest` body.
    */
-  requestBody: CreatePaymentRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body: CreatePaymentRequest;
+  headers: {
+    /**
+     * Idempotency key for the request, ensures idempotent actions.
+     * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+     */
+    "Idempotency-Key": string;
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
 };
 
 export type CreatePaymentResponse2 = CreatePaymentResponse;
 
+export type CreatePaymentError = Problem;
+
 export type GetPaymentData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
+  headers: {
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type GetPaymentResponse2 = GetPaymentResponse;
 
+export type GetPaymentError = unknown;
+
 export type GetPaymentEventLogData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
+  headers: {
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type GetPaymentEventLogResponse = Array<PaymentEvent>;
 
+export type GetPaymentEventLogError = unknown;
+
 export type CancelPaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
   /**
    * New `CancelModificationRequest` body.
    */
-  requestBody?: CancelModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body?: CancelModificationRequest;
+  headers: {
+    /**
+     * Idempotency key for the request, ensures idempotent actions.
+     * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+     */
+    "Idempotency-Key": string;
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type CancelPaymentResponse = ModificationResponse;
 
+export type CancelPaymentError = Problem;
+
 export type CapturePaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
   /**
    * Requested capture modification
    */
-  requestBody?: CaptureModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body?: CaptureModificationRequest;
+  headers: {
+    /**
+     * Idempotency key for the request, ensures idempotent actions.
+     * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+     */
+    "Idempotency-Key": string;
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type CapturePaymentResponse = ModificationResponse;
 
+export type CapturePaymentError = Problem;
+
 export type RefundPaymentData = {
-  /**
-   * Idempotency key for the request, ensures idempotent actions.
-   * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
-   */
-  idempotencyKey: string;
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
   /**
    * Requested refund modification
    */
-  requestBody?: RefundModificationRequest;
-  /**
-   * The name of the ecommerce solution.
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemName?: string;
-  /**
-   * The name of the ecommerce plugin (if applicable).
-   * One word in lowercase letters is good.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginName?: string;
-  /**
-   * The version number of the ecommerce plugin (if applicable).
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemPluginVersion?: string;
-  /**
-   * The version number of the ecommerce solution.
-   * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
-   */
-  vippsSystemVersion?: string;
+  body?: RefundModificationRequest;
+  headers: {
+    /**
+     * Idempotency key for the request, ensures idempotent actions.
+     * See [idempotency](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers#idempotency)
+     */
+    "Idempotency-Key": string;
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+    /**
+     * The name of the ecommerce solution.
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Name"?: string;
+    /**
+     * The name of the ecommerce plugin (if applicable).
+     * One word in lowercase letters is good.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Name"?: string;
+    /**
+     * The version number of the ecommerce plugin (if applicable).
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Plugin-Version"?: string;
+    /**
+     * The version number of the ecommerce solution.
+     * See [http-headers](https://developer.vippsmobilepay.com/docs/knowledge-base/http-headers).
+     */
+    "Vipps-System-Version"?: string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type RefundPaymentResponse = ModificationResponse;
 
+export type RefundPaymentError = Problem;
+
 export type ForceApproveData = {
-  merchantSerialNumber: MSN;
-  /**
-   * The subscription key for a sales unit.
-   * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
-   */
-  ocpApimSubscriptionKey: string;
-  reference: Reference;
   /**
    * Force approve request body
    */
-  requestBody?: ForceApprove;
+  body?: ForceApprove;
+  headers: {
+    "Merchant-Serial-Number": MSN;
+    /**
+     * The subscription key for a sales unit.
+     * See [API keys](https://developer.vippsmobilepay.com/docs/knowledge-base/api-keys/).
+     */
+    "Ocp-Apim-Subscription-Key": string;
+  };
+  path: {
+    Reference: Reference;
+  };
 };
 
 export type ForceApproveResponse = unknown;
+
+export type ForceApproveError = unknown;
 
 export type $OpenApiTs = {
   "/v1/payments": {
@@ -926,19 +966,19 @@ export type $OpenApiTs = {
         /**
          * Create Payment response
          */
-        201: CreatePaymentResponse;
+        "201": CreatePaymentResponse;
         /**
          * Standard problem response.
          */
-        400: Problem;
+        "400": Problem;
         /**
          * Standard problem response.
          */
-        403: Problem;
+        "403": Problem;
         /**
          * Standard problem response.
          */
-        409: Problem;
+        "409": Problem;
       };
     };
   };
@@ -949,7 +989,7 @@ export type $OpenApiTs = {
         /**
          * Get Payment response
          */
-        200: GetPaymentResponse;
+        "200": GetPaymentResponse;
       };
     };
   };
@@ -960,7 +1000,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: Array<PaymentEvent>;
+        "200": Array<PaymentEvent>;
       };
     };
   };
@@ -971,19 +1011,19 @@ export type $OpenApiTs = {
         /**
          * Adjustment response
          */
-        200: ModificationResponse;
+        "200": ModificationResponse;
         /**
          * Standard problem response.
          */
-        400: Problem;
+        "400": Problem;
         /**
          * Standard problem response.
          */
-        404: Problem;
+        "404": Problem;
         /**
          * Standard problem response.
          */
-        409: Problem;
+        "409": Problem;
       };
     };
   };
@@ -994,19 +1034,19 @@ export type $OpenApiTs = {
         /**
          * Adjustment response
          */
-        200: ModificationResponse;
+        "200": ModificationResponse;
         /**
          * Standard problem response.
          */
-        400: Problem;
+        "400": Problem;
         /**
          * Standard problem response.
          */
-        404: Problem;
+        "404": Problem;
         /**
          * Standard problem response.
          */
-        409: Problem;
+        "409": Problem;
       };
     };
   };
@@ -1017,19 +1057,19 @@ export type $OpenApiTs = {
         /**
          * Adjustment response
          */
-        200: ModificationResponse;
+        "200": ModificationResponse;
         /**
          * Standard problem response.
          */
-        400: Problem;
+        "400": Problem;
         /**
          * Standard problem response.
          */
-        404: Problem;
+        "404": Problem;
         /**
          * Standard problem response.
          */
-        409: Problem;
+        "409": Problem;
       };
     };
   };
@@ -1040,7 +1080,7 @@ export type $OpenApiTs = {
         /**
          * OK
          */
-        200: unknown;
+        "200": unknown;
       };
     };
   };
