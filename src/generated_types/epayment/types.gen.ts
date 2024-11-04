@@ -121,10 +121,12 @@ export type CreatePaymentRequest = {
    * `WEB_REDIRECT` is the normal flow for browser-based payment flows.
    * If on a mobile device, the Vipps or MobilePay app will open. A valid value for `returnUrl` is required.
    * Otherwise, the [landing page](https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/) will open.
-   * `NATIVE_REDIRECT` is for automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
    * `PUSH_MESSAGE` is to skip the landing page for payments initiated on a device other than the user's phone.
    * The user gets a push message that opens the payment in the app. This requires a valid `customer` field.
    * `QR` returns a QR code that can be scanned to complete the payment.
+   * `NATIVE_REDIRECT` is not recommended, except in some cases where merchant doesn’t have web presence.
+   * It provides automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
+   * We recommend using `WEB_REDIRECT` instead.
    */
   userFlow: "PUSH_MESSAGE" | "NATIVE_REDIRECT" | "WEB_REDIRECT" | "QR";
   /**
@@ -180,10 +182,12 @@ export type customerInteraction = "CUSTOMER_PRESENT" | "CUSTOMER_NOT_PRESENT";
  * `WEB_REDIRECT` is the normal flow for browser-based payment flows.
  * If on a mobile device, the Vipps or MobilePay app will open. A valid value for `returnUrl` is required.
  * Otherwise, the [landing page](https://developer.vippsmobilepay.com/docs/knowledge-base/landing-page/) will open.
- * `NATIVE_REDIRECT` is for automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
  * `PUSH_MESSAGE` is to skip the landing page for payments initiated on a device other than the user's phone.
  * The user gets a push message that opens the payment in the app. This requires a valid `customer` field.
  * `QR` returns a QR code that can be scanned to complete the payment.
+ * `NATIVE_REDIRECT` is not recommended, except in some cases where merchant doesn’t have web presence.
+ * It provides automatic app-switch between the merchant's native app and the Vipps or MobilePay app.
+ * We recommend using `WEB_REDIRECT` instead.
  */
 export type userFlow =
   | "PUSH_MESSAGE"
