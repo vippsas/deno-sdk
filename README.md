@@ -1,12 +1,15 @@
 # Vipps Mobilepay SDK
 
-SDK client for Vipps Mobilepay public APIs.
+SDK client for Vipps MobilePay public APIs.
 
 A zero dependency, zero configuration ES Module built with Deno. The code is
 written entirely in TypeScript and has 100% test coverage.
 
 Available on: [deno.land](https://deno.land/x/vipps_mobilepay_sdk) and
 [NPM](https://www.npmjs.com/package/@vippsmobilepay/sdk)
+
+ℹ️ Please use the website:
+[Vipps MobilePay Technical Documentation](https://developer.vippsmobilepay.com/docs/SDKs/) for the user documentation.
 
 ```ts
 import { Client } from "https://deno.land/x/vipps_mobilepay_sdk@1.2.0/mod.ts";
